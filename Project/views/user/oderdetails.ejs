@@ -1,0 +1,95 @@
+<%-include('header')-%>
+
+<div class="container-fluid px-4">
+    <div class="row my-5">
+        <h3 class="fs-4 mb-3">Recent Orders</h3>
+
+
+        <div class="col">
+            <table class="table bg-white rounded shadow-sm  table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" width="50">#</th>
+                        <!-- <th scope="col">Name</th> -->
+                        <!-- <th scope="col">Delivery </th> -->
+                        <th scope="col">Paymentmethod</th>
+                        <!-- <th scope="col">Quantity</th> -->
+                        <th scope="col">Totalamount</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">option</th>
+
+                        <th scope="col">Option</th>
+
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <%orders.forEach((orders,i)=>{%>
+                        <tr>
+                            <th scope="row">
+                                <%=i+1%>
+                            </th>
+                            
+                            <td>
+                                <%=orders.paymentMethod%>
+                            </td>
+                            <td>
+                                <%=orders.totalAmount%>
+                            </td>
+                            <td>
+                                <%=orders.status%>
+                            </td>
+                            <td>
+                                <%=orders.date%>
+                            </td>
+                            <td scope="col"><a href="/product/<%=orders._id%>" class="btn btn-info float-left">View Product</a></td>
+                            <%if(orders.ordercanceled === false){%>
+                            <td scope="col"><button class="btn btn-danger  " onclick="confirmDelete('<%=orders._id%>')">Cancel Order</button></td>
+                              <%}else{%>
+                                <td>order cancelled</td>
+                              <%}%>
+
+                            </tr>
+                        <%})%>
+                </tbody>
+            </table>
+        </div>
+        <h1><%=orders.status%></h1>
+    </div>
+</div>
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+  <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+  <script>
+  function confirmDelete(proId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Order Canceled!',
+                'Your order has been canceled.',
+                'success'
+            ).then(() => {
+                location.href = `/cancel-order/${proId}`
+            })
+        }
+    })
+  }
+</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ 
+
+
+
+  <%-include('footer')-%>
+

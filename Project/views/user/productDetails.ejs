@@ -1,0 +1,179 @@
+<%-include('header')-%>
+ <style>
+  .product-content{
+    padding-top: 100px;
+  }
+  .product-imgs{
+    padding-top: 100px;
+  }
+  
+  
+  </style> 
+
+<!-- navbar -->
+<nav class = "navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
+  <div class = "container">
+      <a class = "navbar-brand d-flex justify-content-between align-items-center order-lg-0" href = "index.html">
+          <span class = "text-uppercase fw-lighter ms-2">GOCYCLE</span>
+      </a>
+
+      <div class = "order-lg-2 nav-btns">
+          <button type = "button" class = "btn position-relative">
+              <a href="/cart" class = "fa fa-shopping-cart"></a>
+              <span class = "position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+              <span class="badge badge-light" id="cart-count"><%=cartCount%></span>
+          </button>
+          <button type = "button" class = "btn position-relative">
+              <i class = "fa fa-heart"></i>
+              <span class = "position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+          </button>
+          <button type = "button" class = "btn position-relative">
+              <i class = "fa fa-search"></i>
+          </button>
+          
+          <%if (token) { %>
+              <a href = "logout" class = "btn btn-primary mt-3 ms-2 ">
+                  Logout
+                  </a>
+          <% }else{ %>
+          <a href = "login" class = "btn btn-primary mt-3 ms-2 ">
+              Login
+              </a>
+          <%}%>
+
+      </div>
+
+      <button class = "navbar-toggler border-0" type = "button" data-bs-toggle = "collapse" data-bs-target = "#navMenu">
+          <span class = "navbar-toggler-icon"></span>
+      </button>
+
+      <div class = "collapse navbar-collapse order-lg-1" id = "navMenu">
+          <ul class = "navbar-nav mx-auto text-center">
+              <li class = "nav-item px-2 py-2">
+                  <a class = "nav-link text-uppercase text-dark" href = "#header">home</a>
+              </li>
+              <li class = "nav-item px-2 py-2">
+                  <a class = "nav-link text-uppercase text-dark" href = "#collection">collection</a>
+              </li>
+              <li class = "nav-item px-2 py-2">
+                  <a class = "nav-link text-uppercase text-dark" href = "#special">specials</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+<!-- end of navbar -->
+
+
+<div class="container pt-10">
+    <div class="row">
+      
+        <div class="col-md-5">
+            <!-- card left -->
+        <div class = "product-imgs">
+        <div class = "img-display">
+          <div class = "img-showcase mt-5 zoom img-container" id="img-container" style="width: 500pxl;">
+            <img src = "/static/product-image/<%=data._id%>.jpg" alt = "">
+          </div>
+        </div>
+        <!-- <div class = "img-select">
+          <div class = "img-item">
+            <a href = "#" data-id = "1">
+              <img src = "/static/product-image/630c9c2b8f1ca9e01cfc4baf.jpg" alt = "shoe image">
+            </a>
+          </div>
+          <div class = "img-item">
+            <a href = "#" data-id = "2">
+              <img src = "/static/product-image/630c9c2b8f1ca9e01cfc4baf.jpg" alt = "shoe image">
+            </a>
+          </div>
+          <div class = "img-item">
+            <a href = "#" data-id = "3">
+              <img src = "/static/product-image/630c9c2b8f1ca9e01cfc4baf.jpg" alt = "shoe image">
+            </a>
+          </div>
+          <div class = "img-item">
+            <a href = "#" data-id = "4">
+              <img src = "/static/product-image/630c9c2b8f1ca9e01cfc4baf.jpg" alt = "shoe image">
+            </a>
+          </div>
+        </div> -->
+      </div>
+        </div>
+        <div class="col-md-7">
+            <!-- card right -->
+      <div class = "product-content">
+        <h2 class = "product-title"><%=data.name%></h2>
+        <a href = "#" class = "product-link">visit store</a>
+        <!-- <div class = "product-rating">
+          <i class = "fas fa-star"></i>
+          <i class = "fas fa-star"></i>
+          <i class = "fas fa-star"></i>
+          <i class = "fas fa-star"></i>
+          <i class = "fas fa-star-half-alt"></i>
+          <span>4.7(21)</span>
+        </div> -->
+
+        <div class = "product-price">
+          <p class = "new-price">Price: <span><%=data.price%></span></p>
+        </div>
+
+        <div class = "product-detail">
+          <h2>about this item: </h2>
+          <p><%=data.description%></p>
+          <ul>
+            <li>Color: <span>Black</span></li>
+            <li>Available: <span>in stock</span></li>
+            <li>Category: <span></span></li> 
+          </ul>
+        </div>
+
+        <div class = "purchase-info">
+          <!-- <a href = "/add-to-cart/" class = "btn btn-primary mt-3">ADD TO CART</a> -->
+          <button class ="btn btn-primary mt-3" onclick="addToCart(`<%=data._id%>`)">ADD TO CART</button>
+
+        </div>
+      </div>
+        </div>
+        
+    </div>
+</div>
+
+
+<div class = "card-wrapper">
+    <div class = "card">
+      
+      
+    </div>
+  </div>
+  <script>
+    function addToCart(proId) {
+      $.ajax({
+        url:`/add-to-cart/${proId}`,
+        method:'get',
+        success:(response)=>{
+          if(response.status){
+            location.href = '/'
+            let count = $('#cart-count').html()
+            count = parseInt(count)+1
+            $('#cart-count').html(count)
+            
+          }
+        }
+      })
+      
+    }
+  </script>
+  
+  <script>
+    var options = {
+        width: 200,
+        zoomWidth: 500,
+        offset: {vertical: 0, horizontal: 10 },
+        scale :1
+    };
+    new ImageZoom(document.getElementById("img-container"), options);   
+  </script>
+  <script src="/static/javascripts/productDetails.js"></script>
+
+<%-include('footer')-%>

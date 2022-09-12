@@ -1,0 +1,170 @@
+<%-include('header')-%>
+    <link rel="stylesheet" href="/static/stylesheets/cart.css">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="index.html">
+                <span class="text-uppercase fw-lighter ms-2">GOCYCLE</span>
+            </a>
+
+            <div class="order-lg-2 nav-btns">
+                <button type="button" class="btn position-relative">
+                    <i class="fa fa-heart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+                </button>
+                <button type="button" class="btn position-relative">
+                    <i class="fa fa-search"></i>
+                </button>
+
+                <%if (token) { %>
+                    <a href="logout" class="btn btn-primary mt-3 ms-2 ">
+                        Logout
+                    </a>
+                    <% }else{ %>
+                        <a href="login" class="btn btn-primary mt-3 ms-2 ">
+                            Login
+                        </a>
+                        <%}%>
+
+            </div>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse order-lg-1" id="navMenu">
+                <ul class="navbar-nav mx-auto text-center">
+                    <li class="nav-item px-2 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="#header">home</a>
+                    </li>
+                    <li class="nav-item px-2 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="#collection">collection</a>
+                    </li>
+                    <li class="nav-item px-2 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="#special">specials</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- end of navbar -->
+
+    <!--Cart Section-->
+    <section class="mt-5">
+        <div class="container">
+            <div class="cart">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" class="text-white">Product</th>
+                                <th scope="col" class="text-white">Price</th>
+                                <th scope="col" class="text-white">Quantity</th>
+                                <th scope="col" class="text-white">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% product.forEach((element,i)=>{%>
+                                <tr>
+                                    <th scope="row">
+                                        <%=i+1%>
+                                    </th>
+                                    <td>
+                                        <div class="main">
+                                            <div class="d-flex">
+                                                <!--W=145 H=98--> <img style="width: 145px;height: 98px;"
+                                                    src="/static/product-image/<%=element.product._id%>.jpg" alt="">
+                                            </div>
+                                            <div class="des">
+                                                <p>
+                                                    <%=element.product.name%>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h6>Rs.<%=element.product.price%>
+                                        </h6>
+                                    </td>
+                                    <td>
+                                        <button id="hellobutton" class="cart-increase-button" onclick="changeQuantity(`<%=element._id%>`,`<%=element.product._id%>`,`<%=userId%>`,-1)">-</button><span id="<%=element.product._id%>"><%=element.quantity%></span> <button id="hellobutton" class="cart-increase-button"
+                                            onclick="changeQuantity(`<%=element._id%>`,`<%=element.product._id%>`,`<%=userId%>`,1)">+</button>
+                                    </td>
+                                    <td>
+                                        <h6></h6>
+                                    </td>
+                                    <td>
+                                        <!-- <a class="btn btn-warning float-left second" id=""  onclick="logggging('<%=element.product._id%>')">Remove Product</a> -->
+                                        <button class="btn btn-warning float-left second"
+                                            onclick="deleteItemCart(`<%=element.product._id%>`)">Remove Product</button>
+                                    </td>
+                                </tr>
+                                <%})%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="col-lg-4 offset-lg-4">
+        <div class="checkout">
+            <ul>
+                <li class="subtotal">subtotal
+                    <span>.rs</span>
+                    <span id="total"><%=total%></span>
+                </li>
+                <li class="cart-total">Total
+                    <span>.rs</span>
+                    <span id="totals"><%=total%></span>
+                </li>
+            </ul>
+            <a href="/proccedToCheckOut" class="proceed-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+
+    <!--  -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script src="/static/javascripts/script.js"></script>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        
+        function deleteItemCart(proId) {
+            console.log('called');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    ).then(() => {
+                        location.href = `/deleteCartProduct/${proId}`
+                    })
+                }
+            })
+        }
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <%-include('footer')-%>
