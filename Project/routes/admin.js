@@ -77,9 +77,9 @@ router.post('/add-product',async(req,res)=>{
         let image2 = req.files.imagess
         let image3 = req.files.imagesss
         image.mv(`public/product-image/${data}.jpg`) 
-        image1.mv(`public/product-image/${data}.jpg`) 
-        image2.mv(`public/product-image/${data}.jpg`) 
-        image3.mv(`public/product-image/${data}.jpg`) 
+        image1.mv(`public/product-image/${data}1.jpg`) 
+        image2.mv(`public/product-image/${data}2.jpg`) 
+        image3.mv(`public/product-image/${data}3.jpg`) 
         res.redirect('/admin/productmanagement')
     })
 })

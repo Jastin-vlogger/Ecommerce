@@ -62,31 +62,18 @@
   
           <div class="card bg-glass">
             <div class="card-body px-4 py-5 px-md-5">
-
-                <!-- otp input -->
-                <form action="/checkotp" method="post" id="signup">
-                    <!-- enter number -->
-                    <div class="form-outline mb-4">
-                        <input type="number" name="otp" id="form3Example4" class="form-control" />
-                        <label class="form-label" for="form3Example4">Enter OTP</label>
-                      </div>
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-block mb-4" >
-                            GET VERIFIED
-                        </button>
-                        <p> Resend OTP in <span id="countdowntimer">30 </span> Seconds</p>
-                    </form>
-                    <form action="/sendotp" method="post">
-                      <div class="new_user">
-                        <input type="text" name="number" id="" value="<%=number%>" hidden>
-                          <div class="pt-1 mb-4" id="hide_send" style="visibility: hidden;">
-                              <input type="hidden" name="entered_value" value=""
-                                  class="form-control pb-4 form-control-lg" />
-                              <button class="btn btn-dark btn-lg btn-block col-md-4" id="resend"
-                                  type="submit">resend</button>
-                          </div>
-                      </div>
-                  </form>
+              <form action="/sendotp" method="post" id="signup">
+                <!-- enter number -->
+                <div class="form-outline mb-4">
+                    <input type="number" name="number" id="form3Example4" class="form-control" />
+                    <label class="form-label" for="form3Example4">Enter your number</label>
+                  </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-4">
+                        Get OTP
+                    </button>
+                </form>
+              
             </div>
           </div>
         </div>
@@ -102,25 +89,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
 ></script>
 <!-- <script src="/static/javascripts/validate.js"></script> -->
 
-<script>
-  
-  var timeleft = 30;
-    var downloadTimer = setInterval(function(){
-    timeleft--;
-    document.getElementById("countdowntimer").textContent = timeleft;
-    if(timeleft <= 0)
-        clearInterval(downloadTimer);
-    },1000);
-  
-</script>
 
 
-<script>
-
-  function showdiv() {
-      document.getElementById('hide_send').style.visibility = "visible";
-  }
-  setTimeout('showdiv()', 300 * 100);
-</script>
 
   <%-include('footer')-%>

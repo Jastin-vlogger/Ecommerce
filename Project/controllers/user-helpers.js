@@ -224,8 +224,22 @@ module.exports = {
         })   
         })
         
-    }
-    
-
-    
+    },
+    updatepassword:async(lastpassword,firstpassword,Id)=>{
+        return new Promise (async(resolve,reject)=>{
+           let user =  await User.findById(Types.ObjectId(Id))
+           console.log(user);
+           let response ={}
+           if (user) {
+            bcrypt.compare(lastpassword,user.password).then((status)=>{
+                if(status){
+                    response.status = true;
+                    resolve(response)
+                }else{
+                    resolve({status:false})
+                }
+            })
+           }
+        })
+    }    
 }

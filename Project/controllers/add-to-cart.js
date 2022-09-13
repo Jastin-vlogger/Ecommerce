@@ -5,6 +5,7 @@ const { response } = require('../app');
 const userHelpers = require('./user-helpers');
 const User = require('../models/user');
 const { Types } = require('mongoose');
+const bcrypt = require('bcrypt')
 
 
 module.exports = {
@@ -104,6 +105,25 @@ addtocart :async(req,res)=>{
         lastName:lastName,
       }})
       res.redirect("/profile")
+    })
+  },
+  changepassword:(req,res)=>{
+    res.render('user/changePassword',{passwordError:''})
+  },
+  updatepassword:async(req,res)=>{
+    let {lastpassword,newpassword} = req.body;
+    console.log(lastpassword,newpassword);
+    console.log(req.body);
+    let userId = req.userId
+    userHelpers.updatepassword(lastpassword,newpassword,userId).then(async(data)=>{
+      if (data.status == false) {
+        res.render('user/changePassword',{passwordError:'Enter correct password'})
+      } else {
+        await bcrypt.hash(newpassword,10).then(async(hashed)=>{
+        await User.findByIdAndUpdate({_id:Types.ObjectId(userId)},{$set:{password:hashed}})
+        res.redirect('/profile')
+        }) 
+      }
     })
   }
 

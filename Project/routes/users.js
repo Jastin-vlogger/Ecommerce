@@ -7,7 +7,8 @@ require('dotenv').config()
 const userAuth = require('../authMiddleWare/auth')
 const productController = require('../controllers/productController');
 const addcart = require('../controllers/add-to-cart')
-const checkout = require('../controllers/checkout')
+const checkout = require('../controllers/checkout');
+const { render } = require('../app');
 
 const serverSID ='VAbeb462e425477ecf42eee83cf5093c52' 
 const accountSID = 'AC674a3db162fadea27864cc9da3b8120b'
@@ -65,7 +66,7 @@ router.post('/login',(req,res)=>{
 
 
 router.get('/getOtp',userAuth.userLoggedIn,(req,res)=>{
-  res.render('user/checkOtp',{otperror: ''})
+  res.render('user/otppage')
 })
 
 
@@ -80,17 +81,18 @@ router.post('/sendotp',(req,res)=>{
   } catch(err) {
     console.log(err)
   }
+  res.render('user/checkOtp',{number: req.body.number})
 })
 
 
 router.post('/checkotp',(req,res)=>{
-  const {otp} = req.body
+  const {otp,number} = req.body
   try{
-    client.verify.services(serverSID).verificationChecks.create({to:'+919353883653',code:otp}).then((resp)=>{  
+    client.verify.services(serverSID).verificationChecks.create({to:`+91${number}`,code:otp}).then((resp)=>{  
       if (!resp.valid) {
         res.render('user/checkOtp',{otperror: 'Enter valid OTP'})
       } else {
-
+         res.redirect('/');
       }
       
    })
@@ -111,6 +113,8 @@ router.post('/signup',(req,res)=>{
     res.redirect('/login')
   }) 
 })
+
+
 
 router.get('/add-to-cart/:id',userAuth.userLoggedIn,addcart.addtocart)
 
@@ -150,6 +154,12 @@ router.get('/edituser',userAuth.userLoggedIn,addcart.edituser)
 
 /* ------------------------------- edit post ------------------------------- */
 router.post('/editprofile',userAuth.userLoggedIn,addcart.updateuser)
+
+/* ------------------------------- changepassword ------------------------------- */
+router.get('/changepassword',userAuth.userLoggedIn,addcart.changepassword)
+
+/* -------------------------------  post change password ------------------------------- */
+router.post('/updatepassword',userAuth.userLoggedIn,addcart.updatepassword)
 
 /* ------------------------------- logout ------------------------------- */
 router.get('/logout',userAuth.verify,(req,res)=>{
