@@ -110,11 +110,11 @@
         <div class="checkout">
             <ul>
                 <li class="subtotal">subtotal
-                    <span>.rs</span>
+                    <!-- <span>.rs</span> -->
                     <span id="total"><%=total%></span>
                 </li>
                 <li class="cart-total">Total
-                    <span>.rs</span>
+                    <!-- <span>.rs</span> -->
                     <span id="totals"><%=total%></span>
                 </li>
             </ul>
@@ -143,9 +143,8 @@
     <script type="text/javascript">
         
         function deleteItemCart(proId) {
-            console.log('called');
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Are you sure ?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,

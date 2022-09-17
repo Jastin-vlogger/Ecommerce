@@ -127,7 +127,10 @@ router.get('/deleteCartProduct/:id',userAuth.userLoggedIn,addcart.deleteProduct)
 
 router.get('/proccedToCheckOut',userAuth.userLoggedIn,checkout.proccedToCheck)
 
+/* ------------------------------- placing order ------------------------------- */
 router.post('/place-order',userAuth.userLoggedIn,checkout.placeOrder)
+
+router.post('/verify-payment',userAuth.userLoggedIn,checkout.verifyingOrder)
 
 router.get('/order-placed',userAuth.userLoggedIn,checkout.orderplaced)
 
@@ -139,6 +142,9 @@ router.get('/profile',userAuth.userLoggedIn,addcart.profile)
 
 /* ------------------------------- save address ------------------------------- */
 router.post('/saveaddress',userAuth.userLoggedIn,addcart.saveaddress)
+
+/* ------------------------------- address page ------------------------------- */
+router.get('/address',userAuth.userLoggedIn,addcart.address)
 
 /* ------------------------------- remove address ------------------------------- */
 router.get('/removeaddress/:id',userAuth.userLoggedIn,addcart.removeAddress)
@@ -160,6 +166,8 @@ router.get('/changepassword',userAuth.userLoggedIn,addcart.changepassword)
 
 /* -------------------------------  post change password ------------------------------- */
 router.post('/updatepassword',userAuth.userLoggedIn,addcart.updatepassword)
+
+router.get('/address',userAuth.userLoggedIn,addcart.address)
 
 /* ------------------------------- logout ------------------------------- */
 router.get('/logout',userAuth.verify,(req,res)=>{

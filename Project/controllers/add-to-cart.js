@@ -81,6 +81,11 @@ addtocart :async(req,res)=>{
     })
     
   },
+  address:async(req,res)=>{
+    let userId = req.userId
+    let addedAddress =await userHelpers.findaddress(userId)
+    res.render('user/address',{addedAddress})
+  },
   removeAddress:async(req,res)=>{
     let addressId = req.params.userId
     await productController.removeAddress(addressId).then((data)=>{

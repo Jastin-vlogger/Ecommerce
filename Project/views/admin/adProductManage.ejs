@@ -1,5 +1,6 @@
 <%-include('header')-%>
 
+
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div class="bg-white" id="sidebar-wrapper">
@@ -50,9 +51,12 @@
                     </ul>
                 </div>
             </nav>
-
+            <form>
+                <input type="text" name="search" placeholder="Search Product" id="navBarSearchForm" style="width: 200px;height: 34px;">
+                <input class="btn btn-dark" type="submit" value="Search" >
+            </form>
             <div class="container-fluid px-4">
-                <a href="/admin/add-product" class="btn btn-info float-left">Add Product</a>
+                <a href="/admin/add-product" class="btn btn-info float-left mt-5">Add Product</a>
                 <div class="row my-5">
                     <h3 class="fs-4 mb-3">Recent Orders</h3>
 
@@ -91,18 +95,36 @@
                                         </td>
                                         <td><img style="width: 50px;height: 50px;"
                                                 src="/static/product-image/<%=element._id%>.jpg" alt=""></td>
-                                                <%if(element.isDeleted === false){%>
-                                                <td><a class="btn btn-warning float-left second" id=""onclick="deleteproduct(`<%=element._id%>`)">Delete Product</a></td>
-                                                <%}else{%>
-                                                    <td>deleted</td>
+                                        <%if(element.isDeleted===false){%>
+                                            <td><a class="btn btn-warning float-left second" id=""
+                                                    onclick="deleteproduct(`<%=element._id%>`)">Delete Product</a></td>
+                                            <%}else{%>
+                                                <td>deleted</td>
                                                 <%}%>
-                                       
-                                        <td><a href="/admin/edit-product/<%=element._id%>"
+                                                <td><a href="/admin/edit-product/<%=element._id%>"
                                                 class="btn btn-secondary float-left">Edit Product</a></td>
                                     </tr>
                                     <%})%>
                             </tbody>
                         </table>
+                        
+                            <a href=""></a>
+                        
+                        <nav aria-label="" class="">
+                            <ul class="pagination ">
+                                
+                              <li class="page-item ">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                              </li>
+                              <%for(let j = 1 ; j <= totalpages ; j++){%>
+                              <li class="page-item "><a class="page-link" href="?page=<%=j%>"><%=j%></a></li>
+                              <%}%>
+                              <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                              </li>
+                              
+                            </ul>
+                          </nav>
                     </div>
 
                 </div>

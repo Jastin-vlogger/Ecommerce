@@ -17,11 +17,30 @@ module.exports= {
         })   
         })
     },
-    findProduct:()=>{
+    findProduct:(search,page)=>{
+        const limit = 2
         return new Promise (async(resolve,reject)=>{
-            await Product.find().then((data)=>{
-                resolve(data)
-            })
+            let data = await Product.find({
+                $or:[
+                       {name:{$regex:'.*'+search+'.*',$options:'i'}},
+                        {category:{$regex:'.*'+search+'.*',$options:'i'}},
+                    ]
+                })
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .exec()
+
+                let count = await Product.find({
+                    $or:[
+                           {name:{$regex:'.*'+search+'.*',$options:'i'}},
+                            {category:{$regex:'.*'+search+'.*',$options:'i'}},
+                        ]
+                    })
+                    .countDocuments();
+
+            let cont = Math.ceil(count/limit)
+
+            resolve(data,cont)
         })
     },
     findCategory:()=>{
@@ -212,7 +231,7 @@ module.exports= {
     },
     getUserOrders:(userId)=>{
         return new Promise(async(resolve,reject)=>{
-            let orders = await Order.find({userId:mongoose.Types.ObjectId(userId)})
+            let orders = await Order.find({userId:mongoose.Types.ObjectId(userId)}).sort({_id:-1})
             resolve(orders)
         })
     },

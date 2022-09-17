@@ -14,12 +14,19 @@ module.exports ={
     },
     placeOrder:async(req,res)=>{
         let userId = req.body.userId
+        let payment = req.body.paymentmethod
         let products = await productController.getCartProductList(req.body.userId)
         let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
-        userHelpers.placeOrder(req.body,products,totalPrice,userId).then((response)=>{
-            res.send(response)
+        userHelpers.placeOrder(req.body,products,totalPrice,userId).then((orderId)=>{
+            if (payment == 'COD') {
+                 res.json({cod_sucess:true});
+            } else {
+                userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
+                    res.json(response);
+                    console.log(response);
+                })
+            }
         })
-        console.log(req.body);
     },
     orderplaced:(req,res)=>{
         res.render('user/orderplaced')
@@ -29,5 +36,16 @@ module.exports ={
     const token = req.cookies.token
     let orders =await productController.getUserOrders(userId)
     res.render('user/oderdetails',{orders})
+    },
+    verifyingOrder:(req,res)=>{
+        userHelpers.verifyPayment(req.body).then(()=>{
+            userHelpers.changePaymentStatus(req.body.order.receipt).then(()=>{
+                console.log("successfull");
+                res.json({status:true})
+            })
+        }).catch((err)=>{
+            res.json({status:false,errMsg:err})
+        })
+        // res.redirect('/order-placed');
     }
 }
