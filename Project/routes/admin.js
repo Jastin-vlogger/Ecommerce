@@ -57,6 +57,7 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/dashboard', authentication.adminverify, (req, res) => {
+    
     res.render('admin/dashboard')
 })
 
@@ -204,6 +205,8 @@ router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
     categoryControler.deletecategory(userId)
     res.redirect('/admin/category')
 })
+
+
 
 /* -------------------------------admin view ordered products ------------------------------- */
 router.get('/orderMangement', authentication.adminverify, order.findorders)

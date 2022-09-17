@@ -93,7 +93,7 @@
                     <%if(address){%>
                         <%address.forEach((element,i)=>{%>
                             <div class="form-check col-md-6 py-2">
-                                <% const saved=JSON.stringify(address[i])%>
+                            
                                     <input class="form-check-input" type="radio"
                                         value="<%=element.firstname%> <%=element.lastname%> <%=element.address%> <%=element.town%> <%=element.pincode%>"
                                         name="savedAddress" id="flexRadioDefault<%=i%>"
@@ -168,8 +168,13 @@
                             </div>
                             <div class="custom-control custom-radio">
                                 <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
-                                    value="ONLINE">
+                                    value="Razorpay">
                                 <label class="custom-control-label" for="debit">Razorpay</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                    value="Paypal">
+                                <label class="custom-control-label" for="debit">Paypal</label>
                             </div>
                             <!-- <div class="custom-control custom-radio">
                         <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">

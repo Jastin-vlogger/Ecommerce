@@ -44,6 +44,7 @@ module.exports ={
                 res.json({status:true})
             })
         }).catch((err)=>{
+            
             res.json({status:false,errMsg:err})
         })
         // res.redirect('/order-placed');
