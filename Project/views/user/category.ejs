@@ -1,33 +1,33 @@
-<%-include('header')-%>
+<%-include('header')-%> 
+
 <style>
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
-  z-index: 1;
-}
-
-.dropdown-content a {
-  /* color: black; */
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-/* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
-</style>
-
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+      z-index: 1;
+    }
+    
+    .dropdown-content a {
+      /* color: black; */
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    
+    .dropdown-content a:hover {background-color: #ddd;}
+    
+    .dropdown:hover .dropdown-content {display: block;}
+    
+    /* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
+    </style>
     
     <!-- navbar -->
     <nav class = "navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
@@ -60,7 +60,7 @@
                 <% }else{ %>
                 <a href = "login" class = "btn btn-primary mt-3 ms-2 ">
                     Login
-                    </a>
+                </a>
                 <%}%>
 
             </div>
@@ -74,18 +74,7 @@
                     <li class = "nav-item px-2 py-2">
                         <a class = "nav-link text-uppercase text-dark" href = "#header">home</a>
                     </li>
-                    <li class = "nav-item px-2 py-2">
-                        <!-- <a class = "nav-link text-uppercase text-dark" href = "#collection">collection</a> -->
-                        <div class="dropdown ">
-                            <a class="dropbtn nav-link text-uppercase text-dark">collection</a>
-                            <div class="dropdown-content">
-                            <%categories.forEach((element)=>{%>
-                              <a href="products/categories/<%=element._id%>"><%=element.name%></a>
-                            <%})%>
-                            </div>
-                            
-                          </div>
-                    </li>
+                    
                     <li class = "nav-item px-2 py-2">
                         <a class = "nav-link text-uppercase text-dark" href = "#special">specials</a>
                     </li>
@@ -117,7 +106,7 @@
             
             <div class = "special-list row g-0">
                 
-                <%allProduct.forEach((element)=>{%>
+                <%data.forEach((element)=>{%>
                     <%if(element.isDeleted === false){%>
                 <div class = "col-md-6 col-lg-4 col-xl-3 p-2">
                     

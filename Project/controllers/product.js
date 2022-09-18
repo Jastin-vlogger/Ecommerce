@@ -6,6 +6,8 @@ const userHelpers = require('./user-helpers');
 const User = require('../models/user');
 const { Types } = require('mongoose');
 const bcrypt = require('bcrypt')
+const Category = require('../models/category')
+
 
 
 module.exports = {
@@ -130,6 +132,18 @@ addtocart :async(req,res)=>{
         }) 
       }
     })
+  },
+  categorize:async(req,res)=>{
+    let categoryId = req.params.id
+    const token = req.cookies.token
+    let userId = req.userId
+    let categories = await productController.findCategory()
+    let cartCount =await userHelpers.getCartCount(userId)
+    let catname = await Category.findById(categoryId)
+    // console.log(catname.name);
+    let data =await productController.categorizeProduct(catname.name)
+    console.log('data :'+ data);
+    res.render('user/category',{data,token,cartCount,categories})
   }
 
 }

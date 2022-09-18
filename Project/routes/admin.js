@@ -13,8 +13,9 @@ const fileUpload = require('express-fileupload')
 const userController = require('../controllers/user-helpers');
 const categoryControler = require('../controllers/category')
 const order = require('../controllers/orders')
-const addcart = require('../controllers/add-to-cart');
+const addcart = require('../controllers/product');
 const Product = require('../models/product');
+const Admin = require('../controllers/admin')
 
 
 
@@ -56,9 +57,12 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/dashboard', authentication.adminverify, (req, res) => {
-    
+router.get('/dashboard', authentication.adminverify, async(req, res) => {
+    await Admin.findOrders().then((count)=>{
+
+    console.log(count);
     res.render('admin/dashboard')
+    })
 })
 
 router.get('/productmanagement', authentication.adminverify, async (req, res) => {

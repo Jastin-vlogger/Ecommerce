@@ -128,8 +128,6 @@ module.exports= {
                     resolve(response)
                 })
             } 
-           
-            
         })
     },
     getCartProducts:(userId)=>{
@@ -275,6 +273,34 @@ module.exports= {
             resolve(removeAddress)
         })
         
+    },
+    categorizeProduct:(catname)=>{
+        return new Promise (async(resolve,reject)=>{
+        //   let data = await Product.aggregate([
+        //     {
+        //         $match:{category:catname}
+        //     },
+        //     // {
+        //     //     $unwind:'$name'
+        //     // },
+        //     {
+        //         $lookup:{
+        //             from:'products',
+        //             localField:'name',
+        //             foreignField:'category',
+        //             as:'cat'
+        //         }
+        //     },
+        //     {
+        //         $project:{
+        //             cat:{ $arrayElemAt:['$cat',0]}
+        //         }
+        //     }
+        //   ])
+        let data = await Product.find({category:catname})
+        //   console.log(data);
+          resolve(data)
+        })
     }
 }
 

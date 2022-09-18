@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const userAuth = require('../authMiddleWare/auth')
 const productController = require('../controllers/productController');
-const addcart = require('../controllers/add-to-cart')
+const product = require('../controllers/product')
 const checkout = require('../controllers/checkout');
 const { render } = require('../app');
 
@@ -21,8 +21,10 @@ router.get('/',userAuth.verify,async(req, res)=> {
   const token = req.cookies.token
   let userId = req.userId
   let cartCount =await userHelpers.getCartCount(userId)
+  let categories = await productController.findCategory()
+  // console.log(categories);
   productController.getAllProducts().then((allProduct)=>{
-    res.render('user/landingPage',{allProduct,token,cartCount})
+    res.render('user/landingPage',{allProduct,token,cartCount,categories})
   })
 });
 
@@ -114,16 +116,16 @@ router.post('/signup',(req,res)=>{
   }) 
 })
 
+router.get('/products/categories/:id',product.categorize)
 
+router.get('/add-to-cart/:id',userAuth.userLoggedIn,product.addtocart)
 
-router.get('/add-to-cart/:id',userAuth.userLoggedIn,addcart.addtocart)
+router.get('/cart',userAuth.userLoggedIn,product.cart)
 
-router.get('/cart',userAuth.userLoggedIn,addcart.cart)
-
-router.post('/change-product-quantity',userAuth.userLoggedIn,addcart.changeQuantity)
+router.post('/change-product-quantity',userAuth.userLoggedIn,product.changeQuantity)
 
 /* ------------------------------- delete cart product ------------------------------- */
-router.get('/deleteCartProduct/:id',userAuth.userLoggedIn,addcart.deleteProduct)
+router.get('/deleteCartProduct/:id',userAuth.userLoggedIn,product.deleteProduct)
 
 router.get('/proccedToCheckOut',userAuth.userLoggedIn,checkout.proccedToCheck)
 
@@ -138,36 +140,36 @@ router.get('/order-placed',userAuth.userLoggedIn,checkout.orderplaced)
 router.get('/orders',userAuth.userLoggedIn,checkout.viewproducts)
 
 /* ------------------------------- profile ------------------------------- */
-router.get('/profile',userAuth.userLoggedIn,addcart.profile)
+router.get('/profile',userAuth.userLoggedIn,product.profile)
 
 /* ------------------------------- save address ------------------------------- */
-router.post('/saveaddress',userAuth.userLoggedIn,addcart.saveaddress)
+router.post('/saveaddress',userAuth.userLoggedIn,product.saveaddress)
 
 /* ------------------------------- address page ------------------------------- */
-router.get('/address',userAuth.userLoggedIn,addcart.address)
+router.get('/address',userAuth.userLoggedIn,product.address)
 
 /* ------------------------------- remove address ------------------------------- */
-router.get('/removeaddress/:id',userAuth.userLoggedIn,addcart.removeAddress)
+router.get('/removeaddress/:id',userAuth.userLoggedIn,product.removeAddress)
 
 /* ------------------------------- cancel order ------------------------------- */
-router.get('/cancel-order/:id',userAuth.userLoggedIn,addcart.cancelOrder)
+router.get('/cancel-order/:id',userAuth.userLoggedIn,product.cancelOrder)
 
 /* ------------------------------- view ordered product detail ------------------------------- */
-router.get('/product/:id',userAuth.userLoggedIn,addcart.viewproductdetail)
+router.get('/product/:id',userAuth.userLoggedIn,product.viewproductdetail)
 
 /* ------------------------------- edit get ------------------------------- */
-router.get('/edituser',userAuth.userLoggedIn,addcart.edituser)
+router.get('/edituser',userAuth.userLoggedIn,product.edituser)
 
 /* ------------------------------- edit post ------------------------------- */
-router.post('/editprofile',userAuth.userLoggedIn,addcart.updateuser)
+router.post('/editprofile',userAuth.userLoggedIn,product.updateuser)
 
 /* ------------------------------- changepassword ------------------------------- */
-router.get('/changepassword',userAuth.userLoggedIn,addcart.changepassword)
+router.get('/changepassword',userAuth.userLoggedIn,product.changepassword)
 
 /* -------------------------------  post change password ------------------------------- */
-router.post('/updatepassword',userAuth.userLoggedIn,addcart.updatepassword)
+router.post('/updatepassword',userAuth.userLoggedIn,product.updatepassword)
 
-router.get('/address',userAuth.userLoggedIn,addcart.address)
+router.get('/address',userAuth.userLoggedIn,product.address)
 
 /* ------------------------------- logout ------------------------------- */
 router.get('/logout',userAuth.verify,(req,res)=>{
