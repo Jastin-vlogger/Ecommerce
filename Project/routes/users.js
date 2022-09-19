@@ -9,6 +9,13 @@ const productController = require('../controllers/productController');
 const product = require('../controllers/product')
 const checkout = require('../controllers/checkout');
 const { render } = require('../app');
+const paypal = require('paypal-rest-sdk');
+ 
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': '####yourclientid######',
+  'client_secret': '####yourclientsecret#####'
+})
 
 const serverSID ='VAbeb462e425477ecf42eee83cf5093c52' 
 const accountSID = 'AC674a3db162fadea27864cc9da3b8120b'

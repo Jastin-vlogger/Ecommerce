@@ -80,19 +80,32 @@
 <script>
     var el = document.getElementById("wrapper");
     var toggleButton = document.getElementById("menu-toggle");
-
-    toggleButton.onclick = function () {
-        el.classList.toggle("toggled");
-    };
-
     let myChart = document.getElementById('myChart')
+
+    // toggleButton.onclick = function () {
+    //     el.classList.toggle("toggled");
+    // };
+
+
+    fetch('/admin/dashboard/daystat',{
+        method: 'get',
+    }).then((val)=>val.json())
+    .then((data)=>{
+        console.log(data);
+        let xaxis = []
+        let count = []
+        for (const val of data) {
+            val.push(xaxis)
+            console.log(xaxis);
+        }
+    
     const masspopChart = new Chart(myChart, {
     type: 'line',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: [],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            label: 'Number of orders',
+            data: [],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -119,7 +132,8 @@
             }
         }
     }
-});
+    })
+})
 
 // let massPopChart = new Chart(myChart, {
 //       type:'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea

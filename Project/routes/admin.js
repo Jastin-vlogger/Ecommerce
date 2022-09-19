@@ -57,11 +57,10 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/dashboard', authentication.adminverify, async(req, res) => {
-    await Admin.findOrders().then((count)=>{
-
-    console.log(count);
-    res.render('admin/dashboard')
+router.get('/dashboard', authentication.adminverify, async(req, res) => { 
+    await Admin.findOrders().then((data)=>{
+    // res.json(data)
+    res.render('admin/dashboard',{data})
     })
 })
 
@@ -84,7 +83,6 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec()
-
 
     let count = await Product.find({
         $or: [
@@ -210,6 +208,12 @@ router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
     res.redirect('/admin/category')
 })
 
+router.get('/dashboard/daystat',authentication.adminverify,async(req,res)=>{
+    await Admin.findOrders().then((data)=>{
+        res.json(data)
+        // res.render('admin/dashboard',{data})
+        })
+})
 
 
 /* -------------------------------admin view ordered products ------------------------------- */
