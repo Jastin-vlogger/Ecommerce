@@ -66,9 +66,11 @@
                                     <th scope="col">Paymentmethod</th>
                                     <th scope="col">Total</th>
                                     
-                                    <th scope="col">State</th>
-                                    <th scope="col">Option</th>
+                                    <th scope="col">State</th> 
                                     <th scope="col">Status</th>
+
+                                    <th scope="col">Option</th>
+                                    <th scope="col">Change status</th>
                                     <!-- <th scope="col">Option</th> -->
                                 </tr>
                             </thead>
@@ -88,6 +90,9 @@
                                         <td>
                                             <%=orders[i].deliveryDetails.state%>
                                         </td>
+                                        <td>
+                                            <%=orders[i].status%>
+                                        </td>
                                         <%if(orders[i].ordercanceled === false){%>
                                             <td scope="col"><button class="btn btn-danger" onclick="confirmDelete(`<%=orders[i]._id%>`)"  >Cancel Order</button></td>
                                         <%}else{%>
@@ -98,6 +103,15 @@
                                         <%}else{%>
                                             <td><a class="btn float-left second" id="" ><%=orders[i].status%></a></td>
                                         <%}%>
+                                        <td>
+                                           <select class=" form-select-lg mb-3" >
+                                            <option value="pending"><%=orders[i].status%></option>
+                                                <option value="pending">pending</option>
+                                                <option value="placed">placed</option>
+                                                <option value="delivered">delivered</option>
+                                            </select>
+                                        </td>
+
                                     </tr>
                                     <%}%>
                             </tbody>

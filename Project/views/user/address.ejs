@@ -129,7 +129,7 @@
 
 
 
-        <%if(addedAddress === 0){%>
+        <%if(addedAddress == 0){%>
 
             <p class="text-center">No Data Found</p>
             <%}%>
@@ -137,12 +137,12 @@
                     <div class="row shadow mt-3 rounded p-3 align-items-center">
                         <div class="col-md-3">
                             <%=element.firstname%>
-                                <%=element.lastname%>
+                            <%=element.lastname%>
                         </div>
 
                         <div class="col-md-4">
                             <%=element.address%> ,
-                                <%=element.town%><br>
+                            <%=element.town%><br>
                         </div>
                         <div class="col-md-3">
                             <span>Pin :</span>

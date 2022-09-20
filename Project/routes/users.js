@@ -46,6 +46,17 @@ router.get('/productDetails/:id',userAuth.verify,async(req,res)=>{
   })
 })
 
+router.get('/products/categories/productDetails/:id',userAuth.verify,async(req,res)=>{
+  let productId = req.params.id
+  let userId = req.userId
+  const token = req.cookies.token
+  let cartCount =await userHelpers.getCartCount(userId)
+  productController.productDetails(productId).then((data)=>{
+    console.log(data);
+  res.render('user/productDetails',{data,cartCount,token})
+  })
+})
+
 router.get('/login',userAuth.userLoggedIn,(req,res)=>{
   res.render('user/login',{passwordError:" ",nameval:'',eamilError:''})
 })

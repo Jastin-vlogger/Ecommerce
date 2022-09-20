@@ -208,11 +208,23 @@ router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
     res.redirect('/admin/category')
 })
 
-router.get('/dashboard/daystat',authentication.adminverify,async(req,res)=>{
+router.get('/dashboard/day',authentication.adminverify,async(req,res)=>{
     await Admin.findOrders().then((data)=>{
         res.json(data)
         // res.render('admin/dashboard',{data})
         })
+})
+
+router.get('/dashboard/week',authentication.adminverify,async(req,res)=>{
+    await Admin.findorderbyweek().then((data)=>{
+        res.json(data)
+    })
+})
+
+router.get('/dashboard/month',authentication.adminverify,async(req,res)=>{
+    await Admin.findorderbymonth().then((data)=>{
+        res.json(data)
+    })
 })
 
 
