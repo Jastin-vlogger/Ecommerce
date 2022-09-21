@@ -72,7 +72,7 @@ addtocart :async(req,res)=>{
   },
   changestatus:async(req,res)=>{
     let orderId = req.params.id
-    let status = await productController.changeOrderStatus(orderId)
+    let status = await productController.changeOrderStatus(orderId,req.body.status)
     res.redirect('/admin/orderMangement')
   },
   saveaddress:async(req,res)=>{

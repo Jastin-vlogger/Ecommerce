@@ -207,7 +207,6 @@ module.exports = {
                 status: status,
                 totalAmount: total,
                 date: new Date()
-
             }
             await new Order(ordersave).save().then(async (response) => {
                 await Cart.deleteOne({ user: Types.ObjectId(userId) })

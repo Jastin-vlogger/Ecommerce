@@ -73,13 +73,14 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
     if (req.query.page) {
         page = req.query.page
     }
-    const limit = 2
+    const limit = 5
     let data = await Product.find({
         $or: [
             { name: { $regex: '.*' + search + '.*', $options: 'i' } },
             { category: { $regex: '.*' + search + '.*', $options: 'i' } },
         ]
     })
+        
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec()
@@ -233,7 +234,13 @@ router.get('/orderMangement', authentication.adminverify, order.findorders)
 
 router.get('/cancelorder/:id', authentication.adminverify, addcart.cancelOrderAdmin)
 
-router.get('/change-status/:id', authentication.adminverify, addcart.changestatus)
+router.post('/change-status/:id',authentication.adminverify, addcart.changestatus)
+
+// router.get('/change-status/:id', authentication.adminverify, addcart.changestatus)
+
+router.get('/bannermangement',authentication.adminverify, Admin.bannermange)
+
+router.post('/banner',authentication.adminverify,Admin.addbanner)
 
 router.get('/logout', authentication.adminverify, (req, res) => {
     res.clearCookie('adminToken').redirect('/admin/login')

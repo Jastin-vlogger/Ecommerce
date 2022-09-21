@@ -10,6 +10,9 @@ const product = require('../controllers/product')
 const checkout = require('../controllers/checkout');
 const { render } = require('../app');
 const paypal = require('paypal-rest-sdk');
+const Banner = require('../controllers/admin');
+const banner = require('../models/banner');
+
  
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -29,9 +32,10 @@ router.get('/',userAuth.verify,async(req, res)=> {
   let userId = req.userId
   let cartCount =await userHelpers.getCartCount(userId)
   let categories = await productController.findCategory()
-  // console.log(categories);
+  let bannerdata = await banner.find()
+  console.log(bannerdata);
   productController.getAllProducts().then((allProduct)=>{
-    res.render('user/landingPage',{allProduct,token,cartCount,categories})
+    res.render('user/landingPage',{allProduct,token,cartCount,categories,bannerdata})
   })
 });
 

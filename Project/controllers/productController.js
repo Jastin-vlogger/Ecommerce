@@ -245,9 +245,9 @@ module.exports= {
             resolve(orderC)
         })
     },
-    changeOrderStatus:(orderId)=>{
+    changeOrderStatus:(orderId,status)=>{
         return new Promise (async(resolve,reject)=>{
-            let orderstatuschanged = await Order.findByIdAndUpdate({_id:Types.ObjectId(orderId)},{$set:{status:'placed'}})
+            let orderstatuschanged = await Order.findByIdAndUpdate({_id:Types.ObjectId(orderId)},{$set:{status:status}})
             resolve(orderstatuschanged)
         })
     },

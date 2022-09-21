@@ -1,4 +1,5 @@
 const Category = require('../models/category')
+const Banner = require('../models/banner')
 
 module.exports={
     addCategory:(product)=>{
@@ -36,4 +37,11 @@ module.exports={
             })
         })
     },
+    addbannertodb:(data)=>{
+        return new Promise (async(resolve,reject)=>{
+            await Banner(data).save().then((data)=>{
+                resolve(data._id)
+            })
+        })
+    }
 }

@@ -1,0 +1,196 @@
+<%-include('header')-%>
+
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
+                    class="fas fa-user-secret me-2"></i>goCycle</div>
+            <div class="list-group list-group-flush my-3">
+                <a href="dashboard"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Dashboard</a>
+                <a href="productmanagement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Products</a>
+                <a href="category"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Category</a>
+                <a href="userMangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">User mangement</a>
+                <a href="bannermangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Banner
+                    mangement</a>
+                <a href="orderMangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Order
+                    management</a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add
+                    coupons</a>
+                <a href="logout"
+                    class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">Logout</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0">Dashboard</h2>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-2"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div> -->
+            </nav>
+
+            <div class="container-fluid px-4">
+                <div class="row my-5">
+
+
+                    <section class="col-md-12 col-lg-12 ml-auto mb-2">
+                        <div class="container   mt-4">
+                            <div class="row d-flex justify-content-center  ">
+                                <div class="col-md-4 -">
+                                    <h2 class="text-center">Add banner </h2>
+                                    <form action="/admin/banner" class=" pt-2 ml-auto" id="banner21"
+                                        enctype="multipart/form-data" method="post">
+                                        <label class="form-label" for="customFile">image</label>
+                                        <input type="file" required id="id_image1" accept="image/*" name="image"
+                                            class="form-control" onchange="viewImage1(event)" style="width:100%;"><br>
+                                        <img src="" id="imgView1" alt="" style="height:100px ;display:none">
+                                        <label class="form-label" for="heading">heading for banner</label>
+                                        <input type="text" name="heading" id="heading">
+                                        <br>
+                                        <label class="form-label " for="desc">description for banner</label>
+                                        <input type="text" class="d-block" name="desc" id="desc">
+                                        <select class="form-select form-select-lg mb-3" name="category">
+                                            <%categories.forEach((element)=>{%>
+                                            <option value="<%=element.name%>">
+                                                <%=element.name%>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                        <br>
+                                        <button type="submit" class="my-4 btn btn-primary">submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="row my-5">
+                        <h3 class="fs-4 mb-3">Recent Orders</h3>
+
+
+                        <div class="col">
+                            <table class="table bg-white rounded shadow-sm  table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="50">#</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach((element,i)=>{%>
+                                        <tr>
+                                            <th scope="row">
+                                                <%=i+1%>
+                                            </th>
+                                            <td><img style="width: 50px;height: 50px;"
+                                                src="/static/bannerImg/<%=element._id%>.jpg" alt=""></td>
+                                            <td>
+                                                <%=element.header%>
+                                            </td>
+                                            <td>
+                                                <%=element.description%>
+                                            </td>
+                                            <td><a href=""
+                                                class="btn btn-secondary float-left">Remove</a></td>
+                                        </tr>
+                                        <%})%>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <%-include('footer')-%>
+
+
+        <script>
+
+
+
+
+            function viewImage1(event) {
+                var fileInput1 = document.getElementById('id_image1');
+                var filePath1 = fileInput1.value;
+                var allowedExtensions = /(\.jpg)$/i;
+                if (!allowedExtensions.exec(filePath1)) {
+                    fileInput1.value = '';
+                    swal("There is a problem!", "Please choose image file.");
+                    return false;
+                } else {
+                    document.getElementById("imgView1").style.display = "block";
+                    document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+                }
+            }
+            function confirmation(id) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this product!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((result) => {
+                        if (result) {
+
+
+                            swal("file has been deleted!", {
+                                icon: "success",
+                            }).then(() => {
+                                location.href = `/admin/deletebanner/${id}`;
+                            })
+
+                        } else {
+                            swal("Your  file is safe!");
+                        }
+                    });
+            }
+
+
+
+        </script>

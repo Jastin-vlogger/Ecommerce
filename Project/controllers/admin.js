@@ -1,4 +1,9 @@
 const Order = require('../models/order')
+const Banner = require('../models/banner')
+const adminHelpers = require('../controllers/category')
+const productController = require('../controllers/productController')
+const Category = require('../models/category')
+
 
 
 module.exports ={
@@ -108,5 +113,27 @@ module.exports ={
             ])
             resolve(data)
         })
+    },
+    bannermange:async(req,res)=>{
+        let data = await Banner.find()
+        let categories = await productController.findCategory()
+        console.log(data);
+        res.render('admin/addBanner',{data,categories});
+    },
+    addbanner:async(req,res)=>{
+        console.log(req.body);
+        let { heading,desc,category} = req.body
+        let categor = await Category.findOne({name:category})
+        console.log(categor._id);
+        let image = req.files.image
+        let addbanner = {
+            header:heading,
+            description:desc,
+            category:categor._id,
+        }
+        let data =  await adminHelpers.addbannertodb(addbanner)
+        console.log(data);
+        image.mv(`public/bannerImg/${data}.jpg`)
+         res.redirect('/admin/bannermangement');
     }
 }
