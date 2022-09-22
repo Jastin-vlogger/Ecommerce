@@ -5,15 +5,23 @@
     
         <h1>Add Product</h1>
         <!-- LOGIN FORM -->
-        <form action="/admin/edit-category" method="post" enctype="multipart/form-data">
+        <form action="/admin/edit-category" method="post" enctype="multipart/form-data" >
             <div class="form-group">
                 <label class="fs-4">Name</label>
-                <input type="text" class="form-control fs-4" name="name" value="<%=data.name%>">
+                <input type="text" class="form-control fs-4" name="name" value="<%=data.name%>" id="username" onkeyup="validatename()">
+                <span id="username-err" class="text-danger"></span>
             </div>
+            <p id="error-msg" class="fs-4" style="color:rgb(255, 0, 0) "><%=catError%></p>
+            <div id="emailmsg" class="fs-4" style="color:rgb(170, 47, 47);display:none">Please fill the required</div>
+            <input type="text" name="catId" id="" value="<%=data._id%>" hidden>
+
             <button type="submit" class="btn btn-warning btn-lg fs-4">Update</button>
         </form>
+        
     
         <hr>    
     </div>
     </div>
+
+    <script src="/static/javascripts/validation.js"></script>
 <%-include('footer')-%>

@@ -16,6 +16,7 @@ const order = require('../controllers/orders')
 const addcart = require('../controllers/product');
 const Product = require('../models/product');
 const Admin = require('../controllers/admin')
+const Category = require('../models/category')
 
 
 
@@ -180,27 +181,45 @@ router.get('/category', authentication.adminverify, (req, res) => {
 })
 
 router.get('/add-category', authentication.adminverify, (req, res) => {
-    res.render('admin/add-category')
+    res.render('admin/add-category',{catError:''})
 })
 
-router.post('/add-category', authentication.adminverify, (req, res) => {
-    categoryControler.addCategory(req.body).then((data) => {
+router.post('/add-category', authentication.adminverify,async (req, res) => {
+    let {name} = req.body
+    let data = await categoryControler. recheckCat(name)
+    if (data) {
+        res.render('admin/add-category',{catError:'This category is already present',data})
+    } else {
+       categoryControler.addCategory(req.body).then((data) => {
         res.redirect('/admin/category')
-    })
+    }) 
+    }
+    
 })
 
 router.get('/edit-category/:id', authentication.adminverify, (req, res) => {
     let userId = req.params.id
     categoryControler.findCategory(userId).then((data) => {
-        res.render('admin/edit-category', { data })
+        res.render('admin/edit-category', { data ,catError:''})
     })
 })
 
-router.post('/edit-category', authentication.adminverify, (req, res) => {
+router.post('/edit-category', authentication.adminverify, async(req, res) => {
     let { body } = req
-    categoryControler.updatedCategory(body).then((data) => {
+    let {name,catId} = req.body
+    console.log(req.body);
+    let datas = await categoryControler. recheckCat(name)
+    let data  = await categoryControler.findCategory(catId)
+    // let data = await Category.findOne({name:name})
+    if(datas){
+      if(datas.name == name){
+        res.render('admin/edit-category',{catError:'This category is already present',data})
+    }  
+    }else{
+       categoryControler.updatedCategory(name,catId).then((data) => {
         res.redirect('/admin/category')
-    })
+    }) 
+    }
 })
 
 router.get('/delete-category/:id', authentication.adminverify, (req, res) => {

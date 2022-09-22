@@ -23,9 +23,16 @@ module.exports={
             })
         })
     },
-    updatedCategory:(updatedData)=>{
+    recheckCat:(data)=>{
         return new Promise (async(resolve,reject)=>{
-            await Category.updateOne(updatedData).then((data)=>{
+            await Category.findOne({name:data}).then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    updatedCategory:(name,catId)=>{
+        return new Promise (async(resolve,reject)=>{
+            await Category.findByIdAndUpdate({_id:catId},{name:name}).then((data)=>{
                 resolve(data._id)
             })
         })
