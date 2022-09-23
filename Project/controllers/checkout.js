@@ -20,9 +20,16 @@ module.exports ={
         userHelpers.placeOrder(req.body,products,totalPrice,userId).then((orderId)=>{
             if (payment == 'COD') {
                  res.json({cod_sucess:true});
-            } else {
+            } else if(payment == 'Razorpay'){
                 userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
                     res.json(response);
+                    console.log(response);
+                })
+            } else if(payment == 'Paypal'){
+                console.log(req.body)
+                console.log('im here');
+                userHelpers.generatePaypal(orderId,totalPrice).then((response)=>{    
+                    res.json(response)
                     console.log(response);
                 })
             }

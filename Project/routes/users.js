@@ -12,6 +12,8 @@ const { render } = require('../app');
 const paypal = require('paypal-rest-sdk');
 const Banner = require('../controllers/admin');
 const banner = require('../models/banner');
+ 
+
 
  
 paypal.configure({
@@ -148,6 +150,10 @@ router.post('/change-product-quantity',userAuth.userLoggedIn,product.changeQuant
 
 /* ------------------------------- delete cart product ------------------------------- */
 router.get('/deleteCartProduct/:id',userAuth.userLoggedIn,product.deleteProduct)
+
+router.get('/wishlist',userAuth.userLoggedIn,product.whislist)
+
+router.get('/add-to-whislist/:id',userAuth.userLoggedIn,product.addtowhish)
 
 router.get('/proccedToCheckOut',userAuth.userLoggedIn,checkout.proccedToCheck)
 

@@ -8,11 +8,19 @@ const Razorpay = require('razorpay')
 const { resolve } = require('path')
 const { findByIdAndUpdate } = require('../models/user')
 const crypto = require('crypto')
+const paypal = require('paypal-rest-sdk');
 let instance = new Razorpay({
     key_id: 'rzp_test_kC80uilJbJoVnc',
     key_secret: 'p6rVgBY913W6XmR7IatJHFqe',
 });
 
+
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AVeSbZLSKoF5tArrQWsc49IuZwh7iFt9O7TLu84WpFcaWTY7rVG132U0ug9i1hSObq_Tt73PsdtdbKLt',
+    'client_secret': 'ECa9hIwI7SFkA1uzkrozydGxpreGq7Tf-noWqFNTLQXaHpYDGJey4USkLGcWzZ2ZqZyQTf-bMqPGVDAh'
+  });
+   
 
 module.exports = {
     signUp: (userData) => {
@@ -257,6 +265,49 @@ module.exports = {
             })
         })
 
+    },
+    generatePaypal:(orderId, totalPrice)=>{
+        parseInt(totalPrice).toFixed(2)
+        console.log(totalPrice);
+        return new Promise(async(resolve,reject)=>{
+            const create_payment_json = {
+              "intent": "sale",
+              "payer": {
+                  "payment_method": "paypal"
+              },
+              "redirect_urls": {
+                  "return_url": "http://localhost:3000/success",
+                  "cancel_url": "http://localhost:3000/cancel"
+              },
+              "transactions": [{
+                  "item_list": {
+                      "items": [{
+                          "name": "Red Sox Hat",
+                          "sku": "001",
+                          "price": totalPrice   ,
+                          "currency": "USD",
+                          "quantity": 1
+                      }]
+                  },
+                  "amount": {
+                      "currency": "USD",
+                      "total": totalPrice
+                  },
+                  "description": "Hat "
+              }]
+          };
+          
+          let data =  paypal.payment.create(create_payment_json, function (error, payment) {
+            if (error) {
+                console.log(error,'error ahda kuta');
+                throw error;
+            } else {
+                console.log('payment ayiiii');
+                resolve(payment)
+            }
+          })
+          
+        })
     },
     vieworders: () => {
 

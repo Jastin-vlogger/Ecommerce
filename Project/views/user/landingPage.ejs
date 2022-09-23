@@ -44,13 +44,14 @@
                 <button type="button" class="btn position-relative">
                     <a href="/cart" class="fa fa-shopping-cart"></a>
                     <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-                    <span class="badge badge-light">
+                    <span class="badge badge-light" >
                         <%=cartCount%>
                     </span>
                 </button>
                 <button type="button" class="btn position-relative">
-                    <i class="fa fa-heart"></i>
+                    <a href="/wishlist" class="fa fa-heart"></a>
                     <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+                    <span class="badge badge-light" id="wishlist"></span>
                 </button>
                 
                 <button type="button" class="btn position-relative">
@@ -210,6 +211,7 @@
                                         <%=element.price%>
                                     </span>
                                     <a href="productDetails/<%=element._id%>" class="btn btn-primary mt-3">BUY NOW</a>
+                                    <button class="btn btn-primary mt-3" onclick="addtowhislist(`<%=element._id%>`)">wishlist</button>
                                 </div>
 
                             </div>
@@ -338,7 +340,8 @@
 
 
 
-
+        <!-- sweet alert -->
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- jquery -->
         <script src="js/jquery-3.6.0.js"></script>
         <!-- isotope js -->
@@ -347,4 +350,29 @@
         <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
         <!-- custom js -->
         <script src="js/script.js"></script>
+
+        <script>
+            function addtowhislist(proId) {
+                $.ajax({
+                    url:`/add-to-whislist/${proId}`,
+                    method:'get',
+                    success:(response)=>{
+                    console.log(response);
+                    if(response){
+                        Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Added to wishlist',
+                        showConfirmButton: false,
+                        timer: 1500
+                        })
+                        let count = $('#wishlist').html()
+                        count = parseInt(count)+1
+                        $('#wishlist').html(count)
+                    }
+                    }
+                })
+                
+            }
+        </script>
         <%-include('footer')-%>

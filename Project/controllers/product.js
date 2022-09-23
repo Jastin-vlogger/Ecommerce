@@ -16,7 +16,7 @@ addtocart :async(req,res)=>{
     let productId = req.params.id
     console.log(userId,productId);
     await productcontroller.addToCart(productId,userId).then((response)=>{
-        res.redirect('/');
+        res.json(response)
     })
   },
   cart:async(req,res)=>{
@@ -144,6 +144,25 @@ addtocart :async(req,res)=>{
     let data =await productController.categorizeProduct(catname.name)
     console.log('data :'+ data);
     res.render('user/category',{data,token,cartCount,categories})
+  },
+  whislist:async(req,res)=>{
+    let userId = req.userId
+    // let total = await userHelpers.getTotalAmount(userId)
+    // let eachTotal = await userHelpers.getEachProductAmount(userId)
+    let product =await productController.getwishlistProducts(userId)
+    console.log(product);
+    res.render('user/whislist',{product})
+  },
+  addtowhish:async(req,res)=>{
+    let userId = req.userId
+    let productId = req.params.id
+    console.log(userId,productId);
+    await productcontroller.addTowhishlist(productId,userId).then((response)=>{
+      console.log(response);
+      res.json(response)
+      // res.redirect('/');
+  })
+
   }
 
 }

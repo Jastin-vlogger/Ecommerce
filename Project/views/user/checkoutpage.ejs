@@ -1,5 +1,14 @@
 <%-include('header')-%>
-    
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Checkout Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" type="text/css">       
+
 
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
@@ -12,7 +21,7 @@
                 <button type="button" class="btn position-relative">
                     <a href="/cart" class="fa fa-shopping-cart"></a>
                     <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-                    <span class="badge badge-light">
+                    <span class="badge badge-light" >
 
                     </span>
                 </button>
@@ -38,15 +47,7 @@
                     <li class="nav-item px-2 py-2">
                         <a class="nav-link text-uppercase text-dark" href="/">home</a>
                     </li>
-                    <li class="nav-item px-2 py-2">
-                        <!-- <a class = "nav-link text-uppercase text-dark" href = "#collection">collection</a> -->
-                        <div class="dropdown ">
-                            <a class="dropbtn nav-link text-uppercase text-dark">Category</a>
-                        </div>
-                    </li>
-                    <li class="nav-item px-2 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="#special">specials</a>
-                    </li>
+                    
                 </ul>
             </div>
         </div>
@@ -191,10 +192,11 @@
                                         value="Paypal">
                                     <label class="custom-control-label" for="debit">Paypal</label>
                                 </div>
-                                <!-- <div class="custom-control custom-radio">
-                        <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                        <label class="custom-control-label" for="paypal">PayPal</label>
-                    </div> -->
+
+                                <!-- Replace "test" with your own sandbox Business account app client ID -->
+                                <script src="https://www.paypal.com/sdk/js?client-id=AVeSbZLSKoF5tArrQWsc49IuZwh7iFt9O7TLu84WpFcaWTY7rVG132U0ug9i1hSObq_Tt73PsdtdbKLt&currency=USD"></script>
+                                <!-- Set up a container element for the button -->
+                                <div id="paypal-button-container"></div>
                             </div>
                             <!-- <div class="row">
                     <div class="col-md-6 mb-3">
@@ -228,6 +230,8 @@
             </div>
         </div>
     </div>
+
+    <!-- <script src="/static/javascripts/paypal.js"></script> -->
 
     <SCript>
 
@@ -304,20 +308,7 @@
             })
         }
     </SCript>
-
+</head>
+</html>
     <%-include('footer')-%>
-
-
-        <!DOCTYPE html>
-        <html>
-
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <title>Checkout Form</title>
-            <link rel="stylesheet"
-                href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" type="text/css">
-                
-        </head>
-        </html>
+        

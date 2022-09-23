@@ -7,7 +7,7 @@ const Cart = require('../models/userCart')
 const Order = require('../models/order')
 const Address = require('../models/address')
 const Category = require('../models/category')
-
+const Wishlist = require('../models/userwhislist')
 
 module.exports= {
     addProduct:(product)=>{
@@ -301,7 +301,83 @@ module.exports= {
         //   console.log(data);
           resolve(data)
         })
-    }
+    },
+    addTowhishlist:(productId,userId)=>{
+        let productadd ={
+            item:Types.ObjectId(productId),
+            quantity:1
+        }
+        return new Promise(async(resolve,reject)=>{
+            
+            let userWish = await Wishlist.findOne({user:Types.ObjectId(userId)})
+            
+            if (userWish) {
+                const alreadyExists = userWish.products.findIndex(product => product.item == productId)
+                if(alreadyExists === -1 ){
+                    const adding = await Wishlist.updateOne(
+                        {
+                            user:Types.ObjectId(userId)
+                        },{
+                            $push:{products:{item:Types.ObjectId(productId),quantity:1}}
+                        }).then((response)=>{
+                            resolve(response)
+                        })
+                }else{
+                    await Wishlist.updateOne({user:Types.ObjectId(userId),'products.item':Types.ObjectId(productId)},
+                    {
+                        $inc:{'products.$.quantity':1}
+                    }
+                    ).then((response)=>{
+                        resolve(response)
+                    })
+                }
+            } else {
+                let newWish ={ 
+                    user : userId,
+                    products:[productadd]
+                }
+                await Wishlist(newWish).save().then((response)=>{
+                    resolve(response)
+                })
+            } 
+        })
+    },
+    getwishlistProducts:(userId)=>{
+        return new Promise (async(resolve,reject)=>{
+        let wish = await Wishlist.aggregate([
+        {
+            $match:{user: mongoose.Types.ObjectId(userId)}
+        },
+        {
+            $unwind:'$products'
+        },
+        {
+            $project:{
+                item:'$products.item'
+            }
+        },
+        {
+            $lookup:{
+                from:'products',
+                localField:'item',
+                foreignField:'_id',
+                as:'product'
+            }
+        },
+        {
+            $project:{
+                item:1,
+                quantity:1,
+                product:{ $arrayElemAt:['$product',0]}
+            }
+        },
+        
+    ]).then((wish)=>{
+        // console.log(wish);
+       resolve(wish) 
+    })
+    })
+}
 }
 
     
