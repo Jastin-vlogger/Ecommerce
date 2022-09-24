@@ -135,5 +135,8 @@ module.exports ={
         console.log(data);
         image.mv(`public/bannerImg/${data}.jpg`)
          res.redirect('/admin/bannermangement');
+    },
+    addoffer:(req,res)=>{
+        res.render('admin/add_offer');
     }
 }

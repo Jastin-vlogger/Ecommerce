@@ -1,12 +1,24 @@
 const Category = require('../models/category')
 const Banner = require('../models/banner')
+const { Types } = require('mongoose')
 
 module.exports={
-    addCategory:(product)=>{
+    addCategory:(name,offer)=>{
+        let product = {
+            name:name,
+            offer:offer,
+        }
         return new Promise (async(resolve,reject)=>{
-            await new Category({...product}).save().then((data)=>{
+            await new Category(product).save().then((data)=>{
                 resolve(data)
         })   
+        })
+    },
+    editcoupon:(offer,id)=>{
+        return new Promise (async(resolve,reject)=>{
+            await Category.findByIdAndUpdate({_id:Types.ObjectId(id)},{$set:{offer:offer}}).then((data)=>{
+                resolve(data)
+            })
         })
     },
     findcategory:(findcategory)=>{

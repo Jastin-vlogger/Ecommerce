@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({
     extended: true
   }));
-app.use('/static',express.static(path.join(__dirname,'public')) )
+app.use('/static',express.static(path.join(__dirname,'public')))
 // app.use(fileUpload())
 
 app.use('/admin', adminRouter); 

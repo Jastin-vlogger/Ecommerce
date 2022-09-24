@@ -7,7 +7,9 @@ form.addEventListener("submit" , onsubmit )
 function onsubmit(event){
     event.preventDefault();
     if(email.value === ""){
+        
         document.getElementById("emailmsg").style.display=""
+
         return false;
     } else{
         form.submit();

@@ -197,6 +197,5 @@ router.get('/address',userAuth.userLoggedIn,product.address)
 router.get('/logout',userAuth.verify,(req,res)=>{
     res.clearCookie('token').redirect('/login')
 })
-
  
 module.exports = router;

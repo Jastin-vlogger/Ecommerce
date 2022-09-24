@@ -8,6 +8,10 @@ const categorySchema = new mongoose.Schema({
     productid:{
         type:String,
         // required:true,
+    },
+    offer:{
+        type:Number,
+        // required:true,
     }
 })
 

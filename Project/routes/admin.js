@@ -174,27 +174,40 @@ router.get('/unblock-user/:id', (req, res) => {
     })
 })
 
-router.get('/category', authentication.adminverify, (req, res) => {
+router.get('/category',authentication.adminverify, (req, res) => {
     categoryControler.findcategory().then((data) => {
         res.render('admin/category', { data })
     })
 })
 
-router.get('/add-category', authentication.adminverify, (req, res) => {
-    res.render('admin/add-category',{catError:''})
-})
+// router.get('/add-category', authentication.adminverify, (req, res) => {
+//     res.render('admin/add-category',{catError:''})
+// })
 
 router.post('/add-category', authentication.adminverify,async (req, res) => {
-    let {name} = req.body
+    let {name,offer} = req.body
+    console.log(name,offer);
     let data = await categoryControler. recheckCat(name)
     if (data) {
-        res.render('admin/add-category',{catError:'This category is already present',data})
+        console.log('im here');
+        res.json({status : false})
     } else {
-       categoryControler.addCategory(req.body).then((data) => {
-        res.redirect('/admin/category')
+       categoryControler.addCategory(name,offer).then((data) => {
+        console.log(data);
+        res.json(data)
     }) 
     }
     
+})
+
+router.patch('/edit-category-coupon/:id', authentication.adminverify,async(req,res)=>{
+  console.log(req.body);
+  let id = req.params.id
+  console.log(id);
+  let {offer} = req.body
+  await categoryControler.editcoupon(offer,id).then((data)=>{
+     res.json(data);
+  })
 })
 
 router.get('/edit-category/:id', authentication.adminverify, (req, res) => {
@@ -214,10 +227,12 @@ router.post('/edit-category', authentication.adminverify, async(req, res) => {
     if(datas){
       if(datas.name == name){
         res.render('admin/edit-category',{catError:'This category is already present',data})
+        // res.json({catError:'This category is already present'})
     }  
     }else{
        categoryControler.updatedCategory(name,catId).then((data) => {
         res.redirect('/admin/category')
+        // res.json(data)
     }) 
     }
 })
@@ -260,6 +275,8 @@ router.post('/change-status/:id',authentication.adminverify, addcart.changestatu
 router.get('/bannermangement',authentication.adminverify, Admin.bannermange)
 
 router.post('/banner',authentication.adminverify,Admin.addbanner)
+
+router.get('/add-offers',authentication.adminverify,Admin.addoffer)
 
 router.get('/logout', authentication.adminverify, (req, res) => {
     res.clearCookie('adminToken').redirect('/admin/login')

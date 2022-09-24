@@ -1,109 +1,273 @@
 <%-include('header')-%>
 
-        <div class="d-flex" id="wrapper">
-            <!-- Sidebar -->
-            <div class="bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-                        class="fas fa-user-secret me-2"></i>goCycle</div>
-                <div class="list-group list-group-flush my-3">
-                    <a href="dashboard"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Dashboard</a>
-            <a href="productmanagement"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Products</a>
-            <a href="category"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Category</a>
-            <a href="userMangement"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">User mangement</a>
-            <a href="bannermangement"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Banner mangement</a>
-            <a href="orderMangement"
-                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Order
-                management</a>
-            <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add
-                coupons</a>
-            <a href="logout"
-                class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">Logout</a>
-                </div>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
+                    class="fas fa-user-secret me-2"></i>goCycle</div>
+            <div class="list-group list-group-flush my-3">
+                <a href="dashboard"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Dashboard</a>
+                <a href="productmanagement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Products</a>
+                <a href="category"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Category</a>
+                <a href="userMangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">User mangement</a>
+                <a href="bannermangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Banner
+                    mangement</a>
+                <a href="orderMangement"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Order
+                    management</a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add
+                    coupons</a>
+                <a href="add-offers"
+                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add offers</a>
+                <a href="logout"
+                    class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">Logout</a>
             </div>
-            <!-- /#sidebar-wrapper -->
-    
-            <!-- Page Content -->
-            <div id="page-content-wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                        <h2 class="fs-2 m-0">Dashboard</h2>
-                    </div>
-    
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-    
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user me-2"></i>Admin
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-    
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0">Dashboard</h2>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>Admin
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-4">
                 <div class="container-fluid px-4">
-                    <a href="/admin/add-category" class="btn btn-info float-left" >Add Category</a>
-                    <div class="row my-5">
-                        
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        data-bs-whatever="@mdo" id="drop">Add Category</button>
+                </div>
+                <div class="row my-5">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="recipient-name" class="col-form-label">category name:</label>
+                                        <input type="text" class="form-control" name="name" id="username"
+                                            onkeyup="validatename()">
+                                        <span id="username-err" class="text-danger"></span>
+                                        <p id="error-msg" style="color:rgb(255, 0, 0) "></p>
+                                        <div id="emailmsg" style="color:rgb(170, 47, 47);display:none">Please fill the
+                                            required</div>
+                                        <label class="col-form-label">offer:</label>
+                                        <input type="number" class="form-control" name="offer" id="offer">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary" onclick="addcategory()">submit</button>
 
-                        <div class="col">
-                            <table class="table bg-white rounded shadow-sm  table-hover">
-                                <thead>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col">
+                        <table class="table bg-white rounded shadow-sm  table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="50">No</th>
+                                    <th scope="col">Category name</th>
+                                    <th scope="col">Manage offer</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="list">
+                                <% data.forEach((element,i)=>{%>
                                     <tr>
-                                        <th scope="col" width="50">No</th>
-                                        <th scope="col">Category name</th>
-                                        <th scope="col">Option</th>
-                                        <th scope="col">Option</th>
+                                        <th scope="row">
+                                            <%=i+1%>
+                                        </th>
+                                        <td>
+                                            <%=element.name%>
+                                        </td>
+                                        <td>
+                                            <span >
+                                                <%=element.offer%>%
+                                            </span>
+                                            <span class="fa fa-edit" id="offeredit" class="btn btn-primary"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop<%=i%>"></span>
+                                            <!-- <input class="fa fa-edit" id="offeredit" type="button" class="btn btn-primary"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop" > -->
+                                            <!-- <span  value="<%=element._id%>"></span> -->
+                                            
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="staticBackdrop<%=i%>" data-bs-backdrop="static"
+                                                data-bs-keyboard="false" tabindex="-1"
+                                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel">edit offer
+                                                            </h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="col-form-label">offer:</label>
+                                                            <input  class="form-control" name="offer" id="edit<%=i%>" value="<%=element._id%>" hidden>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% data.forEach((element,i)=>{%>
-                                    <tr>    
-                                        <th scope="row"><%=i+1%></th>
-                                        <td><%=element.name%></td>
-                                        <td><a href="/admin/edit-category/<%=element._id%>" class="btn btn-info" id="sweet" >Edit</a></td>
+                                                            <input type="number" class="form-control" name="offer" id="editedoffer<%=i%>" value="<%=element._id%>">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary"
+                                                                onclick="editcategoryoffer(`<%=element._id%>`,`<%=i%>`)">submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><a href="/admin/edit-category/<%=element._id%>" class="btn btn-info"
+                                                id="sweet">Edit</a></td>
 
-                                        <td><a href="/admin/delete-category/<%=element._id%>" class="btn btn-warning" id="sweet" onclick="return confirm('Are you sure to delete <%=element.name%>')">Delete</a></td>
+                                        <td><a href="/admin/delete-category/<%=element._id%>" class="btn btn-warning"
+                                                id="sweet"
+                                                onclick="return confirm('Are you sure to delete <%=element.name%>')">Delete</a>
+                                        </td>
                                     </tr>
                                     <%})%>
-                                </tbody>
-                            </table>
-                        </div>
-                        
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
             </div>
         </div>
-        <!-- /#page-content-wrapper -->
-        </div>
-    
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            var el = document.getElementById("wrapper");
-            var toggleButton = document.getElementById("menu-toggle");
-    
-            toggleButton.onclick = function () {
-                el.classList.toggle("toggled");
-            };
-        </script>
-    
+    </div>
+    <!-- Button trigger modal -->
 
-</div>
 
-<%-include('footer')-%>
+
+
+    <!-- /#page-content-wrapper -->
+    </div>
+    <script src="/static/javascripts/validation.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addcategory() {
+            let name = document.getElementById('username')
+            let offer = document.getElementById('offer')
+            $.ajax({
+                url: '/admin/add-category',
+                method: 'post',
+                data: { name: name.value, offer: offer.value },
+                success: (response) => {
+                    console.log(response);
+                    if (response.status == false) {
+                        let error = document.getElementById('error-msg')
+                        error.innerHTML = 'This name is already present'
+                    } else {
+                        location.href = '/admin/category'
+                    }
+
+                }
+                // })
+            })
+        }
+
+        
+        function editcategoryoffer(offerId,i) {
+            // let offerId = document.getElementById('offeredit').value
+            console.log(offerId,i);
+            let offer = document.getElementById(`editedoffer${i}`)
+            $.ajax({
+                url:`/admin/edit-category-coupon/${offerId}`,
+                method:'patch',
+                data:{offer:offer.value},
+                success:(response)=>{
+                    location.href = '/admin/category'
+                }
+            })
+        }
+    </script>
+    <script>
+
+        var el = document.getElementById("wrapper");
+        var toggleButton = document.getElementById("menu-toggle");
+
+        toggleButton.onclick = function () {
+            el.classList.toggle("toggled");
+        };
+    </script>
+    <script>
+        var exampleModal = document.getElementById('drop')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            var recipient = button.getAttribute('data-bs-whatever')
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            var modalTitle = exampleModal.querySelector('.modal-title')
+            var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            modalTitle.textContent = 'New message to ' + recipient
+            modalBodyInput.value = recipient
+        })
+
+        var exampleModal = document.getElementById('edit')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            var recipient = button.getAttribute('data-bs-whatever')
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            var modalTitle = exampleModal.querySelector('.modal-title')
+            var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            modalTitle.textContent = 'New message to ' + recipient
+            modalBodyInput.value = recipient
+        })
+
+    </script>
+
+    </div>
+
+    <%-include('footer')-%>
