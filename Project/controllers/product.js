@@ -150,7 +150,7 @@ addtocart :async(req,res)=>{
     // let total = await userHelpers.getTotalAmount(userId)
     // let eachTotal = await userHelpers.getEachProductAmount(userId)
     let product =await productController.getwishlistProducts(userId)
-    console.log(product);
+    // console.log(product);
     res.render('user/whislist',{product})
   },
   addtowhish:async(req,res)=>{
@@ -163,6 +163,14 @@ addtocart :async(req,res)=>{
       // res.redirect('/');
   })
 
+  },
+  deleteWishPro:async(req,res)=>{
+    let userId = req.userId
+    let productId = req.params.id
+    await productcontroller.deleteWishProduct(productId,userId).then((response)=>{
+      console.log(response);
+      res.redirect('/wishlist')
+    })
   }
 
 }

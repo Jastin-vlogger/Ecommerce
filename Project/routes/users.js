@@ -14,14 +14,6 @@ const Banner = require('../controllers/admin');
 const banner = require('../models/banner');
  
 
-
- 
-paypal.configure({
-  'mode': 'sandbox', //sandbox or live
-  'client_id': '####yourclientid######',
-  'client_secret': '####yourclientsecret#####'
-})
-
 const serverSID ='VAbeb462e425477ecf42eee83cf5093c52' 
 const accountSID = 'AC674a3db162fadea27864cc9da3b8120b'
 const authtoken = '02ba0b322f85a0307e8c82d32494e5ed'
@@ -35,7 +27,7 @@ router.get('/',userAuth.verify,async(req, res)=> {
   let cartCount =await userHelpers.getCartCount(userId)
   let categories = await productController.findCategory()
   let bannerdata = await banner.find()
-  console.log(bannerdata);
+  // console.log(bannerdata);
   productController.getAllProducts().then((allProduct)=>{
     res.render('user/landingPage',{allProduct,token,cartCount,categories,bannerdata})
   })
@@ -47,7 +39,7 @@ router.get('/productDetails/:id',userAuth.verify,async(req,res)=>{
   const token = req.cookies.token
   let cartCount =await userHelpers.getCartCount(userId)
   productController.productDetails(productId).then((data)=>{
-    console.log(data);
+    // console.log(data);
   res.render('user/productDetails',{data,cartCount,token})
   })
 })
@@ -154,6 +146,8 @@ router.get('/deleteCartProduct/:id',userAuth.userLoggedIn,product.deleteProduct)
 router.get('/wishlist',userAuth.userLoggedIn,product.whislist)
 
 router.get('/add-to-whislist/:id',userAuth.userLoggedIn,product.addtowhish)
+
+router.get('/wishlist-product/:id',userAuth.userLoggedIn,product.deleteWishPro)
 
 router.get('/proccedToCheckOut',userAuth.userLoggedIn,checkout.proccedToCheck)
 

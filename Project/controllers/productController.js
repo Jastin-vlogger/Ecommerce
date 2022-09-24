@@ -377,6 +377,13 @@ module.exports= {
        resolve(wish) 
     })
     })
+},
+deleteWishProduct:(productId,userId)=>{
+    return new Promise(async(resolve,reject)=>{
+        let list = await Wishlist.updateOne({user:Types.ObjectId(userId),"products.item":Types.ObjectId(productId) },{$pull:{products:{item:Types.ObjectId(productId)}}})
+        console.log(list);
+        resolve(list)
+    })
 }
 }
 
