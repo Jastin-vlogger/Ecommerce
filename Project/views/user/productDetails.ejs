@@ -68,7 +68,7 @@
 
   <div class="container pt-10">
     <div class="row">
-
+      <%data.forEach((data)=>{%>
       <div class="col-md-5">
         <!-- card left -->
         <div class="product-imgs">
@@ -102,6 +102,7 @@
         </div>
       </div>
       <div class="col-md-7">
+       
         <!-- card right -->
         <div class="product-content">
           <h2 class="product-title">
@@ -118,9 +119,8 @@
         </div> -->
 
           <div class="product-price">
-            <p class="new-price">Price: <span>
-                <%=data.price%>
-              </span></p>
+            <p class="new-price">Price:<del class="text-danger">Rs:<%=data.price%></del> Rs.<%=parseInt(data.price - (data.price * data.offer/100))%>
+            </p>
           </div>
 
           <div class="product-detail">
@@ -143,6 +143,7 @@
 
           </div>
         </div>
+        <%})%>
       </div>
 
     </div>

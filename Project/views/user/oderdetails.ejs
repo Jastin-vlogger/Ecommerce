@@ -42,7 +42,7 @@
                                 <%=orders.status%>
                             </td>
                             <td>
-                                <%=orders.date%>
+                                <%=new Date(orders.date).toDateString()%>
                             </td>
                             <td scope="col"><a href="/product/<%=orders._id%>" class="btn btn-info float-left">View Product</a></td>
                             <%if(orders.ordercanceled === false){%>
@@ -84,6 +84,8 @@
         }
     })
   }
+
+  new Date()
 </script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

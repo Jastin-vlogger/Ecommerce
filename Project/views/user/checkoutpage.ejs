@@ -1,93 +1,104 @@
 <%-include('header')-%>
-<!DOCTYPE html>
-<html>
+<style>
+    .clr{
+        display: none;
+    }
+    .disbtn {
+        display: block;
+    }
+    
+</style>
+    <!DOCTYPE html>
+    <html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Checkout Form</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" type="text/css">       
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Checkout Form</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+            type="text/css">
 
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
-        <div class="container">
-            <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="/">
-                <span class="text-uppercase fw-lighter ms-2">GOCYCLE</span>
-            </a>
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
+            <div class="container">
+                <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="/">
+                    <span class="text-uppercase fw-lighter ms-2">GOCYCLE</span>
+                </a>
 
-            <div class="order-lg-2 nav-btns">
-                <button type="button" class="btn position-relative">
-                    <a href="/cart" class="fa fa-shopping-cart"></a>
-                    <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-                    <span class="badge badge-light" >
+                <div class="order-lg-2 nav-btns">
+                    <button type="button" class="btn position-relative">
+                        <a href="/cart" class="fa fa-shopping-cart"></a>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+                        <span class="badge badge-light">
 
-                    </span>
+                        </span>
+                    </button>
+                    <button type="button" class="btn position-relative">
+                        <i class="fa fa-heart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
+                    </button>
+
+                    <button type="button" class="btn position-relative">
+                        <a href="/profile" class="fa-solid fa-user"></a>
+                    </button>
+
+
+
+                </div>
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navMenu">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <button type="button" class="btn position-relative">
-                    <i class="fa fa-heart"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-                </button>
 
-                <button type="button" class="btn position-relative">
-                    <a href="/profile" class="fa-solid fa-user"></a>
-                </button>
-
-
-
-            </div>
-
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse order-lg-1" id="navMenu">
-                <ul class="navbar-nav mx-auto text-center">
-                    <li class="nav-item px-2 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="/">home</a>
-                    </li>
-                    
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- end of navbar -->
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 order-md-2 mb-4">
-                <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Your cart</span>
-
-                </h4>
-                <ul class="list-group mb-3 sticky-top">
-                    <% product.forEach((element,i)=>{%>
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">
-                                    <%=element.product.name%>
-                                </h6>
-                            </div>
-                            <span class="text-muted">Rs.<%=element.product.price%> X <%=element.quantity%></span>
-
+                <div class="collapse navbar-collapse order-lg-1" id="navMenu">
+                    <ul class="navbar-nav mx-auto text-center">
+                        <li class="nav-item px-2 py-2">
+                            <a class="nav-link text-uppercase text-dark" href="/">home</a>
                         </li>
-                        <%})%>
-                            <!-- <li class="list-group-item d-flex justify-content-between bg-light">
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- end of navbar -->
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 order-md-2 mb-4">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Your cart</span>
+
+                    </h4>
+                    <ul class="list-group mb-3 sticky-top">
+                        <% product.forEach((element,i)=>{%>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">
+                                        <%=element.product.name%>
+                                    </h6>
+                                </div>
+                                <span class="text-muted">Rs.<%=element.product.price%> X <%=element.quantity%></span>
+
+                            </li>
+                            <%})%>
+                                <!-- <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
                         <h6 class="my-0">Promo code</h6>
                         <small>EXAMPLECODE</small>
                     </div>
                     <span class="text-success">-$5</span>
                 </li> -->
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total (INR)</span>
-                                <strong>
-                                    <%=total%>
-                                </strong>
-                            </li>
-                </ul>
-                <!-- <form class="card p-2">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total (INR)</span>
+                                    <strong>
+                                        <%=total%>
+                                    </strong>
+                                </li>
+                    </ul>
+                    <!-- <form class="card p-2">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Promo code">
                     <div class="input-group-append">
@@ -95,110 +106,107 @@
                     </div>
                 </div>
             </form> -->
-            </div>
-            <div>
-
-
-                <div class="col-md-4 d-flex mt-5" style="padding-top: 10vh;">
-                    <div>
-                        <h5 class="mb-4" style="font-weight: bold">
-                            Saved Address
-                        </h5>
-
-                        <%if(address){%>
-                            <%address.forEach((element,i)=>{%>
-                                <div class="form-check col-md-6 py-2">
-
-                                    <input class="form-check-input" type="radio"
-                                        value="<%=element.firstname%> <%=element.lastname%> <%=element.address%> <%=element.town%> <%=element.pincode%>"
-                                        name="savedAddress" id="flexRadioDefault<%=i%>"
-                                        onclick="addtofields( `<%=element.firstname%>` ,`<%=element.lastname%>`,` <%=element.address%>`,` <%=element.town%>`,` <%=element.pincode%>`)" />
-                                    <label class="form-check-label" for="flexRadioDefault">
-                                        <%=element.firstname%>
-                                            <%=element.lastname%>
-                                                <%=element.address%>
-                                                    <%=element.town%>
-                                                        <%=element.pincode%>
-                                    </label>
-                                </div>
-                                <%})%>
-                                    <%}else{%>
-                                        <p class="d-flex total-price">
-                                            <span lass="col-12">saved address is empty</span>
-                                        </p>
-                                        <%}%>
-                    </div>
                 </div>
-                <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Billing address</h4>
-                    <form class="needs-validation" id="checkout-form">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="firstName">First name</label>
-                                <input type="text" class="form-control" id="firstName" placeholder="" value=""
-                                    name="firstName" required>
-                                <div class="invalid-feedback"> Valid first name is required. </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName">Last name</label>
-                                <input type="text" class="form-control" id="lastName" placeholder="" value=""
-                                    name="lastName" required>
-                                <div class="invalid-feedback"> Valid last name is required. </div>
-                            </div>
+                <div>
+
+
+                    <div class="col-md-4 d-flex mt-5" style="padding-top: 10vh;">
+                        <div>
+                            <h5 class="mb-4" style="font-weight: bold">
+                                Saved Address
+                            </h5>
+
+                            <%if(address){%>
+                                <%address.forEach((element,i)=>{%>
+                                    <div class="form-check col-md-6 py-2">
+
+                                        <input class="form-check-input" type="radio"
+                                            value="<%=element.firstname%> <%=element.lastname%> <%=element.address%> <%=element.town%> <%=element.pincode%>"
+                                            name="savedAddress" id="flexRadioDefault<%=i%>"
+                                            onclick="addtofields( `<%=element.firstname%>` ,`<%=element.lastname%>`,` <%=element.address%>`,` <%=element.town%>`,` <%=element.pincode%>`)" />
+                                        <label class="form-check-label" for="flexRadioDefault">
+                                            <%=element.firstname%>
+                                                <%=element.lastname%>
+                                                    <%=element.address%>
+                                                        <%=element.town%>
+                                                            <%=element.pincode%>
+                                        </label>
+                                    </div>
+                                    <%})%>
+                                        <%}else{%>
+                                            <p class="d-flex total-price">
+                                                <span lass="col-12">saved address is empty</span>
+                                            </p>
+                                            <%}%>
                         </div>
-
-
-                        <div class="mb-3">
-                            <label for="address">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="" name="address" required>
-                            <div class="invalid-feedback"> Please enter your shipping address. </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-5 mb-3">
-                                <label for="country">State</label>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="state" placeholder="" name="state"
-                                        value=''>
-                                    <div class="invalid-feedback"> Please enter your shipping address. </div>
+                    </div>
+                    <div class="col-md-8 order-md-1">
+                        <h4 class="mb-3">Billing address</h4>
+                        <form class="needs-validation" id="checkout-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName">First name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="" value=""
+                                        name="firstName" required>
+                                    <div class="invalid-feedback"> Valid first name is required. </div>
                                 </div>
-                                <div class="invalid-feedback"> Please select a valid country. </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName">Last name</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="" value=""
+                                        name="lastName" required>
+                                    <div class="invalid-feedback"> Valid last name is required. </div>
+                                </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="state">Pincode</label>
-                                <input type="text" class="form-control" id="pin" placeholder="" name="pincode">
 
-                                <div class="invalid-feedback"> Please provide a valid state. </div>
+
+                            <div class="mb-3">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="" name="address"
+                                    required>
+                                <div class="invalid-feedback"> Please enter your shipping address. </div>
                             </div>
-                            <input type="text" name="userId" value="<%=userId%>" hidden>
 
-                        </div>
-                        <div class="d-block my-3">
-                            <hr class="mb-4">
-                            <h4 class="mb-3">Payment</h4>
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <label for="country">State</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="state" placeholder="" name="state"
+                                            value=''>
+                                        <div class="invalid-feedback"> Please enter your shipping address. </div>
+                                    </div>
+                                    <div class="invalid-feedback"> Please select a valid country. </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="state">Pincode</label>
+                                    <input type="text" class="form-control" id="pin" placeholder="" name="pincode">
+
+                                    <div class="invalid-feedback"> Please provide a valid state. </div>
+                                </div>
+                                <input type="text" name="userId" value="<%=userId%>" hidden>
+
+                            </div>
                             <div class="d-block my-3">
-                                <div class="custom-control custom-radio">
-                                    <input id="credit" name="paymentmethod" type="radio" class="custom-control-input"
-                                        checked="" value="COD">
-                                    <label class="custom-control-label" for="credit">CASH ON DELIVERY</label>
+                                <hr class="mb-4">
+                                <h4 class="mb-3">Payment</h4>
+                                <div class="d-block my-3">
+                                    <div class="custom-control custom-radio">
+                                        <input id="credit" name="paymentmethod" type="radio"
+                                            class="custom-control-input"  value="COD" onclick="displayCheckout()">
+                                        <label class="custom-control-label" for="credit">CASH ON DELIVERY</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                            value="Razorpay" onclick="displayCheckout()">
+                                        <label class="custom-control-label" for="debit">Razorpay</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                            value="Paypal" onclick="displayPaypal()">
+                                        <label class="custom-control-label" for="debit"
+                                            >Paypal</label>
+                                    </div>
                                 </div>
-                                <div class="custom-control custom-radio">
-                                    <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
-                                        value="Razorpay">
-                                    <label class="custom-control-label" for="debit">Razorpay</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
-                                        value="Paypal">
-                                    <label class="custom-control-label" for="debit">Paypal</label>
-                                </div>
-
-                                <!-- Replace "test" with your own sandbox Business account app client ID -->
-                                <script src="https://www.paypal.com/sdk/js?client-id=AVeSbZLSKoF5tArrQWsc49IuZwh7iFt9O7TLu84WpFcaWTY7rVG132U0ug9i1hSObq_Tt73PsdtdbKLt&currency=USD"></script>
-                                <!-- Set up a container element for the button -->
-                                <div id="paypal-button-container"></div>
-                            </div>
-                            <!-- <div class="row">
+                                <!-- <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="cc-name">Name on card</label>
                         <input type="text" class="form-control" id="cc-name" placeholder="" required="">
@@ -223,92 +231,117 @@
                         <div class="invalid-feedback"> Security code required </div>
                     </div>
                 </div> -->
-                            <hr class="mb-4">
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-                    </form>
+                                <hr class="mb-4">
+                                <!-- Replace "test" with your own sandbox Business account app client ID -->
+                                <script src="https://www.paypal.com/sdk/js?client-id=AZF7XqQybNKOpfo9AoGpF4DleAALQvLBFvYlbtLhFCUBVeeHWUMNBCxK53lbmjg7T9Hy7HuOnND-mj8H&currency=USD"></script>
+                                <!-- Set up a container element for the button -->
+                                <div id="paypal-button-container" class="clr"></div>
+                                <div id="checkout-button" class="clr">
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="placeorder" >Continue
+                                    to checkout</button>
+                                </div>
+                                
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- <script src="/static/javascripts/paypal.js"></script> -->
+        <script src="/static/javascripts/paypal.js"></script>
 
-    <SCript>
+        <SCript>
 
-        $('#checkout-form').submit((e) => {
-            e.preventDefault()
-            $.ajax({
-                url: '/place-order',
-                method: 'post',
-                data: $('#checkout-form').serialize(),
-                success: (response) => {
-                    if (response.cod_sucess) {
-                        location.href = '/order-placed'
-                    } else {
-                        razorPayment(response)
+            $('#checkout-form').submit((e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: '/place-order',
+                    method: 'post',
+                    data: $('#checkout-form').serialize(),
+                    success: (response) => {
+                        if (response.cod_sucess) {
+                            location.href = '/order-placed'
+                        } else if(response.paypal){
+                           location.href = '/order-placed'
+                        }else{
+                            razorPayment(response)
+                        }
                     }
-                }
+                })
             })
-        })
 
 
-        function addtofields(firstname, lastname, address, town, pin) {
-            let firstnames = document.getElementById('firstName').value = firstname
-            let lastnames = document.getElementById('lastName').value = lastname
-            let addresses = document.getElementById('address').value = address
-            let stateinfo = document.getElementById('state').value = town
-            let pincode = document.getElementById('pin').value = pin
-        }
+            function addtofields(firstname, lastname, address, town, pin) {
+                let firstnames = document.getElementById('firstName').value = firstname
+                let lastnames = document.getElementById('lastName').value = lastname
+                let addresses = document.getElementById('address').value = address
+                let stateinfo = document.getElementById('state').value = town
+                let pincode = document.getElementById('pin').value = pin
+            }
 
-        function razorPayment(order) {
-            var options = {
-                "key": "rzp_test_kC80uilJbJoVnc", // Enter the Key ID generated from the Dashboard
-                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Jastin",
-                "description": "Test Transaction",
-                "image": "https://example.com/your_logo",
-                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                "handler": (response) => {
-                    verifyPayment(response, order)
-                },
-                "prefill": {
-                    "name": "Gaurav Kumar",
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9999999999"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-        }
-
-        function verifyPayment(payment, order) {
-            console.log(payment, order);
-            $.ajax({
-                url: '/verify-payment',
-                data: {
-                    payment,
-                    order,
-                },
-                method: 'post',
-                success: (response) => {
-                    console.log(response);
-                    if (response.status) {
-                        location.href = '/order-placed'
-                    } else {
-                        alert('payment failed')
+            function razorPayment(order) {
+                var options = {
+                    "key": "rzp_test_kC80uilJbJoVnc", // Enter the Key ID generated from the Dashboard
+                    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "currency": "INR",
+                    "name": "Jastin",
+                    "description": "Test Transaction",
+                    "image": "https://example.com/your_logo",
+                    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "handler": (response) => {
+                        verifyPayment(response, order)
+                    },
+                    "prefill": {
+                        "name": "Gaurav Kumar",
+                        "email": "gaurav.kumar@example.com",
+                        "contact": "9999999999"
+                    },
+                    "notes": {
+                        "address": "Razorpay Corporate Office"
+                    },
+                    "theme": {
+                        "color": "#3399cc"
                     }
-                }
-            })
-        }
-    </SCript>
-</head>
-</html>
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            }
+
+            function verifyPayment(payment, order) {
+                console.log(payment, order);
+                $.ajax({
+                    url: '/verify-payment',
+                    data: {
+                        payment,
+                        order,
+                    },
+                    method: 'post',
+                    success: (response) => {
+                        console.log(response);
+                        if (response.status) {
+                            location.href = '/order-placed'
+                        } else {
+                            alert('payment failed')
+                        }
+                    }
+                })
+            }
+
+            function displayCheckout() {
+                let list1 = document.getElementById("checkout-button").classList
+                let list2 = document.getElementById("paypal-button-container").classList;
+                list1.add('disbtn')
+                list2.remove('disbtn')
+            }
+
+            function displayPaypal() {
+                let list1 = document.getElementById("checkout-button").classList
+                let list2 = document.getElementById("paypal-button-container").classList;
+                list1.remove('disbtn')
+                list2.add('disbtn')
+
+            }
+        </script>
+    </head>
+
+    </html>
     <%-include('footer')-%>
-        

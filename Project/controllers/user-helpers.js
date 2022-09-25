@@ -266,9 +266,16 @@ module.exports = {
         })
 
     },
+    changePaymentStatusPaypal:(orderId)=>{
+        return new Promise(async (resolve, reject) => {
+            await Order.updateOne({ _id: Types.ObjectId(orderId) },{$set: {status: 'placed'}}).then(() => {
+                resolve()
+            })
+        })
+    },
     generatePaypal:(orderId, totalPrice)=>{
         parseInt(totalPrice).toFixed(2)
-        console.log(totalPrice);
+        // console.log(totalPrice);
         return new Promise(async(resolve,reject)=>{
             const create_payment_json = {
               "intent": "sale",

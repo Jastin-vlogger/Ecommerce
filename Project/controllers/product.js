@@ -11,163 +11,175 @@ const Category = require('../models/category')
 
 
 module.exports = {
-addtocart :async(req,res)=>{
+  addtocart: async (req, res) => {
     let userId = req.userId
     let productId = req.params.id
-    console.log(userId,productId);
-    await productcontroller.addToCart(productId,userId).then((response)=>{
-        res.json(response)
+    console.log(userId, productId);
+    await productcontroller.addToCart(productId, userId).then((response) => {
+      res.json(response)
     })
   },
-  cart:async(req,res)=>{
-    let userId = req.userId
-    const token = req.cookies.token
-    console.log(userId);
-    let total = await userHelpers.getTotalAmount(userId)
-    let eachTotal = await userHelpers.getEachProductAmount(userId)
-    let product =await productController.getCartProducts(userId)
-    res.render('user/cart',{product,token,userId,total,eachTotal});
-    
+  cart: async (req, res) => {
+    try {
+      let userId = req.userId
+      const token = req.cookies.token
+      console.log(userId);
+      let total = await userHelpers.getTotalAmount(userId)
+      let eachTotal = await userHelpers.getEachProductAmount(userId)
+      let product = await productController.getCartProducts(userId)
+      product.forEach((data) => {
+        
+      });
+      // let offer = await productController.offerfind(userId)
+      res.render('user/cart', { product, token, userId, total, eachTotal });
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
   },
-  changeQuantity:async(req,res)=>{
-    let {cart ,product,count,quantity,user} = req.body
-    console.log(cart ,product,count ,quantity);
-    userHelpers.changeProductQuantity(cart ,product,count,quantity).then(async(response)=>{
+  changeQuantity: async (req, res) => {
+    let { cart, product, count, quantity, user } = req.body
+    console.log(cart, product, count, quantity);
+    userHelpers.changeProductQuantity(cart, product, count, quantity).then(async (response) => {
       response.total = await userHelpers.getTotalAmount(user)
       res.json(response)
     })
   },
-  deleteProduct:(req,res)=>{
+  deleteProduct: (req, res) => {
     let userId = req.userId
     let prodId = req.params.id
-    let cartdelete = productController.deleteCart(prodId,userId)
+    let cartdelete = productController.deleteCart(prodId, userId)
     res.redirect('/cart')
   },
-  profile:async(req,res)=>{
+  profile: async (req, res) => {
     let userId = req.userId
     let user = await userHelpers.viewprofile(userId)
-    let addedAddress =await userHelpers.findaddress(userId)
-    res.render('user/profile',{user,addedAddress})
+    let addedAddress = await userHelpers.findaddress(userId)
+    res.render('user/profile', { user, addedAddress })
   },
-  viewproductdetail:async(req,res)=>{
+  viewproductdetail: async (req, res) => {
     let orderId = req.params.id
     let product = await productController.getOrderProducts(orderId)
     console.log(product);
-    res.render('user/vieworders',{product})
+    res.render('user/vieworders', { product })
   },
-  cancelOrder:async(req,res)=>{
+  cancelOrder: async (req, res) => {
     let userId = req.userId
     let orderId = req.params.id
     let ordercanceled = await productController.cancelOrder(orderId)
-    let orders =await productController.getUserOrders(userId)
+    let orders = await productController.getUserOrders(userId)
     console.log(orders);
     // res.render('user/oderdetails',{orders})
     res.redirect('/orders')
 
   },
-  cancelOrderAdmin:async(req,res)=>{
+  cancelOrderAdmin: async (req, res) => {
     let orderId = req.params.id
     let ordercanceled = await productController.cancelOrderadmin(orderId)
     res.redirect('/admin/orderMangement')
   },
-  changestatus:async(req,res)=>{
+  changestatus: async (req, res) => {
     let orderId = req.params.id
-    let status = await productController.changeOrderStatus(orderId,req.body.status)
+    let status = await productController.changeOrderStatus(orderId, req.body.status)
     res.redirect('/admin/orderMangement')
   },
-  saveaddress:async(req,res)=>{
-    let {firstname,lastname,address,town,state,pincode}=req.body
+  saveaddress: async (req, res) => {
+    let { firstname, lastname, address, town, state, pincode } = req.body
     let userId = req.userId
-    await productController.addAddress(firstname,lastname,address,town,state,pincode,userId).then((data)=>{
+    await productController.addAddress(firstname, lastname, address, town, state, pincode, userId).then((data) => {
       res.redirect('/profile')
     })
-    
+
   },
-  address:async(req,res)=>{
+  address: async (req, res) => {
     let userId = req.userId
-    let addedAddress =await userHelpers.findaddress(userId)
-    res.render('user/address',{addedAddress})
+    let addedAddress = await userHelpers.findaddress(userId)
+    res.render('user/address', { addedAddress })
   },
-  removeAddress:async(req,res)=>{
+  removeAddress: async (req, res) => {
     let addressId = req.params.userId
-    await productController.removeAddress(addressId).then((data)=>{
+    await productController.removeAddress(addressId).then((data) => {
       res.redirect('/profile')
     })
   },
-  edituser:async(req,res)=>{
+  edituser: async (req, res) => {
     let userId = req.userId
-    return new Promise(async(resolve,reject)=>{
-      let user = await User.findById({_id:Types.ObjectId(userId)})
+    return new Promise(async (resolve, reject) => {
+      let user = await User.findById({ _id: Types.ObjectId(userId) })
       console.log(user);
-      res.render('user/edituser',{user})
+      res.render('user/edituser', { user })
     })
   },
-  updateuser:async(req,res)=>{
-    let {email,firstName,lastName} = req.body
+  updateuser: async (req, res) => {
+    let { email, firstName, lastName } = req.body
     let userId = req.userId
-    return new Promise (async(resolve,reject)=>{
-      let updatedUser = await User.updateOne({_id:Types.ObjectId(userId)},{$set:{
-        email:email,
-        firstName:firstName,
-        lastName:lastName,
-      }})
+    return new Promise(async (resolve, reject) => {
+      let updatedUser = await User.updateOne({ _id: Types.ObjectId(userId) }, {
+        $set: {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+        }
+      })
       res.redirect("/profile")
     })
   },
-  changepassword:(req,res)=>{
-    res.render('user/changePassword',{passwordError:''})
+  changepassword: (req, res) => {
+    res.render('user/changePassword', { passwordError: '' })
   },
-  updatepassword:async(req,res)=>{
-    let {lastpassword,newpassword} = req.body;
-    console.log(lastpassword,newpassword);
+  updatepassword: async (req, res) => {
+    let { lastpassword, newpassword } = req.body;
+    console.log(lastpassword, newpassword);
     console.log(req.body);
     let userId = req.userId
-    userHelpers.updatepassword(lastpassword,newpassword,userId).then(async(data)=>{
+    userHelpers.updatepassword(lastpassword, newpassword, userId).then(async (data) => {
       if (data.status == false) {
-        res.render('user/changePassword',{passwordError:'Enter correct password'})
+        res.render('user/changePassword', { passwordError: 'Enter correct password' })
       } else {
-        await bcrypt.hash(newpassword,10).then(async(hashed)=>{
-        await User.findByIdAndUpdate({_id:Types.ObjectId(userId)},{$set:{password:hashed}})
-        res.redirect('/profile')
-        }) 
+        await bcrypt.hash(newpassword, 10).then(async (hashed) => {
+          await User.findByIdAndUpdate({ _id: Types.ObjectId(userId) }, { $set: { password: hashed } })
+          res.redirect('/profile')
+        })
       }
     })
   },
-  categorize:async(req,res)=>{
+  categorize: async (req, res) => {
     let categoryId = req.params.id
     const token = req.cookies.token
     let userId = req.userId
     let categories = await productController.findCategory()
-    let cartCount =await userHelpers.getCartCount(userId)
+    let cartCount = await userHelpers.getCartCount(userId)
     let catname = await Category.findById(categoryId)
     // console.log(catname.name);
-    let data =await productController.categorizeProduct(catname.name)
-    console.log('data :'+ data);
-    res.render('user/category',{data,token,cartCount,categories})
+    let data = await productController.categorizeProduct(catname.name)
+    console.log('data :' + data);
+    res.render('user/category', { data, token, cartCount, categories })
   },
-  whislist:async(req,res)=>{
+  whislist: async (req, res) => {
     let userId = req.userId
     // let total = await userHelpers.getTotalAmount(userId)
     // let eachTotal = await userHelpers.getEachProductAmount(userId)
-    let product =await productController.getwishlistProducts(userId)
+    let product = await productController.getwishlistProducts(userId)
     // console.log(product);
-    res.render('user/whislist',{product})
+    res.render('user/whislist', { product })
   },
-  addtowhish:async(req,res)=>{
+  addtowhish: async (req, res) => {
     let userId = req.userId
     let productId = req.params.id
-    console.log(userId,productId);
-    await productcontroller.addTowhishlist(productId,userId).then((response)=>{
+    console.log(userId, productId);
+    await productcontroller.addTowhishlist(productId, userId).then((response) => {
       console.log(response);
       res.json(response)
       // res.redirect('/');
-  })
+    })
 
   },
-  deleteWishPro:async(req,res)=>{
+  deleteWishPro: async (req, res) => {
     let userId = req.userId
     let productId = req.params.id
-    await productcontroller.deleteWishProduct(productId,userId).then((response)=>{
+    await productcontroller.deleteWishProduct(productId, userId).then((response) => {
       console.log(response);
       res.redirect('/wishlist')
     })

@@ -190,8 +190,11 @@
 
                 <div class="special-list row g-0">
 
-                    <%allProduct.forEach((element)=>{%>
-                        <%if(element.isDeleted===false){%>
+
+
+
+                    <%allProduct.forEach((element,i)=>{%>
+                        <!-- <%if(element.isDeleted===false){%> -->
                             <div class="col-md-6 col-lg-4 col-xl-3 p-2">
 
                                 <div class="special-img position-relative overflow-hidden"
@@ -204,18 +207,19 @@
                                     </span>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-capitalize mt-3 mb-1">
+                                    <p class="text-capitalize mt-3 mb-1 ">
                                         <%=element.name%>
                                     </p>
-                                    <span class="fw-bold d-block">
-                                        <%=element.price%>
+                                    <span class="fw-bold d-block text-success">
+                                        <del class="text-danger">Rs:<%=element.price%></del> Rs.<%=parseInt(element.price - (element.price * element.offer[0]/100))%>
                                     </span>
                                     <a href="productDetails/<%=element._id%>" class="btn btn-primary mt-3">BUY NOW</a>
                                     <button class="btn btn-primary mt-3" onclick="addtowhislist(`<%=element._id%>`)">wishlist</button>
                                 </div>
 
                             </div>
-                            <%}%>
+                            <!-- <%}%> -->
+                            
                                 <%})%>
 
                 </div>
@@ -374,5 +378,8 @@
                 })
                 
             }
+        </script>
+        <script>
+            
         </script>
         <%-include('footer')-%>

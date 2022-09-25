@@ -21,6 +21,7 @@ module.exports ={
             if (payment == 'COD') {
                  res.json({cod_sucess:true});
             } else if(payment == 'Razorpay'){
+                console.log('da kutta');
                 userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
                     res.json(response);
                     console.log(response);
@@ -28,9 +29,9 @@ module.exports ={
             } else if(payment == 'Paypal'){
                 console.log(req.body)
                 console.log('im here');
-                userHelpers.generatePaypal(orderId,totalPrice).then((response)=>{    
-                    res.json(response)
-                    console.log(response);
+                userHelpers.generatePaypal(orderId,totalPrice).then(async(response)=>{  
+                    await userHelpers.changePaymentStatusPaypal(orderId)
+                    res.json({paypal:true})
                 })
             }
         })
@@ -51,7 +52,6 @@ module.exports ={
                 res.json({status:true})
             })
         }).catch((err)=>{
-            
             res.json({status:false,errMsg:err})
         })
         // res.redirect('/order-placed');

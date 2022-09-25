@@ -78,17 +78,67 @@ module.exports= {
     },
     getAllProducts:()=>{
         return new Promise (async(resolve,reject)=>{
-            await Product.find().then((data)=>{
+            // await Product.find().then((data)=>{
+            //     resolve(data)
+            // })
+            Product.aggregate([
+                {
+                    $lookup:{
+                        from:'categories',
+                        localField:'category',
+                        foreignField:'name',
+                        as:'categories'
+                    }
+                },
+                {
+                    $project:{
+                        name:'$name',
+                        category:'$category',
+                        offer:'$categories.offer',
+                        price:'$price',
+                        isDeleted:'$isDeleted'
+                    }
+                }
+            ]).then((data)=>{
                 resolve(data)
             })
         })
     },
     productDetails:(id)=>{
         return new Promise (async(resolve,reject)=>{
-            await Product.findById(id).then((data)=>{
+            // await Product.findById(id).then((data)=>{
+            //     resolve(data)
+            // })
+           await Product.aggregate([
+                {
+                    $match:{_id:Types.ObjectId(id)}
+                },
+                {
+                    $lookup:{
+                        from:'categories',
+                        localField:'category',
+                        foreignField:'name',
+                        as:'product'
+                    }
+                },
+                {
+                    $unwind:'$product'
+                },
+                {
+                    $project:{
+                        name:'$name',
+                        category:'$product.name',
+                        offer:'$product.offer',
+                        price:'$price',
+                    }
+                }
+            ]).then((data)=>{
                 resolve(data)
             })
         })
+    },
+    offerfind:()=>{
+
     },
     addToCart:(productId,userId)=>{
         let productadd ={
