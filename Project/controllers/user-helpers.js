@@ -9,6 +9,8 @@ const { resolve } = require('path')
 const { findByIdAndUpdate } = require('../models/user')
 const crypto = require('crypto')
 const paypal = require('paypal-rest-sdk');
+const Coupon = require('../models/coupon')
+
 let instance = new Razorpay({
     key_id: 'rzp_test_kC80uilJbJoVnc',
     key_secret: 'p6rVgBY913W6XmR7IatJHFqe',
@@ -110,9 +112,7 @@ module.exports = {
                 ).then((response) => {
                     resolve({ status: true })
                 })
-            }
-
-
+            }  
         })
     },
     getTotalAmount: (userId) => {
@@ -147,7 +147,7 @@ module.exports = {
             {
                 $group: {
                     _id: null,
-                    total: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                    total: { $sum: { $multiply: ['$quantity', '$product.discountedPrice'] } }
                 }
             }
 
@@ -347,6 +347,21 @@ module.exports = {
                         resolve({ status: false })
                     }
                 })
+            }
+        })
+    },
+    findcoupon:(promo)=>{
+        let today = new Date().toISOString().slice(0, 10)
+        console.log(today);
+        return new Promise(async(resolve,reject)=>{
+            let promooffer = await Coupon.findOne({offer:promo})
+            console.log(promooffer.date);
+            if (promooffer.date >= today) {
+                console.log('ondu');
+                resolve(promooffer)
+            } else {
+                console.log('illa');
+                resolve()
             }
         })
     }

@@ -17,6 +17,11 @@ module.exports= {
         })   
         })
     },
+    addDiscountedProduct:(id,value)=>{
+        return new Promise (async(resolve,reject)=>{
+            await Product.findOneAndUpdate({_id:Types.ObjectId(id)},{$set:{discountedPrice:value}})
+        })
+    },
     findProduct:(search,page)=>{
         const limit = 2
         return new Promise (async(resolve,reject)=>{
@@ -99,7 +104,7 @@ module.exports= {
                         isDeleted:'$isDeleted'
                     }
                 }
-            ]).then((data)=>{
+            ]).limit(4).then((data)=>{
                 resolve(data)
             })
         })

@@ -3,6 +3,7 @@ const Banner = require('../models/banner')
 const adminHelpers = require('../controllers/category')
 const productController = require('../controllers/productController')
 const Category = require('../models/category')
+const Coupon = require('../models/coupon')
 
 
 
@@ -136,7 +137,21 @@ module.exports ={
         image.mv(`public/bannerImg/${data}.jpg`)
          res.redirect('/admin/bannermangement');
     },
-    addoffer:(req,res)=>{
-        res.render('admin/add_offer');
+    addoffer:async(req,res)=>{
+        let offers = await Coupon.find()
+        console.log(offers);
+        res.render('admin/add_offer',{offers});
+    },
+    addcoupon:(Offername,discountRate,date)=>{
+        let offer = {
+            offer : Offername,
+            discount :discountRate,
+            date:date
+        }
+        return new Promise (async(resolve,reject)=>{
+            await new Coupon(offer).save().then((data)=>{
+                resolve(data)
+            })
+        })
     }
 }

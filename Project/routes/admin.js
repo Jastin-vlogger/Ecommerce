@@ -17,6 +17,7 @@ const addcart = require('../controllers/product');
 const Product = require('../models/product');
 const Admin = require('../controllers/admin')
 const Category = require('../models/category')
+const coupon = require('../controllers/coupon')
 
 
 
@@ -58,10 +59,10 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/dashboard', authentication.adminverify, async(req, res) => { 
-    await Admin.findOrders().then((data)=>{
-    // res.json(data)
-    res.render('admin/dashboard',{data})
+router.get('/dashboard', authentication.adminverify, async (req, res) => {
+    await Admin.findOrders().then((data) => {
+        // res.json(data)
+        res.render('admin/dashboard', { data })
     })
 })
 
@@ -81,7 +82,7 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
             { category: { $regex: '.*' + search + '.*', $options: 'i' } },
         ]
     })
-        
+
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec()
@@ -94,7 +95,7 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
     }).countDocuments()
 
     // productController.findProduct(search,page).then((data,count)=>{
-    res.render('admin/adProductManage', { data, totalpages : Math.ceil(count / limit),currentPage:page})
+    res.render('admin/adProductManage', { data, totalpages: Math.ceil(count / limit), currentPage: page })
     // })  
 })
 
@@ -174,8 +175,9 @@ router.get('/unblock-user/:id', (req, res) => {
     })
 })
 
-router.get('/category',authentication.adminverify, (req, res) => {
-    categoryControler.findcategory().then((data) => {
+router.get('/category', authentication.adminverify, (req, res) => {
+    categoryControler.findcategoryAdmin().then((data) => {
+        // console.log(data);
         res.render('admin/category', { data })
     })
 })
@@ -184,56 +186,68 @@ router.get('/category',authentication.adminverify, (req, res) => {
 //     res.render('admin/add-category',{catError:''})
 // })
 
-router.post('/add-category', authentication.adminverify,async (req, res) => {
-    let {name,offer} = req.body
-    console.log(name,offer);
-    let data = await categoryControler. recheckCat(name)
+router.post('/add-category', authentication.adminverify, async (req, res) => {
+    let { name, offer } = req.body
+    console.log(name, offer);
+    let data = await categoryControler.recheckCat(name)
     if (data) {
         console.log('im here');
-        res.json({status : false})
+        res.json({ status: false })
     } else {
-       categoryControler.addCategory(name,offer).then((data) => {
-        console.log(data);
-        res.json(data)
-    }) 
+        categoryControler.addCategory(name, offer).then((data) => {
+            console.log(data);
+            res.json(data)
+        })
     }
-    
+
 })
 
-router.patch('/edit-category-coupon/:id', authentication.adminverify,async(req,res)=>{
-  console.log(req.body);
-  let id = req.params.id
-  console.log(id);
-  let {offer} = req.body
-  await categoryControler.editcoupon(offer,id).then((data)=>{
-     res.json(data);
-  })
+router.patch('/edit-category-coupon/:id', authentication.adminverify, async (req, res) => {
+    try {
+        console.log(req.body);
+        let id = req.params.id
+        console.log(id);
+        let { offer } = req.body
+        await categoryControler.editcoupon(offer, id).then(async (data) => {
+            let cat = await categoryControler.findcategory()
+            console.log(cat);
+            await cat.forEach(async(element) => {
+                let value = parseInt(element.price - (element.price * element.offer[0]/100))
+                console.log(value);
+                await productController.addDiscountedProduct(element._id,value)
+            });
+            res.json(data);
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
 })
 
 router.get('/edit-category/:id', authentication.adminverify, (req, res) => {
     let userId = req.params.id
     categoryControler.findCategory(userId).then((data) => {
-        res.render('admin/edit-category', { data ,catError:''})
+        res.render('admin/edit-category', { data, catError: '' })
     })
 })
 
-router.post('/edit-category', authentication.adminverify, async(req, res) => {
+router.post('/edit-category', authentication.adminverify, async (req, res) => {
     let { body } = req
-    let {name,catId} = req.body
+    let { name, catId } = req.body
     console.log(req.body);
-    let datas = await categoryControler. recheckCat(name)
-    let data  = await categoryControler.findCategory(catId)
+    let datas = await categoryControler.recheckCat(name)
+    let data = await categoryControler.findCategory(catId)
     // let data = await Category.findOne({name:name})
-    if(datas){
-      if(datas.name == name){
-        res.render('admin/edit-category',{catError:'This category is already present',data})
-        // res.json({catError:'This category is already present'})
-    }  
-    }else{
-       categoryControler.updatedCategory(name,catId).then((data) => {
-        res.redirect('/admin/category')
-        // res.json(data)
-    }) 
+    if (datas) {
+        if (datas.name == name) {
+            res.render('admin/edit-category', { catError: 'This category is already present', data })
+            // res.json({catError:'This category is already present'})
+        }
+    } else {
+        categoryControler.updatedCategory(name, catId).then((data) => {
+            res.redirect('/admin/category')
+            // res.json(data)
+        })
     }
 })
 
@@ -243,21 +257,21 @@ router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
     res.redirect('/admin/category')
 })
 
-router.get('/dashboard/day',authentication.adminverify,async(req,res)=>{
-    await Admin.findOrders().then((data)=>{
+router.get('/dashboard/day', authentication.adminverify, async (req, res) => {
+    await Admin.findOrders().then((data) => {
         res.json(data)
         // res.render('admin/dashboard',{data})
-        })
+    })
 })
 
-router.get('/dashboard/week',authentication.adminverify,async(req,res)=>{
-    await Admin.findorderbyweek().then((data)=>{
+router.get('/dashboard/week', authentication.adminverify, async (req, res) => {
+    await Admin.findorderbyweek().then((data) => {
         res.json(data)
     })
 })
 
-router.get('/dashboard/month',authentication.adminverify,async(req,res)=>{
-    await Admin.findorderbymonth().then((data)=>{
+router.get('/dashboard/month', authentication.adminverify, async (req, res) => {
+    await Admin.findorderbymonth().then((data) => {
         res.json(data)
     })
 })
@@ -268,15 +282,17 @@ router.get('/orderMangement', authentication.adminverify, order.findorders)
 
 router.get('/cancelorder/:id', authentication.adminverify, addcart.cancelOrderAdmin)
 
-router.post('/change-status/:id',authentication.adminverify, addcart.changestatus)
+router.post('/change-status/:id', authentication.adminverify, addcart.changestatus)
 
 // router.get('/change-status/:id', authentication.adminverify, addcart.changestatus)
 
-router.get('/bannermangement',authentication.adminverify, Admin.bannermange)
+router.get('/bannermangement', authentication.adminverify, Admin.bannermange)
 
-router.post('/banner',authentication.adminverify,Admin.addbanner)
+router.post('/banner', authentication.adminverify, Admin.addbanner)
 
-router.get('/add-offers',authentication.adminverify,Admin.addoffer)
+router.get('/add-offers', authentication.adminverify, Admin.addoffer)
+
+router.post('/add-coupon', authentication.adminverify,coupon.addcoupon)
 
 router.get('/logout', authentication.adminverify, (req, res) => {
     res.clearCookie('adminToken').redirect('/admin/login')

@@ -26,6 +26,9 @@ const productSchema = mongoose.Schema(
       type:Boolean,
       default:false,
     },
+    discountedPrice:{
+      type:Number,
+    }
   },
   { timestamps: true }
 )

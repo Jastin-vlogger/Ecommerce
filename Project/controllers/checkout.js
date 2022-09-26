@@ -10,6 +10,7 @@ module.exports ={
         let product =await productController.getCartProducts(userId)
         let total = await userHelpers.getTotalAmount(userId)
         let address = await userHelpers.findaddress(userId)
+        
         res.render('user/checkoutpage',{total,product,userId,address});   
     },
     placeOrder:async(req,res)=>{

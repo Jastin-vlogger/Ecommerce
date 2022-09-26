@@ -21,7 +21,6 @@ function changeQuantity(cartId, proId,userId ,count) {
                 setTimeout(() => {
                     location.reload()
                 }, 2000)
-
             } else {
                 document.getElementById(proId).innerHTML = quantity + count;
                 document.getElementById('total').innerHTML = res.total;

@@ -1,6 +1,7 @@
 const Category = require('../models/category')
 const Banner = require('../models/banner')
 const { Types } = require('mongoose')
+const Product = require('../models/product')
 
 module.exports={
     addCategory:(name,offer)=>{
@@ -21,9 +22,34 @@ module.exports={
             })
         })
     },
-    findcategory:(findcategory)=>{
-        return new Promise (async(resolve, reject)=>{
-            await Category.find().then((data)=>{
+    findcategory:()=>{
+        return new Promise (async(resolve,reject)=>{
+            Product.aggregate([
+                {
+                    $lookup:{
+                        from:'categories',
+                        localField:'category',
+                        foreignField:'name',
+                        as:'categories'
+                    }
+                },
+                {
+                    $project:{
+                        name:'$name',
+                        category:'$category',
+                        offer:'$categories.offer',
+                        price:'$price',
+                        isDeleted:'$isDeleted'
+                    }
+                }
+            ]).then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    findcategoryAdmin:()=>{
+        return new Promise ((resolve,reject)=>{
+             Category.find().then((data)=>{
                 resolve(data)
             })
         })

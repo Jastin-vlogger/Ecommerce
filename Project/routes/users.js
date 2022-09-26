@@ -12,6 +12,7 @@ const { render } = require('../app');
 const paypal = require('paypal-rest-sdk');
 const Banner = require('../controllers/admin');
 const banner = require('../models/banner');
+const coupon = require('../controllers/coupon');
  
 
 const serverSID ='VAbeb462e425477ecf42eee83cf5093c52' 
@@ -30,7 +31,7 @@ router.get('/',userAuth.verify,async(req, res)=> {
   let bannerdata = await banner.find()
   let allProduct = await productController.getAllProducts()
   // console.log(allProduct);
-  console.log(allProduct[0].price - (allProduct[0].price * allProduct[0].offer[0]/100));
+  // console.log(allProduct[0].price - (allProduct[0].price * allProduct[0].offer[0]/100));
   // res.json(allProduct)
   res.render('user/landingPage',{allProduct,token,cartCount,categories,bannerdata})
   
@@ -195,6 +196,8 @@ router.get('/changepassword',userAuth.userLoggedIn,product.changepassword)
 router.post('/updatepassword',userAuth.userLoggedIn,product.updatepassword)
 
 router.get('/address',userAuth.userLoggedIn,product.address)
+
+router.post('/checkpromo',userAuth.userLoggedIn,coupon.checkcoupon)
 
 /* ------------------------------- logout ------------------------------- */
 router.get('/logout',userAuth.verify,(req,res)=>{
