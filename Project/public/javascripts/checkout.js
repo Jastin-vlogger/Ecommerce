@@ -4,11 +4,13 @@
         let myChart = document.getElementById('myChart')
         let Charts = document.getElementById('Chart')
         let chartz = document.getElementById('Chartz')
-
+        // let form = document.getElementById('checkoutform')
 
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
         };
+
+        
 
 
         fetch('/admin/dashboard/day', {
@@ -157,4 +159,100 @@
             })
 
         })
+
+
+        // function addcoupon() {
+        //     let total = document.getElementById('sum').value
+        //     let promo = document.getElementById('promocode')
+        //     let coupon = document.getElementById('couponvalue')
+        //     $.ajax({
+        //         url: '/checkpromo',
+        //         method: 'post',
+        //         data: { promo: promo.value},
+        //         success: (response) => {
+        //             console.log(response);
+        //             if (response.status == false) {
+        //                 let error = document.getElementById('msg')
+        //                 error.innerHTML = 'Enter valid Promocode'
+        //             } else {
+        //                 let a = document.getElementById('total').innerHTML =total - response.discount;
+        //                 coupon.value = a
+        //             }
+        //         }
+        //     })
+        //     }
+
+           
+
+
+            // function addtofields(firstname, lastname, address, town, pin) {
+            //     let firstnames = document.getElementById('firstName').value = firstname
+            //     let lastnames = document.getElementById('lastName').value = lastname
+            //     let addresses = document.getElementById('address').value = address
+            //     let stateinfo = document.getElementById('state').value = town
+            //     let pincode = document.getElementById('pin').value = pin
+            // }
+
+            // function razorPayment(order) {
+            //     var options = {
+            //         "key": "rzp_test_kC80uilJbJoVnc", // Enter the Key ID generated from the Dashboard
+            //         "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            //         "currency": "INR",
+            //         "name": "Jastin",
+            //         "description": "Test Transaction",
+            //         "image": "https://example.com/your_logo",
+            //         "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            //         "handler": (response) => {
+            //             verifyPayment(response, order)
+            //         },
+            //         "prefill": {
+            //             "name": "Gaurav Kumar",
+            //             "email": "gaurav.kumar@example.com",
+            //             "contact": "9999999999"
+            //         },
+            //         "notes": {
+            //             "address": "Razorpay Corporate Office"
+            //         },
+            //         "theme": {
+            //             "color": "#3399cc"
+            //         }
+            //     };
+            //     var rzp1 = new Razorpay(options);
+            //     rzp1.open();
+            // }
+
+            // function verifyPayment(payment, order) {
+            //     console.log(payment, order);
+            //     $.ajax({
+            //         url: '/verify-payment',
+            //         data: {
+            //             payment,
+            //             order,
+            //         },
+            //         method: 'post',
+            //         success: (response) => {
+            //             console.log(response);
+            //             if (response.status) {
+            //                 location.href = '/order-placed'
+            //             } else {
+            //                 alert('payment failed')
+            //             }
+            //         }
+            //     })
+            // }
+
+            // function displayCheckout() {
+            //     let list1 = document.getElementById("checkout-button").classList
+            //     let list2 = document.getElementById("paypal-button-container").classList;
+            //     list1.add('disbtn')
+            //     list2.remove('disbtn')
+            // }
+
+            // function displayPaypal() {
+            //     let list1 = document.getElementById("checkout-button").classList
+            //     let list2 = document.getElementById("paypal-button-container").classList;
+            //     list1.remove('disbtn')
+            //     list2.add('disbtn')
+
+            // }
    

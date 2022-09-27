@@ -4,6 +4,8 @@ const adminHelpers = require('../controllers/category')
 const productController = require('../controllers/productController')
 const Category = require('../models/category')
 const Coupon = require('../models/coupon')
+const { Types } = require('mongoose')
+const { response } = require('../app')
 
 
 
@@ -152,6 +154,14 @@ module.exports ={
             await new Coupon(offer).save().then((data)=>{
                 resolve(data)
             })
+        })
+    },
+    canceloffer:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await Coupon.findByIdAndUpdate({_id:Types.ObjectId(id)},{$set:{expired:true}}).then((response)=>{
+                resolve(response)
+            })
+
         })
     }
 }

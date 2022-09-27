@@ -2,22 +2,35 @@ const { response } = require("../app");
 const userCart = require("../models/userCart");
 const userHelpers = require("./user-helpers");
 const productController = require('./productController');
-
+const usedcoupon = require('../models/usedcoupon')
+const couponHelpers = require('../controllers/coupon')
 
 module.exports ={
     proccedToCheck:async(req,res)=>{
         let userId = req.userId
+        console.log(req.query);
         let product =await productController.getCartProducts(userId)
         let total = await userHelpers.getTotalAmount(userId)
-        let address = await userHelpers.findaddress(userId)
-        
+        let address = await userHelpers.findaddress(userId)      
         res.render('user/checkoutpage',{total,product,userId,address});   
     },
     placeOrder:async(req,res)=>{
         let userId = req.body.userId
         let payment = req.body.paymentmethod
+        console.log(req.body);
+        let {coupon} = req.body
+        let {couponusing} =req.body
         let products = await productController.getCartProductList(req.body.userId)
-        let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
+        let totalPrice =await userHelpers.getTotalAmount(req.body.userId)
+        if (coupon) {
+            totalPrice = coupon
+            let couponused = await couponHelpers.findCoupon(couponusing)
+            console.log(couponused);
+            await couponHelpers.usedcoupon(couponused._id,userId).then((data)=>{
+                console.log(data);
+            })
+        }
+        
         userHelpers.placeOrder(req.body,products,totalPrice,userId).then((orderId)=>{
             if (payment == 'COD') {
                  res.json({cod_sucess:true});

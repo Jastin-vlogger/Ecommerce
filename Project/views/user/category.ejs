@@ -114,11 +114,13 @@
                         <img src = "/static/product-image/<%=element._id%>.jpg" class = "w-100">
 
                         <span class = "position-absolute d-flex align-items-center justify-content-center text-primary fs-4">
-                        </span>
+                        </span>  
                     </div>
                     <div class = "text-center">
                         <p class = "text-capitalize mt-3 mb-1"><%=element.name%></p>
-                        <span class = "fw-bold d-block"><%=element.price%></span>
+                        <span class="fw-bold d-block text-success">
+                            <del class="text-danger">Rs:<%=element.price%></del> Rs.<%=element.discountedPrice%>
+                        </span> 
                         <a href = "productDetails/<%=element._id%>" class = "btn btn-primary mt-3">BUY NOW</a>
                     </div>
                     

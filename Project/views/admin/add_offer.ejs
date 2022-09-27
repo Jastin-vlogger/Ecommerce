@@ -127,7 +127,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 <%offers.forEach((element)=>{%>
+                                    <%if(element.expired===false){%>
                                     <tr>
                                         <td>
                                             <%=element.offer%>
@@ -139,10 +141,12 @@
                                             <%=element.date%>
                                         </td>
                                         <td>
-                                            <button class="btn btn-danger" onclick="deleteCatOffer()">Remove</button>
+                                            <button class="btn btn-danger" onclick="deleteOffer('<%=element._id%>')">Remove</button>
                                         </td>
                                     </tr>
+                                    <%}%>
                                     <%})%>
+                                    
                             </tbody>
                         </table>
 
@@ -164,6 +168,19 @@
 
     <script>
 
+        function deleteOffer(id){
+            $.ajax({
+                url:'/admin/deletecoupon',
+                method:'patch',
+                data:{
+                    proid:id
+                },
+                success:(response)=>{
+                    location.href = '/admin/add-offers'
+                }
+            })
+        }
+
         function addoffer() {
             let offer = document.getElementById('Offername')
             let discount = document.getElementById('discountRate')
@@ -171,19 +188,9 @@
                 url: '/admin/add-coupon',
                 method: 'post',
                 data: $('#offeradd').serialize(),
-                success: (response) => {
-                    // console.log(response);
-                    // if (response.status == false) {
-                    //     let error = document.getElementById('error-msg')
-                    //     error.innerHTML = 'This name is already present'
-                    // } else {
-                    //     location.href = '/admin/category'
-                    // }
-
-                }
-
             })
         }
+
 
 
         function deleteCatOffer(id) {

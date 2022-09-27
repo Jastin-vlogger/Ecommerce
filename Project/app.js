@@ -10,10 +10,6 @@ const bodyParser = require('body-parser')
 const nocache = require('nocache')
 const twilio = require('twilio');
 
-
-
-
-
 var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
 

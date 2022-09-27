@@ -1,13 +1,13 @@
 
 const form = document.querySelector('form');
-const email = document.querySelector('input[type=text]');
+const entery = document.getElementById('username')
+
 
 form.addEventListener("submit" , onsubmit )
 
 function onsubmit(event){
     event.preventDefault();
-    if(email.value === ""){
-        
+    if(entery.value === ""){
         document.getElementById("emailmsg").style.display=""
 
         return false;

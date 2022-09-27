@@ -142,9 +142,6 @@ module.exports= {
             })
         })
     },
-    offerfind:()=>{
-
-    },
     addToCart:(productId,userId)=>{
         let productadd ={
             item:Types.ObjectId(productId),

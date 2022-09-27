@@ -10,6 +10,7 @@ const { findByIdAndUpdate } = require('../models/user')
 const crypto = require('crypto')
 const paypal = require('paypal-rest-sdk');
 const Coupon = require('../models/coupon')
+const Usedcoupon = require('../models/usedcoupon')
 
 let instance = new Razorpay({
     key_id: 'rzp_test_kC80uilJbJoVnc',
@@ -21,8 +22,8 @@ paypal.configure({
     'mode': 'sandbox', //sandbox or live
     'client_id': 'AVeSbZLSKoF5tArrQWsc49IuZwh7iFt9O7TLu84WpFcaWTY7rVG132U0ug9i1hSObq_Tt73PsdtdbKLt',
     'client_secret': 'ECa9hIwI7SFkA1uzkrozydGxpreGq7Tf-noWqFNTLQXaHpYDGJey4USkLGcWzZ2ZqZyQTf-bMqPGVDAh'
-  });
-   
+});
+
 
 module.exports = {
     signUp: (userData) => {
@@ -112,7 +113,7 @@ module.exports = {
                 ).then((response) => {
                     resolve({ status: true })
                 })
-            }  
+            }
         })
     },
     getTotalAmount: (userId) => {
@@ -226,7 +227,7 @@ module.exports = {
     generateRazorPay: (orderId, totalPrice) => {
         return new Promise((resolve, reject) => {
             instance.orders.create({
-                amount: totalPrice*100,
+                amount: totalPrice * 100,
                 currency: "INR",
                 receipt: '' + orderId,
                 notes: {
@@ -260,60 +261,60 @@ module.exports = {
     },
     changePaymentStatus: (orderId) => {
         return new Promise(async (resolve, reject) => {
-            await Order.updateOne({ _id: Types.ObjectId(orderId) },{$set: {status: 'placed'}}).then(() => {
+            await Order.updateOne({ _id: Types.ObjectId(orderId) }, { $set: { status: 'placed' } }).then(() => {
                 resolve()
             })
         })
 
     },
-    changePaymentStatusPaypal:(orderId)=>{
+    changePaymentStatusPaypal: (orderId) => {
         return new Promise(async (resolve, reject) => {
-            await Order.updateOne({ _id: Types.ObjectId(orderId) },{$set: {status: 'placed'}}).then(() => {
+            await Order.updateOne({ _id: Types.ObjectId(orderId) }, { $set: { status: 'placed' } }).then(() => {
                 resolve()
             })
         })
     },
-    generatePaypal:(orderId, totalPrice)=>{
+    generatePaypal: (orderId, totalPrice) => {
         parseInt(totalPrice).toFixed(2)
         // console.log(totalPrice);
-        return new Promise(async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             const create_payment_json = {
-              "intent": "sale",
-              "payer": {
-                  "payment_method": "paypal"
-              },
-              "redirect_urls": {
-                  "return_url": "http://localhost:3000/success",
-                  "cancel_url": "http://localhost:3000/cancel"
-              },
-              "transactions": [{
-                  "item_list": {
-                      "items": [{
-                          "name": "Red Sox Hat",
-                          "sku": "001",
-                          "price": totalPrice   ,
-                          "currency": "USD",
-                          "quantity": 1
-                      }]
-                  },
-                  "amount": {
-                      "currency": "USD",
-                      "total": totalPrice
-                  },
-                  "description": "Hat "
-              }]
-          };
-          
-          let data =  paypal.payment.create(create_payment_json, function (error, payment) {
-            if (error) {
-                console.log(error,'error ahda kuta');
-                throw error;
-            } else {
-                console.log('payment ayiiii');
-                resolve(payment)
-            }
-          })
-          
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"
+                },
+                "redirect_urls": {
+                    "return_url": "http://localhost:3000/success",
+                    "cancel_url": "http://localhost:3000/cancel"
+                },
+                "transactions": [{
+                    "item_list": {
+                        "items": [{
+                            "name": "Red Sox Hat",
+                            "sku": "001",
+                            "price": totalPrice,
+                            "currency": "USD",
+                            "quantity": 1
+                        }]
+                    },
+                    "amount": {
+                        "currency": "USD",
+                        "total": totalPrice
+                    },
+                    "description": "Hat "
+                }]
+            };
+
+            let data = paypal.payment.create(create_payment_json, function (error, payment) {
+                if (error) {
+                    console.log(error, 'error ahda kuta');
+                    throw error;
+                } else {
+                    console.log('payment ayiiii');
+                    resolve(payment)
+                }
+            })
+
         })
     },
     vieworders: () => {
@@ -350,19 +351,37 @@ module.exports = {
             }
         })
     },
-    findcoupon:(promo)=>{
-        let today = new Date().toISOString().slice(0, 10)
-        console.log(today);
-        return new Promise(async(resolve,reject)=>{
-            let promooffer = await Coupon.findOne({offer:promo})
-            console.log(promooffer.date);
-            if (promooffer.date >= today) {
-                console.log('ondu');
-                resolve(promooffer)
-            } else {
-                console.log('illa');
-                resolve()
-            }
-        })
+    findcoupon: (promo,userid) => {
+        try {
+            let today = new Date().toISOString().slice(0, 10)
+            console.log(today);
+            return new Promise(async (resolve, reject) => {
+                let promooffer = await Coupon.findOne({ offer: promo })
+                let alreadyused = await Usedcoupon.findOne({coupon:Types.ObjectId(promooffer._id)},{user:Types.ObjectId(userid)})
+                console.log(alreadyused);
+                if (promooffer && alreadyused == undefined) {
+                    if (promooffer.date >= today) {
+                        console.log('ondu');
+                        resolve(promooffer)
+                    }
+                } else {
+                    console.log('illa');
+                    resolve()
+                }
+
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
+    },
+    findusedcoupon:(promo,userId)=>{
+        try {
+            return new Promise((resolve,reject)=>{
+               
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
