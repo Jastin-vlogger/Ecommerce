@@ -9,434 +9,489 @@ const Address = require('../models/address')
 const Category = require('../models/category')
 const Wishlist = require('../models/userwhislist')
 
-module.exports= {
-    addProduct:(product)=>{
-        return new Promise (async(resolve,reject)=>{
-            await new Product({...product}).save().then((data)=>{
+module.exports = {
+    addProduct: (product) => {
+        return new Promise(async (resolve, reject) => {
+            await new Product({ ...product }).save().then((data) => {
                 resolve(data._id)
-        })   
+            })
         })
     },
-    addDiscountedProduct:(id,value)=>{
-        return new Promise (async(resolve,reject)=>{
-            await Product.findOneAndUpdate({_id:Types.ObjectId(id)},{$set:{discountedPrice:value}})
+    addDiscountedProduct: (id, value) => {
+        return new Promise(async (resolve, reject) => {
+            await Product.findOneAndUpdate({ _id: Types.ObjectId(id) }, { $set: { discountedPrice: value } })
         })
     },
-    findProduct:(search,page)=>{
+    findProduct: (search, page) => {
         const limit = 2
-        return new Promise (async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             let data = await Product.find({
-                $or:[
-                       {name:{$regex:'.*'+search+'.*',$options:'i'}},
-                        {category:{$regex:'.*'+search+'.*',$options:'i'}},
-                    ]
-                })
+                $or: [
+                    { name: { $regex: '.*' + search + '.*', $options: 'i' } },
+                    { category: { $regex: '.*' + search + '.*', $options: 'i' } },
+                ]
+            })
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .exec()
 
-                let count = await Product.find({
-                    $or:[
-                           {name:{$regex:'.*'+search+'.*',$options:'i'}},
-                            {category:{$regex:'.*'+search+'.*',$options:'i'}},
-                        ]
-                    })
-                    .countDocuments();
+            let count = await Product.find({
+                $or: [
+                    { name: { $regex: '.*' + search + '.*', $options: 'i' } },
+                    { category: { $regex: '.*' + search + '.*', $options: 'i' } },
+                ]
+            })
+                .countDocuments();
 
-            let cont = Math.ceil(count/limit)
+            let cont = Math.ceil(count / limit)
 
-            resolve(data,cont)
+            resolve(data, cont)
         })
     },
-    findCategory:()=>{
-        return new Promise (async(resolve,reject)=>{
-            await Category.find().then((response)=>{
+    findCategory: () => {
+        return new Promise(async (resolve, reject) => {
+            await Category.find().then((response) => {
                 resolve(response)
             })
         })
     },
-    deleteProduct:(id)=>{
-        return new Promise (async(resolve,reject)=>{
-            let softdelete = await Product.findByIdAndUpdate({_id:Types.ObjectId(id)},{$set:{isDeleted:true}})
+    deleteProduct: (id) => {
+        return new Promise(async (resolve, reject) => {
+            let softdelete = await Product.findByIdAndUpdate({ _id: Types.ObjectId(id) }, { $set: { isDeleted: true } })
             resolve(softdelete)
         })
     },
-    updateProduct:(id)=>{
-        return new Promise (async(resolve,reject)=>{
-            await Product.findById(id).then((data)=>{
+    updateProduct: (id) => {
+        return new Promise(async (resolve, reject) => {
+            await Product.findById(id).then((data) => {
                 resolve(data)
             })
         })
     },
-    updatedProduct:(updatedData,id)=>{
-        const {name, description, category, price} = updatedData;
-        return new Promise (async(resolve,reject)=>{
-        await Product.updateOne({_id: Types.ObjectId(id)},{$set: {
-            name: name,
-            description: description,
-            category: category,
-            price: price,
-        }}).then((data)=>{
+    updatedProduct: (updatedData, id) => {
+        const { name, description, category, price } = updatedData;
+        return new Promise(async (resolve, reject) => {
+            await Product.updateOne({ _id: Types.ObjectId(id) }, {
+                $set: {
+                    name: name,
+                    description: description,
+                    category: category,
+                    price: price,
+                }
+            }).then((data) => {
                 resolve(data._id)
             })
         })
     },
-    getAllProducts:()=>{
-        return new Promise (async(resolve,reject)=>{
+    getAllProducts: () => {
+        return new Promise(async (resolve, reject) => {
             // await Product.find().then((data)=>{
             //     resolve(data)
             // })
             Product.aggregate([
                 {
-                    $lookup:{
-                        from:'categories',
-                        localField:'category',
-                        foreignField:'name',
-                        as:'categories'
+                    $lookup: {
+                        from: 'categories',
+                        localField: 'category',
+                        foreignField: 'name',
+                        as: 'categories'
                     }
                 },
                 {
-                    $project:{
-                        name:'$name',
-                        category:'$category',
-                        offer:'$categories.offer',
-                        price:'$price',
-                        isDeleted:'$isDeleted'
+                    $project: {
+                        name: '$name',
+                        category: '$category',
+                        offer: '$categories.offer',
+                        price: '$price',
+                        isDeleted: '$isDeleted'
                     }
                 }
-            ]).limit(4).then((data)=>{
+            ]).limit(4).then((data) => {
                 resolve(data)
             })
         })
     },
-    productDetails:(id)=>{
-        return new Promise (async(resolve,reject)=>{
+    productDetails: (id) => {
+        return new Promise(async (resolve, reject) => {
             // await Product.findById(id).then((data)=>{
             //     resolve(data)
             // })
-           await Product.aggregate([
+            await Product.aggregate([
                 {
-                    $match:{_id:Types.ObjectId(id)}
+                    $match: { _id: Types.ObjectId(id) }
                 },
                 {
-                    $lookup:{
-                        from:'categories',
-                        localField:'category',
-                        foreignField:'name',
-                        as:'product'
+                    $lookup: {
+                        from: 'categories',
+                        localField: 'category',
+                        foreignField: 'name',
+                        as: 'product'
                     }
                 },
                 {
-                    $unwind:'$product'
+                    $unwind: '$product'
                 },
                 {
-                    $project:{
-                        name:'$name',
-                        category:'$product.name',
-                        offer:'$product.offer',
-                        price:'$price',
+                    $project: {
+                        name: '$name',
+                        category: '$product.name',
+                        offer: '$product.offer',
+                        price: '$price',
                     }
                 }
-            ]).then((data)=>{
+            ]).then((data) => {
                 resolve(data)
             })
         })
     },
-    addToCart:(productId,userId)=>{
-        let productadd ={
-            item:Types.ObjectId(productId),
-            quantity:1
+    addToCart: (productId, userId) => {
+        let productadd = {
+            item: Types.ObjectId(productId),
+            quantity: 1
         }
-        return new Promise(async(resolve,reject)=>{
-            
-            let userCart = await Cart.findOne({user:Types.ObjectId(userId)})
-            
+        return new Promise(async (resolve, reject) => {
+
+            let userCart = await Cart.findOne({ user: Types.ObjectId(userId) })
+
             if (userCart) {
                 const alreadyExists = userCart.products.findIndex(product => product.item == productId)
-                if(alreadyExists === -1 ){
+                if (alreadyExists === -1) {
                     const adding = await Cart.updateOne(
                         {
-                            user:Types.ObjectId(userId)
-                        },{
-                            $push:{products:{item:Types.ObjectId(productId),quantity:1}}
-                        }).then((response)=>{
-                            resolve(response)
-                        })
-                }else{
-                    await Cart.updateOne({'user':Types.ObjectId(userId),'products.item':Types.ObjectId(productId)},
-                    {
-                        $inc:{'products.$.quantity':1}
-                    }
-                    ).then((response)=>{
+                            user: Types.ObjectId(userId)
+                        }, {
+                        $push: { products: { item: Types.ObjectId(productId), quantity: 1 } }
+                    }).then((response) => {
+                        resolve(response)
+                    })
+                } else {
+                    await Cart.updateOne({ 'user': Types.ObjectId(userId), 'products.item': Types.ObjectId(productId) },
+                        {
+                            $inc: { 'products.$.quantity': 1 }
+                        }
+                    ).then((response) => {
                         resolve(response)
                     })
                 }
             } else {
-                let newCart ={ 
-                    user : userId,
-                    products:[productadd]
+                let newCart = {
+                    user: userId,
+                    products: [productadd]
                 }
-                await Cart(newCart).save().then((response)=>{
+                await Cart(newCart).save().then((response) => {
                     resolve(response)
                 })
-            } 
+            }
         })
     },
-    getCartProducts:(userId)=>{
-            return new Promise (async(resolve,reject)=>{
+    getCartProducts: (userId) => {
+        return new Promise(async (resolve, reject) => {
             let cartitems = await Cart.aggregate([{
-                $match:{user: mongoose.Types.ObjectId(userId)}
+                $match: { user: mongoose.Types.ObjectId(userId) }
             },
             {
-                $unwind:'$products'
+                $unwind: '$products'
             },
             {
-                $project:{
-                    item:'$products.item',
-                    quantity:'$products.quantity'
+                $project: {
+                    item: '$products.item',
+                    quantity: '$products.quantity'
                 }
             },
             {
-                $lookup:{
-                    from:'products',
-                    localField:'item',
-                    foreignField:'_id',
-                    as:'product'
+                $lookup: {
+                    from: 'products',
+                    localField: 'item',
+                    foreignField: '_id',
+                    as: 'product'
                 }
             },
             {
-                $project:{
-                    item:1,
-                    quantity:1,
-                    product:{ $arrayElemAt:['$product',0]}
+                $project: {
+                    item: 1,
+                    quantity: 1,
+                    product: { $arrayElemAt: ['$product', 0] }
                 }
             },
-            
-        ]).then((cart)=>{
-           resolve(cart) 
-        })
+
+            ]).then((cart) => {
+                resolve(cart)
+            })
         })
     },
-    deleteCart:(productId,userId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orderlist = await Cart.updateOne({user:Types.ObjectId(userId),"products.item":Types.ObjectId(productId) },{$pull:{products:{item:Types.ObjectId(productId)}}})
+    deleteCart: (productId, userId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderlist = await Cart.updateOne({ user: Types.ObjectId(userId), "products.item": Types.ObjectId(productId) }, { $pull: { products: { item: Types.ObjectId(productId) } } })
             console.log(orderlist);
             resolve(orderlist)
         })
     },
-    getCartProductList:(userId)=>{
-        return new Promise (async(resolve ,reject)=>{
-            let cart = await Cart.findOne({user:Types.ObjectId(userId)})
+    getCartProductList: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let cart = await Cart.findOne({ user: Types.ObjectId(userId) })
             if (cart) {
                 resolve(cart.products)
-            }else{
+            } else {
                 resolve('your cart is empty')
             }
-            
+
         })
     },
-    getOrderProducts:(orderId)=>{
-        return new Promise (async(resolve,reject)=>{
-            let orderitems = await Order.aggregate([{
-                $match:{_id: mongoose.Types.ObjectId(orderId)}
+    getOrderProducts: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderitems = await Order.aggregate([
+                {
+                $match: { _id: mongoose.Types.ObjectId(orderId)}
             },
+            // {
+            //     $unwind: '$products'
+            // },
+            // {
+            //     $project: {
+            //         item: '$products.item',
+            //         quantity: '$products.quantity'
+            //     }
+            // },
             {
-                $unwind:'$products'
-            },
-            {
-                $project:{
-                    item:'$products.item',
-                    quantity:'$products.quantity'
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.item',
+                    foreignField: '_id',
+                    as: 'product'
                 }
             },
             {
-                $lookup:{
-                    from:'products',
-                    localField:'item',
-                    foreignField:'_id',
-                    as:'product'
-                }
+                $unwind:'$product'
             },
             {
-                $project:{
-                    item:1,
-                    quantity:1,
-                    product:{ $arrayElemAt:['$product',0]}
+                $project: {
+                    town:'$deliveryDetails.address',
+                    state:'$deliveryDetails.state',
+                    pincode:'$deliveryDetails.pincode',
+                    paymentMethod:'$paymentMethod',
+                    purchase :'$totalAmount',
+                    date:'$date',
+                    original:'$product.price',
+                    name:'$product.name',
+                    category:'$product.category',
+                    image:'$product._id'
                 }
             },
-            
-        ]).then((orderitems)=>{
-            resolve(orderitems)
-        })
-        
-        
+
+            ]).then((orderitems) => {
+                console.log(orderitems);
+                resolve(orderitems)
+            })
+
+
         })
     },
-    getorderId:(userId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orderId = await Order.findById({user:(userId)})
+    getorderId: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderId = await Order.findById({ user: (userId) })
             console.log(orderId);
             resolve(orderId)
         })
     },
-    getUserOrders:(userId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orders = await Order.find({userId:mongoose.Types.ObjectId(userId)}).sort({_id:-1})
+    getUserOrders: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let orders = await Order.find({ userId: mongoose.Types.ObjectId(userId) }).sort({ _id: -1 })
             resolve(orders)
         })
     },
-    cancelOrder:(orderId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orderC = await Order.findByIdAndUpdate({_id:Types.ObjectId(orderId)},{$set:{ordercanceled:true}})
+    cancelOrder: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderC = await Order.findByIdAndUpdate({ _id: Types.ObjectId(orderId) }, { $set: { ordercanceled: true } })
             resolve(orderC)
         })
     },
-    cancelOrderadmin:(orderId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orderC = await Order.findByIdAndUpdate({_id:Types.ObjectId(orderId)},{$set:{ordercanceled:true}})
+    cancelOrderadmin: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderC = await Order.findByIdAndUpdate({ _id: Types.ObjectId(orderId) }, { $set: { ordercanceled: true } })
             resolve(orderC)
         })
     },
-    changeOrderStatus:(orderId,status)=>{
-        return new Promise (async(resolve,reject)=>{
-            let orderstatuschanged = await Order.findByIdAndUpdate({_id:Types.ObjectId(orderId)},{$set:{status:status}})
+    changeOrderStatus: (orderId, status) => {
+        return new Promise(async (resolve, reject) => {
+            let orderstatuschanged = await Order.findByIdAndUpdate({ _id: Types.ObjectId(orderId) }, { $set: { status: status } })
             resolve(orderstatuschanged)
         })
     },
-    addAddress:(firstname,lastname,address,town,state,pincode,userId)=>{
+    addAddress: (firstname, lastname, address, town, state, pincode, userId) => {
         let saveaddress = {
-            userId:Types.ObjectId(userId),
-            firstname:firstname,
-            lastname:lastname,
-            address:address,
-            town:town,
-            state:state,
-            pincode:pincode,
+            userId: Types.ObjectId(userId),
+            firstname: firstname,
+            lastname: lastname,
+            address: address,
+            town: town,
+            state: state,
+            pincode: pincode,
         }
-        return new Promise (async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             let addedAddress = await Address(saveaddress).save();
             resolve(addedAddress)
         })
     },
-    removeAddress:(addressId)=>{
-        return new Promise (async(resolve,reject)=>{
+    removeAddress: (addressId) => {
+        return new Promise(async (resolve, reject) => {
             let removeAddress = await Address.findByIdAndRemove(addressId)
             console.log(removeAddress);
             resolve(removeAddress)
         })
-        
+
     },
-    categorizeProduct:(catname)=>{
-        return new Promise (async(resolve,reject)=>{
-        //   let data = await Product.aggregate([
-        //     {
-        //         $match:{category:catname}
-        //     },
-        //     // {
-        //     //     $unwind:'$name'
-        //     // },
-        //     {
-        //         $lookup:{
-        //             from:'products',
-        //             localField:'name',
-        //             foreignField:'category',
-        //             as:'cat'
-        //         }
-        //     },
-        //     {
-        //         $project:{
-        //             cat:{ $arrayElemAt:['$cat',0]}
-        //         }
-        //     }
-        //   ])
-        let data = await Product.find({category:catname})
-        //   console.log(data);
-          resolve(data)
+    categorizeProduct: (catname) => {
+        return new Promise(async (resolve, reject) => {
+            //   let data = await Product.aggregate([
+            //     {
+            //         $match:{category:catname}
+            //     },
+            //     // {
+            //     //     $unwind:'$name'
+            //     // },
+            //     {
+            //         $lookup:{
+            //             from:'products',
+            //             localField:'name',
+            //             foreignField:'category',
+            //             as:'cat'
+            //         }
+            //     },
+            //     {
+            //         $project:{
+            //             cat:{ $arrayElemAt:['$cat',0]}
+            //         }
+            //     }
+            //   ])
+            let data = await Product.find({ category: catname })
+            //   console.log(data);
+            resolve(data)
         })
     },
-    addTowhishlist:(productId,userId)=>{
-        let productadd ={
-            item:Types.ObjectId(productId),
-            quantity:1
+    addTowhishlist: (productId, userId) => {
+        let productadd = {
+            item: Types.ObjectId(productId),
+            quantity: 1
         }
-        return new Promise(async(resolve,reject)=>{
-            
-            let userWish = await Wishlist.findOne({user:Types.ObjectId(userId)})
-            
+        return new Promise(async (resolve, reject) => {
+
+            let userWish = await Wishlist.findOne({ user: Types.ObjectId(userId) })
+
             if (userWish) {
                 const alreadyExists = userWish.products.findIndex(product => product.item == productId)
-                if(alreadyExists === -1 ){
+                if (alreadyExists === -1) {
                     const adding = await Wishlist.updateOne(
                         {
-                            user:Types.ObjectId(userId)
-                        },{
-                            $push:{products:{item:Types.ObjectId(productId),quantity:1}}
-                        }).then((response)=>{
-                            resolve(response)
-                        })
-                }else{
-                    await Wishlist.updateOne({user:Types.ObjectId(userId),'products.item':Types.ObjectId(productId)},
-                    {
-                        $inc:{'products.$.quantity':1}
-                    }
-                    ).then((response)=>{
+                            user: Types.ObjectId(userId)
+                        }, {
+                        $push: { products: { item: Types.ObjectId(productId), quantity: 1 } }
+                    }).then((response) => {
+                        resolve(response)
+                    })
+                } else {
+                    await Wishlist.updateOne({ user: Types.ObjectId(userId), 'products.item': Types.ObjectId(productId) },
+                        {
+                            $inc: { 'products.$.quantity': 1 }
+                        }
+                    ).then((response) => {
                         resolve(response)
                     })
                 }
             } else {
-                let newWish ={ 
-                    user : userId,
-                    products:[productadd]
+                let newWish = {
+                    user: userId,
+                    products: [productadd]
                 }
-                await Wishlist(newWish).save().then((response)=>{
+                await Wishlist(newWish).save().then((response) => {
                     resolve(response)
                 })
-            } 
+            }
         })
     },
-    getwishlistProducts:(userId)=>{
-        return new Promise (async(resolve,reject)=>{
-        let wish = await Wishlist.aggregate([
-        {
-            $match:{user: mongoose.Types.ObjectId(userId)}
-        },
-        {
-            $unwind:'$products'
-        },
-        {
-            $project:{
-                item:'$products.item'
-            }
-        },
-        {
-            $lookup:{
-                from:'products',
-                localField:'item',
-                foreignField:'_id',
-                as:'product'
-            }
-        },
-        {
-            $project:{
-                item:1,
-                quantity:1,
-                product:{ $arrayElemAt:['$product',0]}
-            }
-        },
-        
-    ]).then((wish)=>{
-        // console.log(wish);
-       resolve(wish) 
-    })
-    })
-},
-deleteWishProduct:(productId,userId)=>{
-    return new Promise(async(resolve,reject)=>{
-        let list = await Wishlist.updateOne({user:Types.ObjectId(userId),"products.item":Types.ObjectId(productId) },{$pull:{products:{item:Types.ObjectId(productId)}}})
-        console.log(list);
-        resolve(list)
-    })
-}
+    getwishlistProducts: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let wish = await Wishlist.aggregate([
+                {
+                    $match: { user: mongoose.Types.ObjectId(userId) }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
+                    }
+                },
+
+            ]).then((wish) => {
+                // console.log(wish);
+                resolve(wish)
+            })
+        })
+    },
+    deleteWishProduct: (productId, userId) => {
+        return new Promise(async (resolve, reject) => {
+            let list = await Wishlist.updateOne({ user: Types.ObjectId(userId), "products.item": Types.ObjectId(productId) }, { $pull: { products: { item: Types.ObjectId(productId) } } })
+            console.log(list);
+            resolve(list)
+        })
+    },
+    finddetailoforder: (id) => {
+        try {
+            return new Promise(async (resolve, reject) => {
+                let order = await Order.aggregate([
+                    {
+                        $match: { _id: Types.ObjectId(id) }
+                    },
+                    {
+                        $lookup:{
+                            from:'products',
+                            localField:'products.item',
+                            foreignField:'_id',
+                            as:'orderdetail'
+                        }
+                    },
+                    {
+                        $unwind:'$orderdetail'
+                    },
+                    {
+                        $project:{
+                            id:'$orderdetail._id',
+                            name:'$orderdetail.name',      
+                            totalAmount:'$orderdetail.price',
+                            ordercanceled:'$orders.ordercanceled',
+                            state:'$deliveryDetails.state',
+                            address:'$deliveryDetails.state',
+                            pincode:'$deliveryDetails.pincode',
+                            status:'$status',
+                            discount:'$orderdetail.discountedPrice',
+                            payment:'$paymentMethod',
+                            category:'$orderdetail.category',
+                            image:'$orderdetail._id'
+                        }
+                    }
+                ])
+                resolve(order)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 }
 
-    

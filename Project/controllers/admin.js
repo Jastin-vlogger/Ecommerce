@@ -9,21 +9,22 @@ const { response } = require('../app')
 
 
 
-module.exports ={
-    findOrders:()=>{
-        return new Promise (async(resolve,reject)=>{
+module.exports = {
+    findOrders: () => {
+        return new Promise(async (resolve, reject) => {
             let data = await Order.aggregate([
                 {
-                    $match:{ createdAt:{
-                            $gte: new Date(new Date() - 60*60*24*1000*7)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date() - 60 * 60 * 24 * 1000 * 7)
                         }
                     }
                 },
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $project:{
+                    $project: {
                         year: { $year: "$createdAt" },
                         month: { $month: "$createdAt" },
                         day: { $dayOfMonth: "$createdAt" },
@@ -31,35 +32,35 @@ module.exports ={
                     }
                 },
                 {
-                    $group:{
-                        _id:'$dayOfWeek',
-                        count:{$sum:1},
-                        detail:{$first:'$$ROOT'}
+                    $group: {
+                        _id: '$dayOfWeek',
+                        count: { $sum: 1 },
+                        detail: { $first: '$$ROOT' }
                     }
                 },
                 {
-                    $sort:{detail:1}
+                    $sort: { detail: 1 }
                 }
-        ])
+            ])
             // console.log(data);
             resolve(data)
         })
     },
-    findorderbyweek:()=>{
-        return new Promise(async(resolve,reject)=>{
+    findorderbyweek: () => {
+        return new Promise(async (resolve, reject) => {
             let data = await Order.aggregate([
                 {
-                    $match:{
-                        createdAt:{
-                            $gte:new Date(new Date() - 1000*60*60*24*7*7)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 7)
                         }
                     }
                 },
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $project:{
+                    $project: {
                         year: { $year: "$createdAt" },
                         month: { $month: "$createdAt" },
                         day: { $dayOfMonth: "$createdAt" },
@@ -68,34 +69,34 @@ module.exports ={
                     }
                 },
                 {
-                    $group:{
-                        _id:'$week',
-                        count:{$sum:1},
-                        detail:{$first:'$$ROOT'}
+                    $group: {
+                        _id: '$week',
+                        count: { $sum: 1 },
+                        detail: { $first: '$$ROOT' }
                     }
                 },
                 {
-                    $sort:{detail:1}
+                    $sort: { detail: 1 }
                 }
             ])
             resolve(data)
         })
     },
-    findorderbymonth:()=>{
-        return new Promise (async(resolve,reject)=>{
+    findorderbymonth: () => {
+        return new Promise(async (resolve, reject) => {
             let data = await Order.aggregate([
                 {
-                    $match:{
-                        createdAt:{
-                            $gte:new Date(new Date().getMonth() - 10)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date().getMonth() - 10)
                         }
                     }
                 },
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $project:{
+                    $project: {
                         year: { $year: "$createdAt" },
                         month: { $month: "$createdAt" },
                         day: { $dayOfMonth: "$createdAt" },
@@ -104,64 +105,78 @@ module.exports ={
                     }
                 },
                 {
-                    $group:{
-                        _id:'$month',
-                        count:{$sum:1},
-                        detail:{$first:'$$ROOT'}
+                    $group: {
+                        _id: '$month',
+                        count: { $sum: 1 },
+                        detail: { $first: '$$ROOT' }
                     }
                 },
                 {
-                    $sort:{detail:-1}
+                    $sort: { detail: -1 }
                 }
             ])
             resolve(data)
         })
     },
-    bannermange:async(req,res)=>{
+    bannermange: async (req, res) => {
         let data = await Banner.find()
         let categories = await productController.findCategory()
         console.log(data);
-        res.render('admin/addBanner',{data,categories});
+        res.render('admin/addBanner', { data, categories });
     },
-    addbanner:async(req,res)=>{
+    addbanner: async (req, res) => {
         console.log(req.body);
-        let { heading,desc,category} = req.body
-        let categor = await Category.findOne({name:category})
+        let { heading, desc, category } = req.body
+        let categor = await Category.findOne({ name: category })
         console.log(categor._id);
         let image = req.files.image
         let addbanner = {
-            header:heading,
-            description:desc,
-            category:categor._id,
+            header: heading,
+            description: desc,
+            category: categor._id,
         }
-        let data =  await adminHelpers.addbannertodb(addbanner)
+        let data = await adminHelpers.addbannertodb(addbanner)
         console.log(data);
         image.mv(`public/bannerImg/${data}.jpg`)
-         res.redirect('/admin/bannermangement');
+        res.redirect('/admin/bannermangement');
     },
-    addoffer:async(req,res)=>{
+    addoffer: async (req, res) => {
         let offers = await Coupon.find()
         console.log(offers);
-        res.render('admin/add_offer',{offers});
+        res.render('admin/add_offer', { offers });
     },
-    addcoupon:(Offername,discountRate,date)=>{
+    addcoupon: (Offername, discountRate, date) => {
         let offer = {
-            offer : Offername,
-            discount :discountRate,
-            date:date
+            offer: Offername,
+            discount: discountRate,
+            date: date
         }
-        return new Promise (async(resolve,reject)=>{
-            await new Coupon(offer).save().then((data)=>{
+        return new Promise(async (resolve, reject) => {
+            await new Coupon(offer).save().then((data) => {
                 resolve(data)
             })
         })
     },
-    canceloffer:(id)=>{
-        return new Promise(async(resolve,reject)=>{
-            await Coupon.findByIdAndUpdate({_id:Types.ObjectId(id)},{$set:{expired:true}}).then((response)=>{
+    canceloffer: (id) => {
+        return new Promise(async (resolve, reject) => {
+            await Coupon.findByIdAndUpdate({ _id: Types.ObjectId(id) }, { $set: { expired: true } }).then((response) => {
                 resolve(response)
             })
 
         })
+    },
+    detailview: (req, res) => {
+        try {
+            console.log('njan ivida');
+            let id = req.params.id
+            console.log(id);
+            productController.finddetailoforder(id).then((data) => {
+                console.log(data);
+                res.json(data)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 }

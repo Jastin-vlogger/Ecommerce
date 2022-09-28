@@ -27,7 +27,7 @@
                     <span class="text-uppercase fw-lighter ms-2">GOCYCLE</span>
                 </a>
 
-            
+
 
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navMenu">
@@ -75,18 +75,18 @@
                                 </li> -->
                                 <li class="list-group-item d-flex justify-content-between">
                                     <input type="text" id="sum" value="<%=total%>" hidden>
-                                    <span >Total (INR)</span>
-                                    
+                                    <span>Total (INR)</span>
+
                                     <strong id="total">
                                         <%=total%>
                                     </strong>
                                 </li>
                     </ul>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code" name="promo" id="promocode">       
+                        <input type="text" class="form-control" placeholder="Promo code" name="promo" id="promocode">
                         <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary" onclick="addcoupon()">Redeem</button>
-                        <p id="msg" style="color:rgb(255, 0, 0) "></p>
+                            <button type="submit" class="btn btn-secondary" onclick="addcoupon()">Redeem</button>
+                            <p id="msg" style="color:rgb(255, 0, 0) "></p>
                         </div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
             </div>
         </div>
 
-        <script src="/static/javascripts/paypal.js"></script>
+
         <!-- <script src="/static/javascripts/checkout.js"></script> -->
 
         <SCript>
@@ -228,8 +228,8 @@
                         }
                     }
                 })
-            }) 
-            
+            })
+
             function addtofields(firstname, lastname, address, town, pin) {
                 let firstnames = document.getElementById('firstName').value = firstname
                 let lastnames = document.getElementById('lastName').value = lastname
@@ -302,29 +302,37 @@
             }
 
             function addcoupon() {
-            let total = document.getElementById('sum').value
-            let promo = document.getElementById('promocode')
-            let coupon = document.getElementById('couponvalue')
-            let couponusing = document.getElementById('couponusing')
-            $.ajax({
-                url: '/checkpromo',
-                method: 'post',
-                data: { promo: promo.value},
-                success: (response) => {
-                    console.log(response);
-                    if (response.status == false) {
-                        let error = document.getElementById('msg')
-                        error.innerHTML = 'Enter valid Promocode'
-                    } else {
-                        let a = document.getElementById('total').innerHTML =total - response.discount;
-                        coupon.value = a
-                        couponusing.value = response.discount
+                let total = document.getElementById('sum').value
+                let promo = document.getElementById('promocode')
+                let coupon = document.getElementById('couponvalue')
+                let couponusing = document.getElementById('couponusing')
+                $.ajax({
+                    url: '/checkpromo',
+                    method: 'post',
+                    data: { promo: promo.value },
+                    success: (response) => {
+                        console.log(response);
+                        if (response.status == false) {
+                            let error = document.getElementById('msg')
+                            error.innerHTML = 'Enter valid Promocode'
+                        } else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'COUPON APPLIED',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            let a = document.getElementById('total').innerHTML = total - response.discount;
+                            coupon.value = a
+                            couponusing.value = response.discount
+                        }
                     }
-                }
-            })
+                })
             }
         </script>
+        <script src="/static/javascripts/paypal.js"></script>
     </head>
 
     </html>
-    <%-include('footer')-%> 
+    <%-include('footer')-%>

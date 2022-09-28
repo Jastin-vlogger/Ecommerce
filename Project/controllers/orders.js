@@ -13,17 +13,50 @@ module.exports = {
             page = req.query.page
         }
         const limit = 10
-        let orders = await Order.find({
-            $or: [
-                { name: { $regex: '.*' + search + '.*', $options: 'i' } },
-                { category: { $regex: '.*' + search + '.*', $options: 'i' } },
-            ]
-        })
-            .skip((page - 1) * limit)
-            .limit(limit * 1)
-            .sort({ _id: -1 })
-            .exec()
-            
+        // let orders = await Order.find({
+        //     $or: [
+        //         { name: { $regex: '.*' + search + '.*', $options: 'i' } },
+        //         { category: { $regex: '.*' + search + '.*', $options: 'i' } },
+        //     ]
+        // })
+        //     .skip((page - 1) * limit)
+        //     .limit(limit * 1)
+        //     .sort({ _id: -1 })
+        //     .exec()
+        let orders = await Order.aggregate([
+            // {
+            //     $project:{
+            //         item:'products.item'
+            //     }
+            // },
+            {
+                $lookup: {
+                    from: 'products',
+                    foreignField: '_id',
+                    localField: 'products.item',
+                    as:'orders'
+                }
+            },
+            {
+                $unwind:'$orders'
+            },
+            {
+                $project:{
+                    id:'$orders._id',
+                    name:'$orders.name',      
+                    totalAmount:'$totalAmount',
+                    ordercanceled:'$ordercanceled',
+                    state:'$deliveryDetails.state',
+                    status:'$status',
+                    paymentMethod:'$paymentMethod',
+                }
+            },
+
+        ]).skip((page - 1) * limit)
+        .limit(limit * 1)
+        .sort({ _id: -1 })
+        .exec()
+        // console.log(orders);
 
         let count = await Order.find({
             $or: [
@@ -32,6 +65,6 @@ module.exports = {
             ]
         }).countDocuments()
         // let order = await Order.find().sort({ _id: -1 })
-        res.render('admin/orderMangement', { orders , pages : Math.ceil(count / limit),current: page});
+        res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page });
     }
 }

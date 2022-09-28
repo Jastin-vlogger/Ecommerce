@@ -296,6 +296,8 @@ router.post('/add-coupon', authentication.adminverify,coupon.addcoupon)
 
 router.patch('/deletecoupon', authentication.adminverify,coupon.deletecoupon)
 
+router.get('/detail-view/:id',authentication.adminverify,Admin.detailview)
+
 router.get('/logout', authentication.adminverify, (req, res) => {
     res.clearCookie('adminToken').redirect('/admin/login')
 })

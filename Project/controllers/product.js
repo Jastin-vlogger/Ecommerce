@@ -62,8 +62,9 @@ module.exports = {
   viewproductdetail: async (req, res) => {
     let orderId = req.params.id
     let product = await productController.getOrderProducts(orderId)
-    console.log(product);
-    res.render('user/vieworders', { product })
+    // console.log(product);
+    res.json(product)
+    // res.render('user/vieworders', { product })
   },
   cancelOrder: async (req, res) => {
     let userId = req.userId
