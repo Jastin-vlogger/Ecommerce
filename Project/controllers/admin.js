@@ -118,6 +118,44 @@ module.exports = {
             resolve(data)
         })
     },
+    findorderbycat:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let data= await Order.aggregate([
+                {
+                    $match:{
+                        createdAt:{
+                            $gte:new Date(new Date().getMonth()-10)
+                        }
+                    }
+                },
+                {
+                    $lookup:{
+                        from:'products',
+                        localField:'products.item',
+                        foreignField:'_id',
+                        as:'pro'
+                    }
+                },
+                {
+                    $unwind:'$pro'
+                },
+                {
+                    $project:{
+                        cat:'$pro.category'
+                    }
+                },
+                {
+                    $group:{
+                        _id:'$cat',
+                        count:{$sum:1},
+                        detail:{$first:"$$ROOT"}
+                    }
+                }
+            ])
+            // console.log(data);
+            resolve(data)
+        })
+    },
     bannermange: async (req, res) => {
         let data = await Banner.find()
         let categories = await productController.findCategory()

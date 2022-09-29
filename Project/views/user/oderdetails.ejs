@@ -83,18 +83,22 @@
                             <td scope="col">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="viewdetail(`<%=orders._id%>`)">View Details</button>
                                 
+
                                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                   <div class="modal-dialog">
                                     <div class="modal-content">
                                       <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel"> VIEW DETAILS</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       <div class="modal-body">
+                                        <div id="hello">
+
+
+                                        </div>
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Send message</button>
                                       </div>
                                     </div>
                                   </div>
@@ -118,6 +122,8 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
   <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+  
+
   <script>
   function confirmDelete(proId) {
     Swal.fire({
@@ -142,12 +148,25 @@
   }
   
   function viewdetail(id) {
+    let hello = document.getElementById('hello')
+            hello.innerHTML = ''
     $.ajax({
         url:`/product/${id}`,
         method:'get',
         success:(response)=>{
             console.log(response);
-            alert('h9')
+            for (let i = 0; i < response.length; i++) {
+                        hello.innerHTML += ` <h5>${response[i].name}</h5>
+                        <img src="/static/product-image/${response[i].image}.jpg" alt="" style="width: 100px;height: 75px;">
+                        <h6 class="text-danger">Price: ${response[i].original}</h6>
+                        <h6 class="text-success">Discount Price: ${response[i].purchase}</h6>
+                        <p>Category: ${response[i].category}</p>
+                        
+                        <p>paymentMethod: ${response[i].paymentMethod}</p>
+                        <p>address: ${response[i].town} ${response[i].state} ${response[i].pincode}</p>
+                        <hr>
+                        `
+                    }
         }
     })
     

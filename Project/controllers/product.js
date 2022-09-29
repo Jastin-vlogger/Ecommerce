@@ -12,12 +12,23 @@ const Category = require('../models/category')
 
 module.exports = {
   addtocart: async (req, res) => {
-    let userId = req.userId
-    let productId = req.params.id
-    console.log(userId, productId);
-    await productcontroller.addToCart(productId, userId).then((response) => {
-      res.json(response)
-    })
+    try {
+      let userId = req.userId
+      let token = req.token
+      if (token) {
+        let productId = req.params.id
+        console.log(userId, productId);
+        await productcontroller.addToCart(productId, userId).then((response) => {
+          res.json(response)
+        })
+      } else {
+        res.redirect('/login')
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
   },
   cart: async (req, res) => {
     try {
@@ -28,7 +39,7 @@ module.exports = {
       let eachTotal = await userHelpers.getEachProductAmount(userId)
       let product = await productController.getCartProducts(userId)
       product.forEach((data) => {
-        
+
       });
       // let offer = await productController.offerfind(userId)
       res.render('user/cart', { product, token, userId, total, eachTotal });
@@ -54,17 +65,32 @@ module.exports = {
     res.redirect('/cart')
   },
   profile: async (req, res) => {
-    let userId = req.userId
-    let user = await userHelpers.viewprofile(userId)
-    let addedAddress = await userHelpers.findaddress(userId)
-    res.render('user/profile', { user, addedAddress })
+    try {
+      let userId = req.userId
+      if (userId) {
+        let user = await userHelpers.viewprofile(userId)
+        let addedAddress = await userHelpers.findaddress(userId)
+        res.render('user/profile', { user, addedAddress })
+      } else {
+        res.redirect('/login')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+
   },
   viewproductdetail: async (req, res) => {
-    let orderId = req.params.id
-    let product = await productController.getOrderProducts(orderId)
-    // console.log(product);
-    res.json(product)
-    // res.render('user/vieworders', { product })
+    try {
+      let orderId = req.params.id
+      let product = await productController.getOrderProducts(orderId)
+      // console.log(product);
+      res.json(product)
+      // res.render('user/vieworders', { product })
+    } catch (error) {
+      console.log(error);
+    }
+
   },
   cancelOrder: async (req, res) => {
     let userId = req.userId

@@ -276,6 +276,12 @@ router.get('/dashboard/month', authentication.adminverify, async (req, res) => {
     })
 })
 
+router.get('/dashboard/catSalesReport', authentication.adminverify,(req,res)=>{
+     Admin.findorderbycat().then((data)=>{
+        res.json(data)
+     })
+})
+
 
 /* -------------------------------admin view ordered products ------------------------------- */
 router.get('/orderMangement', authentication.adminverify, order.findorders)

@@ -168,7 +168,7 @@
                                                                                                         class="modal-header">
                                                                                                         <h5 class="modal-title"
                                                                                                             id="exampleModalLabel">
-                                                                                                            New message
+                                                                                                            VIEW DETAILS
                                                                                                         </h5>
                                                                                                         <button
                                                                                                             type="button"
@@ -306,8 +306,8 @@
 
         function findproductdetail(id,i){
             console.log(id,i);
-            let hello = document.getElementById('hello')
-            hello.innerHTML = ''
+                let hello = document.getElementById('hello')
+                hello.innerHTML = ''
             $.ajax({  
                 url:`/admin/detail-view/${id}`,
                 method:'get',
