@@ -1,20 +1,21 @@
-const productController = require('./productController');
+const productController = require('../services/productController');
 const userAuth = require('../authMiddleWare/auth')
-const productcontroller = require('./productController');
+const productcontroller = require('../services/productController');
 const { response } = require('../app');
-const userHelpers = require('./user-helpers');
+const userHelpers = require('../services/user');
 const User = require('../models/user');
 const { Types } = require('mongoose');
 const bcrypt = require('bcrypt')
 const Category = require('../models/category')
-
+const order = require ('../services/orders')
+const wallet = require('../services/wallet')
 
 
 module.exports = {
   addtocart: async (req, res) => {
     try {
       let userId = req.userId
-      let token = req.token
+      const token = req.cookies.token
       if (token) {
         let productId = req.params.id
         console.log(userId, productId);
@@ -95,9 +96,17 @@ module.exports = {
   cancelOrder: async (req, res) => {
     let userId = req.userId
     let orderId = req.params.id
+
+    // finding the order is it online and refunding
+    let isonline = await order.findIsOrderOnline(orderId)
+    console.log(isonline);
+    if(isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay'){
+      let wall = await wallet.refundForOnline(isonline.totalAmount,userId)
+      console.log(wall);
+    }
     let ordercanceled = await productController.cancelOrder(orderId)
     let orders = await productController.getUserOrders(userId)
-    console.log(orders);
+    // console.log(orders);
     // res.render('user/oderdetails',{orders})
     res.redirect('/orders')
 

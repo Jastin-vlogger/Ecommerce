@@ -29,8 +29,17 @@ const userSchema = new mongoose.Schema({
     number:{
         type: Number,
         required:true,
-    }
-    
+    },
+    wallet:{
+        type:Number,
+        default:0,
+    },
+    referal:{
+        type:String,
+    },
+    referral_code:{
+        type:String,
+    },
 },{
     timestamps:true
 })

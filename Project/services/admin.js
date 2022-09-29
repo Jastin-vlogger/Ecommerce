@@ -1,7 +1,7 @@
 const Order = require('../models/order')
 const Banner = require('../models/banner')
-const adminHelpers = require('../controllers/category')
-const productController = require('../controllers/productController')
+const adminHelpers = require('./category')
+const productController = require('./productController')
 const Category = require('../models/category')
 const Coupon = require('../models/coupon')
 const { Types } = require('mongoose')
@@ -150,6 +150,9 @@ module.exports = {
                         count:{$sum:1},
                         detail:{$first:"$$ROOT"}
                     }
+                },
+                {
+                    $sort:{detail:-1}
                 }
             ])
             // console.log(data);

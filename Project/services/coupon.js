@@ -1,6 +1,6 @@
 const Coupon = require('../models/coupon')
-const Admin = require('../controllers/admin')
-const user = require('../controllers/user-helpers')
+const Admin = require('./admin')
+const user = require('./user')
 const usedcoupon = require('../models/usedcoupon')
 const { Types } = require('mongoose')
 

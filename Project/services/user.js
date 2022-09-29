@@ -11,6 +11,8 @@ const crypto = require('crypto')
 const paypal = require('paypal-rest-sdk');
 const Coupon = require('../models/coupon')
 const Usedcoupon = require('../models/usedcoupon')
+const shortid = require('shortid');
+
 
 let instance = new Razorpay({
     key_id: 'rzp_test_kC80uilJbJoVnc',
@@ -27,17 +29,49 @@ paypal.configure({
 
 module.exports = {
     signUp: (userData) => {
-        return new Promise(async (resolve, reject) => {
-            let user = await User.findOne({ email: userData.email })
-            if (user?.email === userData.email) {
-                resolve('email found')
-            } else {
-                userData.password = await bcrypt.hash(userData.password, 10)
-                await new User({ ...userData }).save().then((data) => {
-                    resolve(data)
-                })
-            }
-        })
+        try {
+            let { referal } = userData
+            console.log(userData);
+            return new Promise(async (resolve, reject) => {
+                let user = await User.findOne({ email: userData.email })
+                let refer = 'a';
+                if(referal) {
+                    refer = await User.findOne({ referral_code: referal })
+                }
+                if(refer){
+                    let value = 500;
+                    let val = refer.wallet +value;
+                    await User.findByIdAndUpdate({_id:Types.ObjectId(refer._id)},{$set:{wallet:val}})
+                }
+                if (user) {
+                    resolve('email found')
+                } else if (!refer) {
+                    // console.log('invalid');
+                    resolve('invalid referal')
+                } else {
+
+                    /* a unique referral code the user can share */
+                    let referral_code = shortid.generate();
+                    let { firstName, lastName, email, number, password, referal } = userData
+                    let data = {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        password: password,
+                        number: number,
+                        referal: referal,
+                        referral_code: referral_code,
+                    }
+                    userData.password = await bcrypt.hash(userData.password, 10)
+                    await new User(data).save().then((data) => {
+                        resolve(data)
+                    })
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
     },
     loginValidate: (userData) => {
         return new Promise(async (resolve, reject) => {
@@ -351,13 +385,13 @@ module.exports = {
             }
         })
     },
-    findcoupon: (promo,userid) => {
+    findcoupon: (promo, userid) => {
         try {
             let today = new Date().toISOString().slice(0, 10)
             console.log(today);
             return new Promise(async (resolve, reject) => {
                 let promooffer = await Coupon.findOne({ offer: promo })
-                let alreadyused = await Usedcoupon.findOne({coupon:Types.ObjectId(promooffer._id)},{user:Types.ObjectId(userid)})
+                let alreadyused = await Usedcoupon.findOne({ coupon: Types.ObjectId(promooffer._id) }, { user: Types.ObjectId(userid) })
                 console.log(alreadyused);
                 if (promooffer && alreadyused == undefined) {
                     if (promooffer.date >= today) {
@@ -375,10 +409,21 @@ module.exports = {
         }
 
     },
-    findusedcoupon:(promo,userId)=>{
+    findusedcoupon: (promo, userId) => {
         try {
-            return new Promise((resolve,reject)=>{
-               
+            return new Promise((resolve, reject) => {
+
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    findWallBalance: (id) => {
+        try {
+            return new Promise((resolve, reject) => {
+                User.findById(id).then((data) => {
+                    resolve(data)
+                })
             })
         } catch (error) {
             console.log(error);

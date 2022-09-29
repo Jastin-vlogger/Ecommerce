@@ -5,19 +5,19 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const authentication = require('../authMiddleWare/adminauth');
 const { route } = require('./users');
-const adminHelpers = require('../controllers/checkout')
+const adminHelpers = require('../services/checkout')
 const User = require('../models/user')
-const products = require('../data/product');
-const productController = require('../controllers/productController');
+// const products = require('../data/product');
+const productController = require('../services/productController');
 const fileUpload = require('express-fileupload')
-const userController = require('../controllers/user-helpers');
-const categoryControler = require('../controllers/category')
-const order = require('../controllers/orders')
-const addcart = require('../controllers/product');
+const userController = require('../services/user');
+const categoryControler = require('../services/category')
+const order = require('../services/orders')
+const addcart = require('../controller/product');
 const Product = require('../models/product');
-const Admin = require('../controllers/admin')
+const Admin = require('../services/admin')
 const Category = require('../models/category')
-const coupon = require('../controllers/coupon')
+const coupon = require('../services/coupon')
 
 
 

@@ -106,7 +106,7 @@
                             
                             </td>
                             <%if(orders.ordercanceled === false){%>
-                            <td scope="col"><button class="btn btn-danger  " onclick="confirmDelete('<%=orders._id%>')">Cancel Order</button></td>
+                            <td scope="col"><button class="btn btn-danger" onclick="confirmDelete('<%=orders._id%>')">Cancel Order</button></td>
                               <%}else{%>
                                 <td>order cancelled</td>
                               <%}%>
@@ -161,7 +161,6 @@
                         <h6 class="text-danger">Price: ${response[i].original}</h6>
                         <h6 class="text-success">Discount Price: ${response[i].purchase}</h6>
                         <p>Category: ${response[i].category}</p>
-                        
                         <p>paymentMethod: ${response[i].paymentMethod}</p>
                         <p>address: ${response[i].town} ${response[i].state} ${response[i].pincode}</p>
                         <hr>

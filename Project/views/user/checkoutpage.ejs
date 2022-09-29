@@ -183,11 +183,19 @@
                                             value="Razorpay" onclick="displayCheckout()">
                                         <label class="custom-control-label" for="debit">Razorpay</label>
                                     </div>
+                                    <%if(wall > total){%>
+                                    <div class="custom-control custom-radio">
+                                        <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                            value="wallet" onclick="displayCheckout()">
+                                        <label class="custom-control-label" for="debit">Wallet</label>
+                                    </div>
+                                    <%}%>
                                     <div class="custom-control custom-radio">
                                         <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
                                             value="Paypal" onclick="displayPaypal()">
                                         <label class="custom-control-label" for="debit">Paypal</label>
                                     </div>
+                                    
                                 </div>
                                 <hr class="mb-4">
                                 <!-- Replace "test" with your own sandbox Business account app client ID -->
@@ -223,7 +231,9 @@
                             location.href = '/order-placed'
                         } else if (response.paypal) {
                             location.href = '/order-placed'
-                        } else {
+                        } else if(response.wallet){
+                            location.href = '/order-placed'
+                        }else{
                             razorPayment(response)
                         }
                     }

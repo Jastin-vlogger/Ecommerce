@@ -66,5 +66,11 @@ module.exports = {
         }).countDocuments()
         // let order = await Order.find().sort({ _id: -1 })
         res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page });
+    },
+    findIsOrderOnline:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            let order = await Order.findById(id)
+            resolve(order)
+        })
     }
 }
