@@ -6,6 +6,7 @@ const Category = require('../models/category')
 const Coupon = require('../models/coupon')
 const { Types } = require('mongoose')
 const { response } = require('../app')
+const Admin = require('../models/admin')
 
 
 
@@ -219,5 +220,16 @@ module.exports = {
             console.log(error);
         }
 
+    },
+    findAdmin:(email)=>{
+        try {
+            return new Promise ((resolve,reject)=>{
+                Admin.findOne({email:email}).then((data)=>{
+                    resolve(data)
+                })
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

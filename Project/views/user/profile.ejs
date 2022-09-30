@@ -13,11 +13,8 @@
                     <span class="badge badge-light" id="cart-count"></span>
                 </button>
                 <button type="button" class="btn position-relative">
-                    <i class="fa fa-heart"></i>
+                    <a href="/wishlist" class="fa fa-heart"></a>
                     <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-                </button>
-                <button type="button" class="btn position-relative">
-                    <i class="fa fa-search"></i>
                 </button>
             </div>
 
@@ -88,7 +85,11 @@
 							</tr>
 							<tr>
 								<td class="text-secondary">Mobile Number</td>
-								<td class="text-secondary">: <span class="ms-2"><%=user.phonenumber%></span> </td>
+								<td class="text-secondary">: <span class="ms-2"><%=user.number%></span> </td>
+							</tr>
+							<tr>
+								<td class="text-secondary">Referal Code</td>
+								<td class="text-secondary">: <span class="ms-2"><%=user.referral_code%></span> </td>
 							</tr>
 							<tr>
 								<td class=" text-center pt-5" colspan="2">

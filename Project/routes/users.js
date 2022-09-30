@@ -13,7 +13,7 @@ const { render } = require('../app');
 const paypal = require('paypal-rest-sdk');
 const Banner = require('../services/admin');
 const banner = require('../models/banner');
-const coupon = require('../services/coupon');
+const coupon = require('../controller/coupon');
 
 
 const serverSID = 'VAfa12683b77edfb62a335bb72f21b4970'
@@ -39,14 +39,17 @@ router.get('/', userAuth.verify, async (req, res) => {
 });
 
 router.get('/productDetails/:id', userAuth.verify, async (req, res) => {
-  let productId = req.params.id
-  console.log(productId);
-  let userId = req.userId
-  const token = req.cookies.token
-  let cartCount = await userHelpers.getCartCount(userId)
-  let data = await productController.productDetails(productId)
-  console.log(data);
-  res.render('user/productDetails', { data, cartCount, token })
+  try {
+    let productId = req.params.id
+    let userId = req.userId
+    const token = req.cookies.token
+    let cartCount = await userHelpers.getCartCount(userId)
+    let data = await productController.productDetails(productId)
+    console.log(data);
+    res.render('user/productDetails', { data, cartCount, token })
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 router.get('/products/categories/productDetails/:id', userAuth.verify, async (req, res) => {
@@ -125,16 +128,16 @@ router.post('/checkotp', (req, res) => {
 })
 
 router.get('/signup', userAuth.userLoggedIn, (req, res) => {
-  res.render('user/signup', { eamilNotFound: '' ,referalError:''})
+  res.render('user/signup', { eamilNotFound: '', referalError: '' })
 })
 router.post('/signup', (req, res) => {
   let { body } = req
   userHelpers.signUp(body).then((data) => {
     if (data == 'email found') {
-      res.render('user/signup', { eamilNotFound: 'Email already exists',referalError:'' })
-    }else if(data =='invalid referal'){
-      res.render('user/signup',{referalError:'please check the referral',eamilNotFound:''})
-    }else{
+      res.render('user/signup', { eamilNotFound: 'Email already exists', referalError: '' })
+    } else if (data == 'invalid referal') {
+      res.render('user/signup', { referalError: 'please check the referral', eamilNotFound: '' })
+    } else {
       res.redirect('/login')
     }
   })

@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const admin = require('../models/admin')
-const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const authentication = require('../authMiddleWare/adminauth');
 const { route } = require('./users');
@@ -17,7 +15,8 @@ const addcart = require('../controller/product');
 const Product = require('../models/product');
 const Admin = require('../services/admin')
 const Category = require('../models/category')
-const coupon = require('../services/coupon')
+const coupon = require('../controller/coupon')
+const admin = require('../controller/admin')
 
 
 
@@ -32,32 +31,10 @@ router.get("/login", authentication.adminLoggedIn, async (req, res) => {
         nameError: '',
         passErr: '',
         nameVal: '',
-    });
+    })
 })
 
-router.post('/login', (req, res) => {
-    if (credential.email === req.body.email && credential.password === req.body.password) {
-        let { email } = req.body
-        //the important part
-        const token = jwt.sign({ email }, process.env.ADMIN_TOKEN_SECRET, { expiresIn: "2d" })
-        res.cookie('adminToken', token, {
-            httpOnly: true,
-        })
-        res.redirect('/admin/dashboard')
-    } else if (credential.email != req.body.email) {
-        res.render('admin/login', {
-            nameError: 'Email not found',
-            passErr: '',
-            nameVal: req.body.email,
-        })
-    } else if (credential.password != req.body.password) {
-        res.render('admin/login', {
-            nameError: '',
-            passErr: 'Password incorrect',
-            nameVal: req.body.email,
-        })
-    }
-})
+router.post('/login',admin.login)
 
 router.get('/dashboard', authentication.adminverify, async (req, res) => {
     await Admin.findOrders().then((data) => {

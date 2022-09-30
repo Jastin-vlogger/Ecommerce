@@ -65,7 +65,7 @@
 
 
                     <div class="col">
-                        <table class="table bg-white rounded shadow-sm  table-hover">
+                        <table class="table bg-white rounded shadow-sm  table-hover" id="example">
                             <thead>
                                 <tr>
                                     <th scope="col" width="50">#</th>
@@ -154,7 +154,8 @@
                                                                                             class="btn btn-primary"
                                                                                             data-bs-toggle="modal"
                                                                                             data-bs-target="#exampleModal"
-                                                                                             onclick="findproductdetail(`<%=orders[i]._id%>`,`<%=i%>`)">VIEW DETAIL</button>
+                                                                                            onclick="findproductdetail(`<%=orders[i]._id%>`,`<%=i%>`)">VIEW
+                                                                                            DETAIL</button>
 
                                                                                         <div class="modal fade"
                                                                                             id="exampleModal"
@@ -178,10 +179,10 @@
                                                                                                     </div>
                                                                                                     <div
                                                                                                         class="modal-body">
-                                                                                                       <div id="hello">
+                                                                                                        <div id="hello">
 
 
-                                                                                                       </div>
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                     <div
                                                                                                         class="modal-footer">
@@ -200,41 +201,43 @@
                                     <%}%>
                             </tbody>
                         </table>
-
+                        
                         <% if (pages> 0) { %>
-                            <ul class="pagination text-center" >
+                            <nav aria-label="Page navigation example">
+                            <ul class="pagination">
                                 <% if (current==1) { %>
-                                    <li class="disabled"><a>First</a></li>
+                                    <li class="disabled page-item" ><a class="page-link">First</a></li>
                                     <% } else { %>
-                                        <li><a href="?page=1">First</a></li>
+                                        <li class="page-item"><a href="?page=1"  class="page-link">First</a></li>
                                         <% } %>
-                                            <% var i=(Number(current)> 5 ? Number(current) - 4 : 1) %>
+                                            <% let i=(Number(current)> 5 ? Number(current) - 4 : 1) %>
                                                 <% if (i !==1) { %>
-                                                    <li class="disabled"><a>...</a></li>
+                                                    <li class="disabled page-item"><a class="page-link">...</a></li>
                                                     <% } %>
                                                         <% for (; i <=(Number(current) + 4) && i <=pages; i++) { %>
                                                             <% if (i==current) { %>
-                                                                <li class="active"><a>
+                                                                <li class="active page-item"><a class="page-link">
                                                                         <%= i %>
                                                                     </a></li>
                                                                 <% } else { %>
-                                                                    <li><a href="?page=<%=i%>">
+                                                                    <li class="page-item"><a href="?page=<%=i%>" class="page-link">
                                                                             <%= i %>
                                                                         </a></li>
                                                                     <% } %>
                                                                         <% if (i==Number(current) + 4 && i < pages) { %>
-                                                                            <li class="disabled"><a>...</a></li>
+                                                                            <li class="disabled  page-item"><a class="page-link">...</a></li>
                                                                             <% } %>
                                                                                 <% } %>
                                                                                     <% if (current==pages) { %>
-                                                                                        <li class="disabled"><a>Last</a>
+                                                                                        <li class="disabled page-item"><a class="page-link">Last</a>
                                                                                         </li>
                                                                                         <% } else { %>
-                                                                                            <li><a
+                                                                                            <li class="page-item"><a class="page-link"
                                                                                                     href="?page=<%=pages%>">Last</a>
                                                                                             </li>
                                                                                             <% } %>
                             </ul>
+                        </nav>
                             <% } %>
 
 
@@ -256,32 +259,22 @@
             el.classList.toggle("toggled");
         };
     </script>
-    </div>
+    <script src="/static/javascripts/datatable.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
     <script>
-        // function changestatus(proId) {
-        //     Swal.fire({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Yes, delete it!'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             Swal.fire(
-        //                 'Deleted!',
-        //                 'Your file has been deleted.',
-        //                 'success'
-        //             ).then(() => {
-        //                 location.href = `/admin/change-status/${proId}`
-        //             })
-        //         }
-        //     })
-        // }
-
         function confirmDelete(proId) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -304,14 +297,14 @@
             })
         }
 
-        function findproductdetail(id,i){
-            console.log(id,i);
-                let hello = document.getElementById('hello')
-                hello.innerHTML = ''
-            $.ajax({  
-                url:`/admin/detail-view/${id}`,
-                method:'get',
-                success:(response)=>{
+        function findproductdetail(id, i) {
+            console.log(id, i);
+            let hello = document.getElementById('hello')
+            hello.innerHTML = ''
+            $.ajax({
+                url: `/admin/detail-view/${id}`,
+                method: 'get',
+                success: (response) => {
                     console.log(response);
                     for (let i = 0; i < response.length; i++) {
                         hello.innerHTML += ` <h5>${response[i].name}</h5>

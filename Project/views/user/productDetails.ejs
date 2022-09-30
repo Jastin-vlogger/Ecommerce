@@ -119,7 +119,15 @@
         </div> -->
 
           <div class="product-price">
-            <p class="new-price">Price:<del class="text-danger">Rs:<%=data.price%></del> Rs.<%=parseInt(data.price - (data.price * data.offer/100))%>
+            <p class="new-price">Price:
+              <%if(data.offer===0){%> 
+              <span class="fw-bold d-block text-success">
+              Rs.<%=parseInt(data.price - (data.price * data.offer/100))%> </span> 
+              <%}else{%>
+              <span class="fw-bold d-block text-success"><del class="text-danger">Rs:<%=data.price%></del>
+              Rs.<%=parseInt(data.price - (data.price * data.offer/100))%>
+              </span>
+              <%}%>
             </p>
           </div>
 

@@ -35,13 +35,13 @@ module.exports = {
             return new Promise(async (resolve, reject) => {
                 let user = await User.findOne({ email: userData.email })
                 let refer = 'a';
-                if(referal) {
+                if (referal) {
                     refer = await User.findOne({ referral_code: referal })
                 }
-                if(refer){
+                if (refer) {
                     let value = 500;
-                    let val = refer.wallet +value;
-                    await User.findByIdAndUpdate({_id:Types.ObjectId(refer._id)},{$set:{wallet:val}})
+                    let val = refer.wallet + value;
+                    await User.findByIdAndUpdate({ _id: Types.ObjectId(refer._id) }, { $set: { wallet: val } })
                 }
                 if (user) {
                     resolve('email found')
@@ -391,18 +391,16 @@ module.exports = {
             console.log(today);
             return new Promise(async (resolve, reject) => {
                 let promooffer = await Coupon.findOne({ offer: promo })
+                // console.log(promooffer);
                 let alreadyused = await Usedcoupon.findOne({ coupon: Types.ObjectId(promooffer._id) }, { user: Types.ObjectId(userid) })
                 console.log(alreadyused);
-                if (promooffer && alreadyused == undefined) {
-                    if (promooffer.date >= today) {
+                if (promooffer && alreadyused == "null" && promooffer.date >= today) {
                         console.log('ondu');
                         resolve(promooffer)
-                    }
                 } else {
                     console.log('illa');
                     resolve()
                 }
-
             })
         } catch (error) {
             console.log(error);

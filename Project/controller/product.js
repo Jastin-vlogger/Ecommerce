@@ -7,7 +7,7 @@ const User = require('../models/user');
 const { Types } = require('mongoose');
 const bcrypt = require('bcrypt')
 const Category = require('../models/category')
-const order = require ('../services/orders')
+const order = require('../services/orders')
 const wallet = require('../services/wallet')
 
 
@@ -35,16 +35,15 @@ module.exports = {
     try {
       let userId = req.userId
       const token = req.cookies.token
-      console.log(userId);
-      let total = await userHelpers.getTotalAmount(userId)
-      let eachTotal = await userHelpers.getEachProductAmount(userId)
-      let product = await productController.getCartProducts(userId)
-      product.forEach((data) => {
-
-      });
-      // let offer = await productController.offerfind(userId)
-      res.render('user/cart', { product, token, userId, total, eachTotal });
-
+      if (token) {
+        let total = await userHelpers.getTotalAmount(userId)
+        let eachTotal = await userHelpers.getEachProductAmount(userId)
+        let product = await productController.getCartProducts(userId)
+        // let offer = await productController.offerfind(userId)
+        res.render('user/cart', { product, token, userId, total, eachTotal });
+      } else {
+        res.redirect('/login')
+      }
     } catch (error) {
       console.log(error);
     }
@@ -100,8 +99,8 @@ module.exports = {
     // finding the order is it online and refunding
     let isonline = await order.findIsOrderOnline(orderId)
     console.log(isonline);
-    if(isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay'){
-      let wall = await wallet.refundForOnline(isonline.totalAmount,userId)
+    if (isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay') {
+      let wall = await wallet.refundForOnline(isonline.totalAmount, userId)
       console.log(wall);
     }
     let ordercanceled = await productController.cancelOrder(orderId)
@@ -194,12 +193,21 @@ module.exports = {
     res.render('user/category', { data, token, cartCount, categories })
   },
   whislist: async (req, res) => {
-    let userId = req.userId
-    // let total = await userHelpers.getTotalAmount(userId)
-    // let eachTotal = await userHelpers.getEachProductAmount(userId)
-    let product = await productController.getwishlistProducts(userId)
-    // console.log(product);
-    res.render('user/whislist', { product })
+    try {
+      let userId = req.userId
+      if (userId) {
+        // let total = await userHelpers.getTotalAmount(userId)
+        // let eachTotal = await userHelpers.getEachProductAmount(userId)
+        let product = await productController.getwishlistProducts(userId)
+        // console.log(product);
+        res.render('user/whislist', { product })
+      } else {
+        res.redirect('/login')
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   },
   addtowhish: async (req, res) => {
     let userId = req.userId
