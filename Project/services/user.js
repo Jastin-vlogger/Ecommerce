@@ -392,13 +392,16 @@ module.exports = {
             return new Promise(async (resolve, reject) => {
                 let promooffer = await Coupon.findOne({ offer: promo })
                 // console.log(promooffer);
-                let alreadyused = await Usedcoupon.findOne({ coupon: Types.ObjectId(promooffer._id) }, { user: Types.ObjectId(userid) })
-                console.log(alreadyused);
-                if (promooffer && alreadyused == "null" && promooffer.date >= today) {
-                        console.log('ondu');
+                if(promooffer){
+                    let alreadyused = await Usedcoupon.findOne({ coupon: Types.ObjectId(promooffer._id) }, { user: Types.ObjectId(userid) })
+                    if (!alreadyused && promooffer.date >= today){
+                        console.log('kiti');
                         resolve(promooffer)
-                } else {
-                    console.log('illa');
+                    }else{
+                        resolve()
+                    }
+                }else{
+                    console.log('promo illa');
                     resolve()
                 }
             })

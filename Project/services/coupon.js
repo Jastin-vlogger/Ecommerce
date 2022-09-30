@@ -4,10 +4,10 @@ const usedcoupon = require('../models/usedcoupon')
 const { Types } = require('mongoose')
 
 module.exports ={
-    findCoupon:(couponusing)=>{
+    findCoupon:(couponid)=>{
         try {
             return new Promise((resolve,reject)=>{
-            Coupon.findOne({discount:couponusing}).then((data)=>{
+            Coupon.findById({_id:Types.ObjectId(couponid)}).then((data)=>{
             resolve(data)
             })
         }) 

@@ -27,14 +27,14 @@ module.exports = {
         let payment = req.body.paymentmethod
         console.log(req.body);
         let { coupon } = req.body
-        let { couponusing } = req.body
+        let { couponusing,couponid } = req.body
         let products = await productController.getCartProductList(req.body.userId)
         let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
         let wallbalance = await userHelpers.findWallBalance(userId)
         let wall = wallbalance.wallet
         if (coupon) {
             totalPrice = coupon
-            let couponused = await couponHelpers.findCoupon(couponusing)
+            let couponused = await couponHelpers.findCoupon(couponid)
             console.log(couponused);
             await couponHelpers.usedcoupon(couponused._id, userId).then((data) => {
                 console.log(data);

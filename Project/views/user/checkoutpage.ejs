@@ -128,6 +128,7 @@
                         <form class="needs-validation" id="checkout-form">
                             <input type="text" id="couponvalue" name="coupon" hidden>
                             <input type="text" name="couponusing" id="couponusing" hidden>
+                            <input type="text" name="couponid" id="couponid" hidden>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="firstName">First name</label>
@@ -316,6 +317,7 @@
                 let promo = document.getElementById('promocode')
                 let coupon = document.getElementById('couponvalue')
                 let couponusing = document.getElementById('couponusing')
+                let couponid = document.getElementById('couponid')
                 $.ajax({
                     url: '/checkpromo',
                     method: 'post',
@@ -336,6 +338,7 @@
                             let a = document.getElementById('total').innerHTML = total - response.discount;
                             coupon.value = a
                             couponusing.value = response.discount
+                            couponid.value = response._id
                         }
                     }
                 })

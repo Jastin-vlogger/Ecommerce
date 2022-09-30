@@ -12,5 +12,16 @@ module.exports = {
          } catch (error) {
              console.log(error);
          }
+    },
+    findwallet:(userId)=>{
+        try {
+            return new Promise((resolve,reject)=>{
+                User.findById({_id:Types.ObjectId(userId)}).then((res)=>{
+                    resolve(res)
+                })
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

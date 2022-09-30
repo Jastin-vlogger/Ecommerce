@@ -15,10 +15,10 @@ module.exports = {
         // let couponused = await user.findusedcoupon(promo,userId)
         let coupon = await user.findcoupon(promo, userId)
         console.log(coupon);
-        if (coupon == undefined) {
-            res.json({ status: false })
-        } else {
+        if (coupon) {
             res.json(coupon)
+        } else {
+            res.json({ status: false })
         }
     },
     deletecoupon: (req, res) => {

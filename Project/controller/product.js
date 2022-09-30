@@ -100,15 +100,16 @@ module.exports = {
     let isonline = await order.findIsOrderOnline(orderId)
     console.log(isonline);
     if (isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay') {
-      let wall = await wallet.refundForOnline(isonline.totalAmount, userId)
-      console.log(wall);
+      let wallAmountInUserWall = await wallet.findwallet(userId)
+      let totalToAdd = wallAmountInUserWall.wallet + isonline.totalAmount
+      let wall = await wallet.refundForOnline(totalToAdd, userId)
+      console.log(wall)
     }
     let ordercanceled = await productController.cancelOrder(orderId)
     let orders = await productController.getUserOrders(userId)
     // console.log(orders);
     // res.render('user/oderdetails',{orders})
     res.redirect('/orders')
-
   },
   cancelOrderAdmin: async (req, res) => {
     let orderId = req.params.id
@@ -152,7 +153,7 @@ module.exports = {
     let userId = req.userId
     return new Promise(async (resolve, reject) => {
       let updatedUser = await User.updateOne({ _id: Types.ObjectId(userId) }, {
-        $set: {
+        $set: {  
           email: email,
           firstName: firstName,
           lastName: lastName,
