@@ -1,63 +1,8 @@
 <%-include('header')-%>
 
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <div class="bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-                    class="fas fa-user-secret me-2"></i>goCycle</div>
-            <div class="list-group list-group-flush my-3">
-                <a href="dashboard"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Dashboard</a>
-                <a href="productmanagement"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Products</a>
-                <a href="category"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Category</a>
-                <a href="userMangement"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">User mangement</a>
-                <a href="bannermangement"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Banner
-                    mangement</a>
-                <a href="orderMangement"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Order
-                    management</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add
-                    coupons</a>
-                <a href="add-offers"
-                    class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add offers</a>
-                <a href="logout"
-                    class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">Logout</a>
-            </div>
-        </div>
-        <!-- /#sidebar-wrapper -->
+    <%-include('../partials/sidebarAdmin.ejs')%>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                    <h2 class="fs-2 m-0">Dashboard</h2>
-                </div>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-2"></i>Admin
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+        
 
             <div class="container-fluid px-4">
                 <div class="row my-5">
@@ -201,48 +146,118 @@
                                     <%}%>
                             </tbody>
                         </table>
-                        
+
                         <% if (pages> 0) { %>
                             <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <% if (current==1) { %>
-                                    <li class="disabled page-item" ><a class="page-link">First</a></li>
-                                    <% } else { %>
-                                        <li class="page-item"><a href="?page=1"  class="page-link">First</a></li>
-                                        <% } %>
-                                            <% let i=(Number(current)> 5 ? Number(current) - 4 : 1) %>
-                                                <% if (i !==1) { %>
-                                                    <li class="disabled page-item"><a class="page-link">...</a></li>
-                                                    <% } %>
-                                                        <% for (; i <=(Number(current) + 4) && i <=pages; i++) { %>
-                                                            <% if (i==current) { %>
-                                                                <li class="active page-item"><a class="page-link">
-                                                                        <%= i %>
-                                                                    </a></li>
-                                                                <% } else { %>
-                                                                    <li class="page-item"><a href="?page=<%=i%>" class="page-link">
+                                <ul class="pagination mt-3">
+                                    <% if (current==1) { %>
+                                        <li class="disabled page-item"><a class="page-link">First</a></li>
+                                        <% } else { %>
+                                            <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
+                                            <% } %>
+                                                <% let i=(Number(current)> 5 ? Number(current) - 4 : 1) %>
+                                                    <% if (i !==1) { %>
+                                                        <li class="disabled page-item"><a class="page-link">...</a></li>
+                                                        <% } %>
+                                                            <% for (; i <=(Number(current) + 4) && i <=pages; i++) { %>
+                                                                <% if (i==current) { %>
+                                                                    <li class="active page-item"><a class="page-link">
                                                                             <%= i %>
                                                                         </a></li>
-                                                                    <% } %>
-                                                                        <% if (i==Number(current) + 4 && i < pages) { %>
-                                                                            <li class="disabled  page-item"><a class="page-link">...</a></li>
-                                                                            <% } %>
+                                                                    <% } else { %>
+                                                                        <li class="page-item"><a href="?page=<%=i%>"
+                                                                                class="page-link">
+                                                                                <%= i %>
+                                                                            </a></li>
+                                                                        <% } %>
+                                                                            <% if (i==Number(current) + 4 && i < pages)
+                                                                                { %>
+                                                                                <li class="disabled  page-item"><a
+                                                                                        class="page-link">...</a></li>
                                                                                 <% } %>
-                                                                                    <% if (current==pages) { %>
-                                                                                        <li class="disabled page-item"><a class="page-link">Last</a>
-                                                                                        </li>
-                                                                                        <% } else { %>
-                                                                                            <li class="page-item"><a class="page-link"
-                                                                                                    href="?page=<%=pages%>">Last</a>
+                                                                                    <% } %>
+                                                                                        <% if (current==pages) { %>
+                                                                                            <li
+                                                                                                class="disabled page-item">
+                                                                                                <a
+                                                                                                    class="page-link">Last</a>
                                                                                             </li>
-                                                                                            <% } %>
-                            </ul>
-                        </nav>
+                                                                                            <% } else { %>
+                                                                                                <li class="page-item"><a
+                                                                                                        class="page-link"
+                                                                                                        href="?page=<%=pages%>">Last</a>
+                                                                                                </li>
+                                                                                                <% } %>
+                                </ul>
+                            </nav>
                             <% } %>
 
 
                     </div>
+                    <table id="example3" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Category Wise Sales report</th>
+                                <th>Orders</th>
 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%ordersbycategory.forEach((element,i)=>{%>
+                               
+                                <tr>
+                                    <td>
+                                        <%=element._id%>
+                                    </td>
+                                    <td>
+                                        <%=element.count%>
+                                    </td>
+  
+                                </tr>
+                               
+                            <%})%> 
+                                        
+                                           
+                        </tbody>
+                    </table>
+                    <table id="example4" class="display nowrap mt-3" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Weekly Wise Sales report</th>
+                                <th>Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <%week.forEach((data,i)=>{%>
+                                <tr>
+                                    <td> Week :
+                                        <%=data.detail.dayOfWeek%>
+                                    </td>
+                                    <td><%=data.count%></td>
+                                </tr>
+                                <%})%>
+                                           
+                        </tbody>
+                    </table>
+                    <table id="example5" class="display nowrap mt-3" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Monthly Wise Sales report</th>
+                                <th>Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <%month.forEach((data,i)=>{%>
+                                <tr>
+                                    <td> 
+                                        <%=data.detail.month%>
+                                    </td>
+                                    <td><%=data.count%></td>
+                                </tr>
+                                <%})%>
+                                           
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -260,11 +275,7 @@
         };
     </script>
     <script src="/static/javascripts/datatable.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#example').DataTable();
-        });
-    </script>
+    
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>

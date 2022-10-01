@@ -9,63 +9,6 @@
     }
   </style>
 
-  <!-- navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top">
-    <div class="container">
-      <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="/">
-        <span class="text-uppercase fw-lighter ms-2">GOCYCLE</span>
-      </a>
-
-      <div class="order-lg-2 nav-btns">
-        <button type="button" class="btn position-relative">
-          <a href="/cart" class="fa fa-shopping-cart"></a>
-          <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-          <span class="badge badge-light" id="cart-count">
-            <%=cartCount%>
-          </span>
-        </button>
-        <button type="button" class="btn position-relative">
-          <a href="/wishlist" class="fa fa-heart"></a>
-          <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"></span>
-        </button>
-        <button type="button" class="btn position-relative">
-          <i class="fa fa-search"></i>
-        </button>
-
-        <%if (token) { %>
-          <a href="logout" class="btn btn-primary mt-3 ms-2 ">
-            Logout
-          </a>
-          <% }else{ %>
-            <a href="login" class="btn btn-primary mt-3 ms-2 ">
-              Login
-            </a>
-            <%}%>
-
-      </div>
-
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse order-lg-1" id="navMenu">
-        <ul class="navbar-nav mx-auto text-center">
-          <li class="nav-item px-2 py-2">
-            <a class="nav-link text-uppercase text-dark" href="#header">home</a>
-          </li>
-          <li class="nav-item px-2 py-2">
-            <a class="nav-link text-uppercase text-dark" href="#collection">collection</a>
-          </li>
-          <li class="nav-item px-2 py-2">
-            <a class="nav-link text-uppercase text-dark" href="#special">specials</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- end of navbar -->
-
-
   <div class="container pt-10">
     <div class="row">
       <%data.forEach((data)=>{%>

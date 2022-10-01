@@ -1,5 +1,5 @@
 const Order = require('../models/order')
-
+const Admin = require('./admin')
 
 module.exports = {
     findorders: async (req, res) => {
@@ -13,50 +13,34 @@ module.exports = {
             page = req.query.page
         }
         const limit = 10
-        // let orders = await Order.find({
-        //     $or: [
-        //         { name: { $regex: '.*' + search + '.*', $options: 'i' } },
-        //         { category: { $regex: '.*' + search + '.*', $options: 'i' } },
-        //     ]
-        // })
-        //     .skip((page - 1) * limit)
-        //     .limit(limit * 1)
-        //     .sort({ _id: -1 })
-        //     .exec()
         let orders = await Order.aggregate([
-            // {
-            //     $project:{
-            //         item:'products.item'
-            //     }
-            // },
             {
                 $lookup: {
                     from: 'products',
                     foreignField: '_id',
                     localField: 'products.item',
-                    as:'orders'
+                    as: 'orders'
                 }
             },
             {
-                $unwind:'$orders'
+                $unwind: '$orders'
             },
             {
-                $project:{
-                    id:'$orders._id',
-                    name:'$orders.name',      
-                    totalAmount:'$totalAmount',
-                    ordercanceled:'$ordercanceled',
-                    state:'$deliveryDetails.state',
-                    status:'$status',
-                    paymentMethod:'$paymentMethod',
+                $project: {
+                    id: '$orders._id',
+                    name: '$orders.name',
+                    totalAmount: '$totalAmount',
+                    ordercanceled: '$ordercanceled',
+                    state: '$deliveryDetails.state',
+                    status: '$status',
+                    paymentMethod: '$paymentMethod',
                 }
             },
 
         ]).skip((page - 1) * limit)
-        .limit(limit * 1)
-        .sort({ _id: -1 })
-        .exec()
-        // console.log(orders);
+            .limit(limit * 1)
+            .sort({ _id: -1 })
+            .exec()
 
         let count = await Order.find({
             $or: [
@@ -64,11 +48,26 @@ module.exports = {
                 { category: { $regex: '.*' + search + '.*', $options: 'i' } },
             ]
         }).countDocuments()
-        // let order = await Order.find().sort({ _id: -1 })
-        res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page });
+        let ordersbycategory = await Admin.findorderbycat()
+        let week = await Admin.findorderbymonth()
+        let day = await Admin.findOrders()
+        let month = await Admin.findorderbymonth()
+        // console.log(month);
+        let moo = []
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        for (const val of month) {
+            let month = `${val.detail.month}`
+            let m = months[month]
+            moo.push(m)
+        }
+        month.forEach((val,i)=>{
+            val.detail.month = moo[i]
+        })
+        console.log(month);
+        res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page, ordersbycategory, week, month ,title:'Order Management'});
     },
-    findIsOrderOnline:(id)=>{
-        return new Promise(async(resolve,reject)=>{
+    findIsOrderOnline: (id) => {
+        return new Promise(async (resolve, reject) => {
             let order = await Order.findById(id)
             resolve(order)
         })

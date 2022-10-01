@@ -38,9 +38,11 @@ module.exports = {
       if (token) {
         let total = await userHelpers.getTotalAmount(userId)
         let eachTotal = await userHelpers.getEachProductAmount(userId)
+        let cartCount = await userHelpers.getCartCount(userId)
         let product = await productController.getCartProducts(userId)
+        let categories = await productController.findCategory()
         // let offer = await productController.offerfind(userId)
-        res.render('user/cart', { product, token, userId, total, eachTotal });
+        res.render('user/cart', { product, token, userId, total, eachTotal, cartCount, categories });
       } else {
         res.redirect('/login')
       }
@@ -66,11 +68,17 @@ module.exports = {
   },
   profile: async (req, res) => {
     try {
+
       let userId = req.userId
       if (userId) {
+        const token = req.cookies.token
+        let cartCount = await userHelpers.getCartCount(userId)
+        let categories = await productController.findCategory()
         let user = await userHelpers.viewprofile(userId)
+
         let addedAddress = await userHelpers.findaddress(userId)
-        res.render('user/profile', { user, addedAddress })
+
+        res.render('user/profile', { user, addedAddress, cartCount, token, categories })
       } else {
         res.redirect('/login')
       }
@@ -130,9 +138,12 @@ module.exports = {
 
   },
   address: async (req, res) => {
+    const token = req.cookies.token
+    let cartCount = await userHelpers.getCartCount(userId)
+    let categories = await productController.findCategory()
     let userId = req.userId
     let addedAddress = await userHelpers.findaddress(userId)
-    res.render('user/address', { addedAddress })
+    res.render('user/address', { addedAddress, token, cartCount, categories })
   },
   removeAddress: async (req, res) => {
     let addressId = req.params.userId
@@ -153,7 +164,7 @@ module.exports = {
     let userId = req.userId
     return new Promise(async (resolve, reject) => {
       let updatedUser = await User.updateOne({ _id: Types.ObjectId(userId) }, {
-        $set: {  
+        $set: {
           email: email,
           firstName: firstName,
           lastName: lastName,
@@ -162,8 +173,11 @@ module.exports = {
       res.redirect("/profile")
     })
   },
-  changepassword: (req, res) => {
-    res.render('user/changePassword', { passwordError: '' })
+  changepassword: async(req, res) => {
+    const token = req.cookies.token
+    let cartCount = await userHelpers.getCartCount(userId)
+    let categories = await productController.findCategory()
+    res.render('user/changePassword', { passwordError: '' ,cartCount,categories})
   },
   updatepassword: async (req, res) => {
     let { lastpassword, newpassword } = req.body;
@@ -200,8 +214,11 @@ module.exports = {
         // let total = await userHelpers.getTotalAmount(userId)
         // let eachTotal = await userHelpers.getEachProductAmount(userId)
         let product = await productController.getwishlistProducts(userId)
+        const token = req.cookies.token
+        let cartCount = await userHelpers.getCartCount(userId)
+        let categories = await productController.findCategory()
         // console.log(product);
-        res.render('user/whislist', { product })
+        res.render('user/whislist', { product, token, cartCount, categories })
       } else {
         res.redirect('/login')
       }

@@ -4,6 +4,49 @@ $(document).ready(function () {
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        ],
+        "paging": false,
+        'ordering':false,
+        'info':false
     });
 });
+
+$(document).ready(function () {
+    $('#example3').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "searching": false,
+        "paging": false,
+        'ordering':false,
+        'info':false
+    });
+});
+
+$(document).ready(function () {
+    $('#example4').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "searching": false,
+        "paging": false,
+        'ordering':false,
+        'info':false
+    });
+});
+
+$(document).ready(function () {
+    $('#example5').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "searching": false,
+        "paging": false,
+        'ordering':false,
+        'info':false
+    });
+});
+

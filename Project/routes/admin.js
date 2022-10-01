@@ -39,7 +39,7 @@ router.post('/login',admin.login)
 router.get('/dashboard', authentication.adminverify, async (req, res) => {
     await Admin.findOrders().then((data) => {
         // res.json(data)
-        res.render('admin/dashboard', { data })
+        res.render('admin/dashboard', { data ,title:'dashboard'})
     })
 })
 
@@ -72,13 +72,13 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
     }).countDocuments()
 
     // productController.findProduct(search,page).then((data,count)=>{
-    res.render('admin/adProductManage', { data, totalpages: Math.ceil(count / limit), currentPage: page })
+    res.render('admin/adProductManage', { data, totalpages: Math.ceil(count / limit), currentPage: page ,title:'Products'})
     // })  
 })
 
 router.get('/add-product', authentication.adminverify, async (req, res) => {
     let categories = await productController.findCategory()
-    res.render('admin/add-products', { categories })
+    res.render('admin/add-products', { categories ,title:'Add Product'})
 })
 
 router.post('/add-product', async (req, res) => {
@@ -105,7 +105,7 @@ router.get('/edit-product/:id', authentication.adminverify, async (req, res) => 
     let userId = req.params.id
     let categories = await productController.findCategory()
     productController.updateProduct(userId).then((data) => {
-        res.render('admin/edit-product', { data, categories })
+        res.render('admin/edit-product', { data, categories,title:'Edit Product' })
     })
 })
 
@@ -125,7 +125,7 @@ router.post('/edit-product/:id', authentication.adminverify, (req, res) => {
 
 router.get('/userMangement', authentication.adminverify, async (req, res) => {
     let data = await User.find().sort({ _id: -1 })
-    res.render('admin/adDashUserManage', { data })
+    res.render('admin/adDashUserManage', { data ,title:'User Management'})
 })
 
 router.get('/block-user/:id', async (req, res) => {
@@ -155,7 +155,7 @@ router.get('/unblock-user/:id', (req, res) => {
 router.get('/category', authentication.adminverify, (req, res) => {
     categoryControler.findcategoryAdmin().then((data) => {
         // console.log(data);
-        res.render('admin/category', { data })
+        res.render('admin/category', { data ,title:'Category'})
     })
 })
 
@@ -204,7 +204,7 @@ router.patch('/edit-category-coupon/:id', authentication.adminverify, async (req
 router.get('/edit-category/:id', authentication.adminverify, (req, res) => {
     let userId = req.params.id
     categoryControler.findCategory(userId).then((data) => {
-        res.render('admin/edit-category', { data, catError: '' })
+        res.render('admin/edit-category', { data, catError: '' ,title:'Edit Category'})
     })
 })
 
@@ -217,7 +217,7 @@ router.post('/edit-category', authentication.adminverify, async (req, res) => {
     // let data = await Category.findOne({name:name})
     if (datas) {
         if (datas.name == name) {
-            res.render('admin/edit-category', { catError: 'This category is already present', data })
+            res.render('admin/edit-category', { catError: 'This category is already present', data ,title:'Edit Category'})
             // res.json({catError:'This category is already present'})
         }
     } else {

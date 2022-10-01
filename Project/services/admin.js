@@ -164,7 +164,7 @@ module.exports = {
         let data = await Banner.find()
         let categories = await productController.findCategory()
         console.log(data);
-        res.render('admin/addBanner', { data, categories });
+        res.render('admin/addBanner', { data, categories ,title:'Banner Mangement'});
     },
     addbanner: async (req, res) => {
         console.log(req.body);
@@ -185,7 +185,7 @@ module.exports = {
     addoffer: async (req, res) => {
         let offers = await Coupon.find()
         console.log(offers);
-        res.render('admin/add_offer', { offers });
+        res.render('admin/add_offer', { offers ,title:'Add Offers'});
     },
     addcoupon: (Offername, discountRate, date) => {
         let offer = {

@@ -111,6 +111,13 @@ module.exports = {
             })
         })
     },
+    finde:()=>{
+        return new Promise((resolve,reject)=>{
+            Product.find({}).select('price').then((res)=>{
+                resolve(res)
+            })
+        })
+    },
     productDetails: (id) => {
         return new Promise(async (resolve, reject) => {
             // await Product.findById(id).then((data)=>{

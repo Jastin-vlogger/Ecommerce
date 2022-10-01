@@ -9,14 +9,18 @@ const wallet = require('../services/wallet')
 module.exports = {
     proccedToCheck: async (req, res) => {
         try {
+            
             let userId = req.userId
             console.log(req.query);
+            const token = req.cookies.token
+            let cartCount = await userHelpers.getCartCount(userId)
+            let categories = await productController.findCategory()
             let product = await productController.getCartProducts(userId)
             let total = await userHelpers.getTotalAmount(userId)
             let address = await userHelpers.findaddress(userId)
             let wallbalance = await userHelpers.findWallBalance(userId)
             let wall = wallbalance.wallet
-            res.render('user/checkoutpage', { total, product, userId, address, wall });
+            res.render('user/checkoutpage', { total, product, userId, address, wall, cartCount, categories ,token});
         } catch (error) {
             console.log(error);
         }
@@ -27,7 +31,7 @@ module.exports = {
         let payment = req.body.paymentmethod
         console.log(req.body);
         let { coupon } = req.body
-        let { couponusing,couponid } = req.body
+        let { couponusing, couponid } = req.body
         let products = await productController.getCartProductList(req.body.userId)
         let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
         let wallbalance = await userHelpers.findWallBalance(userId)
@@ -41,7 +45,7 @@ module.exports = {
             })
         }
 
-        userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async(orderId) => {
+        userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async (orderId) => {
             if (payment == 'COD') {
                 res.json({ cod_sucess: true });
             } else if (payment == 'Razorpay') {
@@ -59,17 +63,21 @@ module.exports = {
                 })
             } else {
                 console.log('hi im wallet');
-                let reduceWallBalance =   wall -totalPrice;
-                 let a = await wallet.refundForOnline(reduceWallBalance,userId)
-                userHelpers.changePaymentStatusPaypal(orderId).then((response)=>{
-                    res.json({wallet:true})
+                let reduceWallBalance = wall - totalPrice;
+                let a = await wallet.refundForOnline(reduceWallBalance, userId)
+                userHelpers.changePaymentStatusPaypal(orderId).then((response) => {
+                    res.json({ wallet: true })
                 })
 
             }
         })
     },
-    orderplaced: (req, res) => {
-        res.render('user/orderplaced')
+    orderplaced: async(req, res) => {
+        const token = req.cookies.token
+        let userId = req.userId
+        let cartCount = await userHelpers.getCartCount(userId)
+        let categories = await productController.findCategory()
+        res.render('user/orderplaced',{token,cartCount,categories})
     },
     viewproducts: async (req, res) => {
         let userId = req.userId

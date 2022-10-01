@@ -28,14 +28,11 @@ router.get('/', userAuth.verify, async (req, res) => {
   let userId = req.userId
   let cartCount = await userHelpers.getCartCount(userId)
   let categories = await productController.findCategory()
-  // console.log(categories);
   let bannerdata = await banner.find()
   let allProduct = await productController.getAllProducts()
-  // console.log(allProduct);
-  // console.log(allProduct[0].price - (allProduct[0].price * allProduct[0].offer[0]/100));
-  // res.json(allProduct)
+  // let all = await productController.finde()
+  // console.log(all);
   res.render('user/landingPage', { allProduct, token, cartCount, categories, bannerdata })
-
 });
 
 router.get('/productDetails/:id', userAuth.verify, async (req, res) => {
@@ -43,10 +40,11 @@ router.get('/productDetails/:id', userAuth.verify, async (req, res) => {
     let productId = req.params.id
     let userId = req.userId
     const token = req.cookies.token
+    let categories = await productController.findCategory()
     let cartCount = await userHelpers.getCartCount(userId)
     let data = await productController.productDetails(productId)
     console.log(data);
-    res.render('user/productDetails', { data, cartCount, token })
+    res.render('user/productDetails', { data, cartCount, token ,categories})
   } catch (error) {
     console.log(error);
   }
@@ -57,9 +55,10 @@ router.get('/products/categories/productDetails/:id', userAuth.verify, async (re
   let userId = req.userId
   const token = req.cookies.token
   let cartCount = await userHelpers.getCartCount(userId)
+  let categories = await productController.findCategory()
   productController.productDetails(productId).then((data) => {
     console.log(data);
-    res.render('user/productDetails', { data, cartCount, token })
+    res.render('user/productDetails', { data, cartCount, token ,categories})
   })
 })
 
