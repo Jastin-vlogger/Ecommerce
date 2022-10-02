@@ -101,23 +101,27 @@ module.exports = {
 
   },
   cancelOrder: async (req, res) => {
-    let userId = req.userId
-    let orderId = req.params.id
+    try {
+      let userId = req.userId
+      let orderId = req.params.id
 
-    // finding the order is it online and refunding
-    let isonline = await order.findIsOrderOnline(orderId)
-    console.log(isonline);
-    if (isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay') {
-      let wallAmountInUserWall = await wallet.findwallet(userId)
-      let totalToAdd = wallAmountInUserWall.wallet + isonline.totalAmount
-      let wall = await wallet.refundForOnline(totalToAdd, userId)
-      console.log(wall)
+      // finding the order is it online and refunding
+      let isonline = await order.findIsOrderOnline(orderId)
+      console.log(isonline);
+      if (isonline.paymentMethod == 'Paypal' || isonline.paymentMethod == 'Razorpay') {
+        let wallAmountInUserWall = await wallet.findwallet(userId)
+        let totalToAdd = wallAmountInUserWall.wallet + isonline.totalAmount
+        let wall = await wallet.refundForOnline(totalToAdd, userId)
+        console.log(wall)
+      }
+      let ordercanceled = await productController.cancelOrder(orderId)
+      let orders = await productController.getUserOrders(userId)
+      res.redirect('/orders')
+    } catch (error) {
+      console.log(error);
+      throw new Error(error)
     }
-    let ordercanceled = await productController.cancelOrder(orderId)
-    let orders = await productController.getUserOrders(userId)
-    // console.log(orders);
-    // res.render('user/oderdetails',{orders})
-    res.redirect('/orders')
+
   },
   cancelOrderAdmin: async (req, res) => {
     let orderId = req.params.id
@@ -173,11 +177,11 @@ module.exports = {
       res.redirect("/profile")
     })
   },
-  changepassword: async(req, res) => {
+  changepassword: async (req, res) => {
     const token = req.cookies.token
     let cartCount = await userHelpers.getCartCount(userId)
     let categories = await productController.findCategory()
-    res.render('user/changePassword', { passwordError: '' ,cartCount,categories})
+    res.render('user/changePassword', { passwordError: '', cartCount, categories })
   },
   updatepassword: async (req, res) => {
     let { lastpassword, newpassword } = req.body;

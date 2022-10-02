@@ -8,305 +8,295 @@
             display: block;
         }
     </style>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 order-md-2 mb-4">
-                    <h4 class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Your cart</span>
+    <div class="container" style="padding-top: 10vh;">
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
 
-                    </h4>
-                    <ul class="list-group mb-3 sticky-top">
-                        <% product.forEach((element,i)=>{%>
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">
-                                        <%=element.product.name%>
-                                    </h6>
-                                </div>
-                                <span class="text-muted">Rs.<%=element.product.discountedPrice%> X <%=element.quantity%>
-                                </span>
+                </h4>
+                <ul class="list-group mb-3 sticky-top">
+                    <% product.forEach((element,i)=>{%>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">
+                                    <%=element.product.name%>
+                                </h6>
+                            </div>
+                            <span class="text-muted">Rs.<%=element.product.discountedPrice%> X <%=element.quantity%>
+                            </span>
 
-                            </li>
-                            <%})%>
-                                <!-- <li class="list-group-item d-flex justify-content-between bg-light">
+                        </li>
+                        <%})%>
+                            <!-- <li class="list-group-item d-flex justify-content-between bg-light">
                                     <div class="text-success">
                                         <h6 class="my-0">Promo code</h6>
                                         <small>EXAMPLECODE</small>
                                     </div>
                                     <span class="text-success">-$5</span>
                                 </li> -->
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <input type="text" id="sum" value="<%=total%>" hidden>
-                                    <span>Total (INR)</span>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <input type="text" id="sum" value="<%=total%>" hidden>
+                                <span>Total (INR)</span>
 
-                                    <strong id="total">
-                                        <%=total%>
-                                    </strong>
-                                </li>
-                    </ul>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code" name="promo" id="promocode">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary" onclick="addcoupon()">Redeem</button>
-                            <p id="msg" style="color:rgb(255, 0, 0) "></p>
-                        </div>
+                                <strong id="total">
+                                    <%=total%>
+                                </strong>
+                            </li>
+                </ul>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Promo code" name="promo" id="promocode">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary" onclick="addcoupon()">Redeem</button>
+                        <p id="msg" style="color:rgb(255, 0, 0) "></p>
                     </div>
                 </div>
-                <div>
+                <!-- </div> -->
+                <!-- <div class="col-md-12 order-md-1" style="padding-top: 10vh;"> -->
 
+                <h5 class="mb-4" style="font-weight: bold">
+                    Saved Address
+                </h5>
 
-                    <div class="col-md-4 d-flex mt-5" style="padding-top: 10vh;">
-                        <div>
-                            <h5 class="mb-4" style="font-weight: bold">
-                                Saved Address
-                            </h5>
+                <%if(address){%>
+                    <%address.forEach((element,i)=>{%>
+                        <div class="form-check col-md-6 py-2">
 
-                            <%if(address){%>
-                                <%address.forEach((element,i)=>{%>
-                                    <div class="form-check col-md-6 py-2">
+                            <input class="form-check-input" type="radio"
+                                value="<%=element.firstname%> <%=element.lastname%> <%=element.address%> <%=element.town%> <%=element.pincode%>"
+                                name="savedAddress" id="flexRadioDefault<%=i%>"
+                                onclick="addtofields( `<%=element.firstname%>` ,`<%=element.lastname%>`,` <%=element.address%>`,` <%=element.town%>`,` <%=element.pincode%>`)" />
+                            <label class="form-check-label" for="flexRadioDefault">
+                                <%=element.firstname%>
+                                    <%=element.lastname%>
+                                        <%=element.address%>
+                                            <%=element.town%>
+                                                <%=element.pincode%>
+                            </label>
+                        </div>
+                        <%})%>
+                            <%}else{%>
+                                <p class="d-flex total-price">
+                                    <span lass="col-12">saved address is empty</span>
+                                </p>
+                                <%}%>
 
-                                        <input class="form-check-input" type="radio"
-                                            value="<%=element.firstname%> <%=element.lastname%> <%=element.address%> <%=element.town%> <%=element.pincode%>"
-                                            name="savedAddress" id="flexRadioDefault<%=i%>"
-                                            onclick="addtofields( `<%=element.firstname%>` ,`<%=element.lastname%>`,` <%=element.address%>`,` <%=element.town%>`,` <%=element.pincode%>`)" />
-                                        <label class="form-check-label" for="flexRadioDefault">
-                                            <%=element.firstname%>
-                                                <%=element.lastname%>
-                                                    <%=element.address%>
-                                                        <%=element.town%>
-                                                            <%=element.pincode%>
-                                        </label>
-                                    </div>
-                                    <%})%>
-                                        <%}else{%>
-                                            <p class="d-flex total-price">
-                                                <span lass="col-12">saved address is empty</span>
-                                            </p>
-                                            <%}%>
+            </div>
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" id="checkout-form">
+                    <input type="text" id="couponvalue" name="coupon" hidden>
+                    <input type="text" name="couponusing" id="couponusing" hidden>
+                    <input type="text" name="couponid" id="couponid" hidden>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value=""
+                                name="firstName" required>
+                            <div class="invalid-feedback"> Valid first name is required. </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value=""
+                                name="lastName" required>
+                            <div class="invalid-feedback"> Valid last name is required. </div>
                         </div>
                     </div>
-                    <div class="col-md-8 order-md-1">
-                        <h4 class="mb-3">Billing address</h4>
-                        <form class="needs-validation" id="checkout-form">
-                            <input type="text" id="couponvalue" name="coupon" hidden>
-                            <input type="text" name="couponusing" id="couponusing" hidden>
-                            <input type="text" name="couponid" id="couponid" hidden>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="firstName">First name</label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="" value=""
-                                        name="firstName" required>
-                                    <div class="invalid-feedback"> Valid first name is required. </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="lastName">Last name</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="" value=""
-                                        name="lastName" required>
-                                    <div class="invalid-feedback"> Valid last name is required. </div>
-                                </div>
-                            </div>
 
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="" name="address" required>
+                        <div class="invalid-feedback"> Please enter your shipping address. </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="country">State</label>
                             <div class="mb-3">
-                                <label for="address">Address</label>
-                                <input type="text" class="form-control" id="address" placeholder="" name="address"
-                                    required>
+                                <input type="text" class="form-control" id="state" placeholder="" name="state" value=''>
                                 <div class="invalid-feedback"> Please enter your shipping address. </div>
                             </div>
+                            <div class="invalid-feedback"> Please select a valid country. </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="state">Pincode</label>
+                            <input type="text" class="form-control" id="pin" placeholder="" name="pincode">
 
-                            <div class="row">
-                                <div class="col-md-5 mb-3">
-                                    <label for="country">State</label>
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" id="state" placeholder="" name="state"
-                                            value=''>
-                                        <div class="invalid-feedback"> Please enter your shipping address. </div>
-                                    </div>
-                                    <div class="invalid-feedback"> Please select a valid country. </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="state">Pincode</label>
-                                    <input type="text" class="form-control" id="pin" placeholder="" name="pincode">
+                            <div class="invalid-feedback"> Please provide a valid state. </div>
+                        </div>
+                        <input type="text" name="userId" value="<%=userId%>" hidden>
 
-                                    <div class="invalid-feedback"> Please provide a valid state. </div>
-                                </div>
-                                <input type="text" name="userId" value="<%=userId%>" hidden>
-
+                    </div>
+                    <div class="d-block my-3">
+                        <hr class="mb-4">
+                        <h4 class="mb-3">Payment</h4>
+                        <div class="d-block my-3">
+                            <div class="custom-control custom-radio">
+                                <input id="credit" name="paymentmethod" type="radio" class="custom-control-input"
+                                    value="COD" onclick="displayCheckout()">
+                                <label class="custom-control-label" for="credit">CASH ON DELIVERY</label>
                             </div>
-                            <div class="d-block my-3">
-                                <hr class="mb-4">
-                                <h4 class="mb-3">Payment</h4>
-                                <div class="d-block my-3">
-                                    <div class="custom-control custom-radio">
-                                        <input id="credit" name="paymentmethod" type="radio"
-                                            class="custom-control-input" value="COD" onclick="displayCheckout()">
-                                        <label class="custom-control-label" for="credit">CASH ON DELIVERY</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
-                                            value="Razorpay" onclick="displayCheckout()">
-                                        <label class="custom-control-label" for="debit">Razorpay</label>
-                                    </div>
-                                    <%if(wall > total){%>
-                                    <div class="custom-control custom-radio">
-                                        <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
-                                            value="wallet" onclick="displayCheckout()">
-                                        <label class="custom-control-label" for="debit">Wallet</label>
-                                    </div>
-                                    <%}%>
+                            <div class="custom-control custom-radio">
+                                <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                    value="Razorpay" onclick="displayCheckout()">
+                                <label class="custom-control-label" for="debit">Razorpay</label>
+                            </div>
+                            <%if(wall> total){%>
+                                <div class="custom-control custom-radio">
+                                    <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
+                                        value="wallet" onclick="displayCheckout()">
+                                    <label class="custom-control-label" for="debit">Wallet</label>
+                                </div>
+                                <%}%>
                                     <div class="custom-control custom-radio">
                                         <input id="debit" name="paymentmethod" type="radio" class="custom-control-input"
                                             value="Paypal" onclick="displayPaypal()">
                                         <label class="custom-control-label" for="debit">Paypal</label>
                                     </div>
-                                    
-                                </div>
-                                <hr class="mb-4">
-                                <!-- Replace "test" with your own sandbox Business account app client ID -->
-                                <script
-                                    src="https://www.paypal.com/sdk/js?client-id=AZF7XqQybNKOpfo9AoGpF4DleAALQvLBFvYlbtLhFCUBVeeHWUMNBCxK53lbmjg7T9Hy7HuOnND-mj8H&currency=USD"></script>
-                                <!-- Set up a container element for the button -->
-                                <div id="paypal-button-container" class="clr"></div>
-                                <div id="checkout-button" class="clr">
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit"
-                                        id="placeorder">Continue
-                                        to checkout</button>
-                                </div>
-                        </form>
-                    </div>
-                </div>
+
+                        </div>
+                        <hr class="mb-4">
+                        <!-- Replace "test" with your own sandbox Business account app client ID -->
+                        <script
+                            src="https://www.paypal.com/sdk/js?client-id=AZF7XqQybNKOpfo9AoGpF4DleAALQvLBFvYlbtLhFCUBVeeHWUMNBCxK53lbmjg7T9Hy7HuOnND-mj8H&currency=USD"></script>
+                        <!-- Set up a container element for the button -->
+                        <div id="paypal-button-container" class="clr"></div>
+                        <div id="checkout-button" class="clr">
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" id="placeorder">Continue
+                                to checkout</button>
+                        </div>
+                </form>
             </div>
+
         </div>
+    </div>
 
-
-        <!-- <script src="/static/javascripts/checkout.js"></script> -->
-
-        <SCript>
-
-            $('#checkout-form').submit((e) => {
-                console.log('im heweweeeeeeeeeeeeeee');
-                e.preventDefault()
-                $.ajax({
-                    url: '/place-order',
-                    method: 'post',
-                    data: $('#checkout-form').serialize(),
-                    success: (response) => {
-                        if (response.cod_sucess) {
-                            location.href = '/order-placed'
-                        } else if (response.paypal) {
-                            location.href = '/order-placed'
-                        } else if(response.wallet){
-                            location.href = '/order-placed'
-                        }else{
-                            razorPayment(response)
-                        }
+    <SCript>
+        $('#checkout-form').submit((e) => {
+            console.log('im heweweeeeeeeeeeeeeee');
+            e.preventDefault()
+            $.ajax({
+                url: '/place-order',
+                method: 'post',
+                data: $('#checkout-form').serialize(),
+                success: (response) => {
+                    if (response.cod_sucess) {
+                        location.href = '/order-placed'
+                    } else if (response.paypal) {
+                        location.href = '/order-placed'
+                    } else if (response.wallet) {
+                        location.href = '/order-placed'
+                    } else {
+                        razorPayment(response)
                     }
-                })
+                }
             })
+        })
 
-            function addtofields(firstname, lastname, address, town, pin) {
-                let firstnames = document.getElementById('firstName').value = firstname
-                let lastnames = document.getElementById('lastName').value = lastname
-                let addresses = document.getElementById('address').value = address
-                let stateinfo = document.getElementById('state').value = town
-                let pincode = document.getElementById('pin').value = pin
-            }
+        function addtofields(firstname, lastname, address, town, pin) {
+            let firstnames = document.getElementById('firstName').value = firstname
+            let lastnames = document.getElementById('lastName').value = lastname
+            let addresses = document.getElementById('address').value = address
+            let stateinfo = document.getElementById('state').value = town
+            let pincode = document.getElementById('pin').value = pin
+        }
 
-            function razorPayment(order) {
-                var options = {
-                    "key": "rzp_test_kC80uilJbJoVnc", // Enter the Key ID generated from the Dashboard
-                    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                    "currency": "INR",
-                    "name": "Jastin",
-                    "description": "Test Transaction",
-                    "image": "https://example.com/your_logo",
-                    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                    "handler": (response) => {
-                        verifyPayment(response, order)
-                    },
-                    "prefill": {
-                        "name": "Gaurav Kumar",
-                        "email": "gaurav.kumar@example.com",
-                        "contact": "9999999999"
-                    },
-                    "notes": {
-                        "address": "Razorpay Corporate Office"
-                    },
-                    "theme": {
-                        "color": "#3399cc"
+        function razorPayment(order) {
+            var options = {
+                "key": "rzp_test_kC80uilJbJoVnc", // Enter the Key ID generated from the Dashboard
+                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Jastin",
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": (response) => {
+                    verifyPayment(response, order)
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+        function verifyPayment(payment, order) {
+            console.log(payment, order);
+            $.ajax({
+                url: '/verify-payment',
+                data: {
+                    payment,
+                    order,
+                },
+                method: 'post',
+                success: (response) => {
+                    console.log(response);
+                    if (response.status) {
+                        location.href = '/order-placed'
+                    } else {
+                        alert('payment failed')
                     }
-                };
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
-            }
+                }
+            })
+        }
 
-            function verifyPayment(payment, order) {
-                console.log(payment, order);
-                $.ajax({
-                    url: '/verify-payment',
-                    data: {
-                        payment,
-                        order,
-                    },
-                    method: 'post',
-                    success: (response) => {
-                        console.log(response);
-                        if (response.status) {
-                            location.href = '/order-placed'
-                        } else {
-                            alert('payment failed')
-                        }
+        function displayCheckout() {
+            let list1 = document.getElementById("checkout-button").classList
+            let list2 = document.getElementById("paypal-button-container").classList;
+            list1.add('disbtn')
+            list2.remove('disbtn')
+        }
+
+        function displayPaypal() {
+            let list1 = document.getElementById("checkout-button").classList
+            let list2 = document.getElementById("paypal-button-container").classList;
+            list1.remove('disbtn')
+            list2.add('disbtn')
+
+        }
+
+        function addcoupon() {
+            let total = document.getElementById('sum').value
+            let promo = document.getElementById('promocode')
+            let coupon = document.getElementById('couponvalue')
+            let couponusing = document.getElementById('couponusing')
+            let couponid = document.getElementById('couponid')
+            $.ajax({
+                url: '/checkpromo',
+                method: 'post',
+                data: { promo: promo.value },
+                success: (response) => {
+                    console.log(response);
+                    if (response.status == false) {
+                        let error = document.getElementById('msg')
+                        error.innerHTML = 'Enter valid Promocode'
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'COUPON APPLIED',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        let a = document.getElementById('total').innerHTML = total - response.discount;
+                        coupon.value = a
+                        couponusing.value = response.discount
+                        couponid.value = response._id
                     }
-                })
-            }
-
-            function displayCheckout() {
-                let list1 = document.getElementById("checkout-button").classList
-                let list2 = document.getElementById("paypal-button-container").classList;
-                list1.add('disbtn')
-                list2.remove('disbtn')
-            }
-
-            function displayPaypal() {
-                let list1 = document.getElementById("checkout-button").classList
-                let list2 = document.getElementById("paypal-button-container").classList;
-                list1.remove('disbtn')
-                list2.add('disbtn')
-
-            }
-
-            function addcoupon() {
-                let total = document.getElementById('sum').value
-                let promo = document.getElementById('promocode')
-                let coupon = document.getElementById('couponvalue')
-                let couponusing = document.getElementById('couponusing')
-                let couponid = document.getElementById('couponid')
-                $.ajax({
-                    url: '/checkpromo',
-                    method: 'post',
-                    data: { promo: promo.value },
-                    success: (response) => {
-                        console.log(response);
-                        if (response.status == false) {
-                            let error = document.getElementById('msg')
-                            error.innerHTML = 'Enter valid Promocode'
-                        } else {
-                            Swal.fire({
-                                position: 'top-end',
-                                icon: 'success',
-                                title: 'COUPON APPLIED',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                            let a = document.getElementById('total').innerHTML = total - response.discount;
-                            coupon.value = a
-                            couponusing.value = response.discount
-                            couponid.value = response._id
-                        }
-                    }
-                })
-            }
-        </script>
-        <script src="/static/javascripts/paypal.js"></script>
+                }
+            })
+        }
+    </script>
+    <script src="/static/javascripts/paypal.js"></script>
     </head>
 
     </html>

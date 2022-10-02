@@ -7,6 +7,8 @@ const Coupon = require('../models/coupon')
 const { Types } = require('mongoose')
 const { response } = require('../app')
 const Admin = require('../models/admin')
+const Product = require('../models/product')
+const User = require('../models/user')
 
 
 
@@ -45,6 +47,13 @@ module.exports = {
             ])
             // console.log(data);
             resolve(data)
+        })
+    },
+    totalUser: () => {
+        return new Promise((resolve, reject) => {
+            User.find({}).countDocuments().then((data) => {
+                resolve(data)
+            })
         })
     },
     findorderbyweek: () => {
@@ -119,41 +128,41 @@ module.exports = {
             resolve(data)
         })
     },
-    findorderbycat:()=>{
-        return new Promise(async(resolve,reject)=>{
-            let data= await Order.aggregate([
+    findorderbycat: () => {
+        return new Promise(async (resolve, reject) => {
+            let data = await Order.aggregate([
                 {
-                    $match:{
-                        createdAt:{
-                            $gte:new Date(new Date().getMonth()-10)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date().getMonth() - 10)
                         }
                     }
                 },
                 {
-                    $lookup:{
-                        from:'products',
-                        localField:'products.item',
-                        foreignField:'_id',
-                        as:'pro'
+                    $lookup: {
+                        from: 'products',
+                        localField: 'products.item',
+                        foreignField: '_id',
+                        as: 'pro'
                     }
                 },
                 {
-                    $unwind:'$pro'
+                    $unwind: '$pro'
                 },
                 {
-                    $project:{
-                        cat:'$pro.category'
+                    $project: {
+                        cat: '$pro.category'
                     }
                 },
                 {
-                    $group:{
-                        _id:'$cat',
-                        count:{$sum:1},
-                        detail:{$first:"$$ROOT"}
+                    $group: {
+                        _id: '$cat',
+                        count: { $sum: 1 },
+                        detail: { $first: "$$ROOT" }
                     }
                 },
                 {
-                    $sort:{detail:-1}
+                    $sort: { detail: -1 }
                 }
             ])
             // console.log(data);
@@ -164,7 +173,7 @@ module.exports = {
         let data = await Banner.find()
         let categories = await productController.findCategory()
         console.log(data);
-        res.render('admin/addBanner', { data, categories ,title:'Banner Mangement'});
+        res.render('admin/addBanner', { data, categories, title: 'Banner Mangement' });
     },
     addbanner: async (req, res) => {
         console.log(req.body);
@@ -185,7 +194,7 @@ module.exports = {
     addoffer: async (req, res) => {
         let offers = await Coupon.find()
         console.log(offers);
-        res.render('admin/add_offer', { offers ,title:'Add Offers'});
+        res.render('admin/add_offer', { offers, title: 'Add Offers' });
     },
     addcoupon: (Offername, discountRate, date) => {
         let offer = {
@@ -221,15 +230,97 @@ module.exports = {
         }
 
     },
-    findAdmin:(email)=>{
+    findAdmin: (email) => {
         try {
-            return new Promise ((resolve,reject)=>{
-                Admin.findOne({email:email}).then((data)=>{
+            return new Promise((resolve, reject) => {
+                Admin.findOne({ email: email }).then((data) => {
                     resolve(data)
                 })
             })
         } catch (error) {
             console.log(error);
         }
+    },
+    findproductdesc: (id) => {
+        return new Promise((resolve, reject) => {
+            Product.findById({ _id: Types.ObjectId(id) }).select('description').then((data) => {
+                resolve(data)
+
+            })
+        })
+    },
+    todaytotal: () => {
+        return new Promise(async (resolve, reject) => {
+            let data = Order.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date()-1000 * 60 * 60 * 24)
+                        }
+                    }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: "$totalAmount"},
+                        
+                    }
+                },
+            ])
+            resolve(data)
+        })
+    },
+    monthtotal:()=>{
+        return new Promise((resolve,reject)=>{
+            Order.aggregate([
+                {
+                    $match:{
+                        createdAt:{
+                            $gte:new Date(new Date() - 1000 * 60 * 60 * 24*7*4)
+                        }
+                    }
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $group:{
+                        _id:null,
+                        total:{$sum:'$totalAmount'}
+                    }
+                }
+            ]).then((res)=>{
+                // console.log(res);
+                resolve(res)
+            })
+        })
+    },
+    yeartotal:()=>{
+        return new Promise(async(resolve,reject)=>{
+           let data = await Order.aggregate([
+                {
+                    $match:{
+                        createdAt:{
+                            $gte:new Date(new Date() - 1000 * 60 * 60 * 24*7*4*12)
+                        }
+                    }
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $group:{
+                        _id:1,
+                        total:{$sum:'$totalAmount'},
+
+                    }
+                }
+            ])
+            resolve(data)
+        })
     }
+
 }

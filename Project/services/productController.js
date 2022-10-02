@@ -250,15 +250,6 @@ module.exports = {
                 {
                 $match: { _id: mongoose.Types.ObjectId(orderId)}
             },
-            // {
-            //     $unwind: '$products'
-            // },
-            // {
-            //     $project: {
-            //         item: '$products.item',
-            //         quantity: '$products.quantity'
-            //     }
-            // },
             {
                 $lookup: {
                     from: 'products',

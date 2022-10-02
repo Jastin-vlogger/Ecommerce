@@ -32,5 +32,14 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+    productDes:async(req,res)=>{
+        try {
+           let id = req.params.id
+            let pro = await AdminController.findproductdesc(id)
+            res.json(pro)
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 }

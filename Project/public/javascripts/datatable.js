@@ -50,3 +50,11 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#example6').DataTable({
+        "searching": true,
+        "paging": false,
+        'ordering':false,
+        'info':false
+    });
+});

@@ -44,9 +44,10 @@ router.get('/productDetails/:id', userAuth.verify, async (req, res) => {
     let cartCount = await userHelpers.getCartCount(userId)
     let data = await productController.productDetails(productId)
     console.log(data);
-    res.render('user/productDetails', { data, cartCount, token ,categories})
+    res.render('user/productDetails', { data, cartCount, token, categories })
   } catch (error) {
     console.log(error);
+    throw new (error)
   }
 })
 
@@ -58,7 +59,7 @@ router.get('/products/categories/productDetails/:id', userAuth.verify, async (re
   let categories = await productController.findCategory()
   productController.productDetails(productId).then((data) => {
     console.log(data);
-    res.render('user/productDetails', { data, cartCount, token ,categories})
+    res.render('user/productDetails', { data, cartCount, token, categories })
   })
 })
 
@@ -67,26 +68,32 @@ router.get('/login', userAuth.userLoggedIn, (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  let { email } = req.body
-  userHelpers.loginValidate(req.body).then((data) => {
-    if (data.status == true) {
-      //the important part
-      userHelpers.findUser(req.body.email).then((userdata) => {
-        const token = jwt.sign({ userdata }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" })
-        res.cookie('token', token, {
-          httpOnly: true,
+  try {
+    let { email } = req.body
+    userHelpers.loginValidate(req.body).then((data) => {
+      if (data.status == true) {
+        //the important part
+        userHelpers.findUser(req.body.email).then((userdata) => {
+          const token = jwt.sign({ userdata }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" })
+          res.cookie('token', token, {
+            httpOnly: true,
+          })
+          res.redirect('/')
         })
-        res.redirect('/')
-      })
-    } else if (data == "blocked") {
-      res.clearCookie('token');
-      res.render('user/login', { passwordError: "You are Blocked", nameval: email, eamilError: '' })
-    } else if (data.status == false) {
-      res.render('user/login', { passwordError: "Enter valid password", nameval: email, eamilError: '' })
-    } else if (data) {
-      res.render('user/login', { eamilError: 'Enter valid Email', passwordError: '', nameval: '' })
-    }
-  })
+      } else if (data == "blocked") {
+        res.clearCookie('token');
+        res.render('user/login', { passwordError: "You are Blocked", nameval: email, eamilError: '' })
+      } else if (data.status == false) {
+        res.render('user/login', { passwordError: "Enter valid password", nameval: email, eamilError: '' })
+      } else if (data) {
+        res.render('user/login', { eamilError: 'Enter valid Email', passwordError: '', nameval: '' })
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error(' Authentication failed')
+  }
+
 })
 
 

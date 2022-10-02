@@ -9,7 +9,7 @@ const wallet = require('../services/wallet')
 module.exports = {
     proccedToCheck: async (req, res) => {
         try {
-            
+
             let userId = req.userId
             console.log(req.query);
             const token = req.cookies.token
@@ -20,7 +20,7 @@ module.exports = {
             let address = await userHelpers.findaddress(userId)
             let wallbalance = await userHelpers.findWallBalance(userId)
             let wall = wallbalance.wallet
-            res.render('user/checkoutpage', { total, product, userId, address, wall, cartCount, categories ,token});
+            res.render('user/checkoutpage', { total, product, userId, address, wall, cartCount, categories, token });
         } catch (error) {
             console.log(error);
         }
@@ -72,18 +72,28 @@ module.exports = {
             }
         })
     },
-    orderplaced: async(req, res) => {
-        const token = req.cookies.token
-        let userId = req.userId
-        let cartCount = await userHelpers.getCartCount(userId)
-        let categories = await productController.findCategory()
-        res.render('user/orderplaced',{token,cartCount,categories})
+    orderplaced: async (req, res) => {
+        try {
+            const token = req.cookies.token
+            let userId = req.userId
+            let cartCount = await userHelpers.getCartCount(userId)
+            let categories = await productController.findCategory()
+            res.render('user/orderplaced', { token, cartCount, categories })
+        } catch (error) {
+            throw new Error(error)
+        }
     },
     viewproducts: async (req, res) => {
-        let userId = req.userId
-        const token = req.cookies.token
-        let orders = await productController.getUserOrders(userId)
-        res.render('user/oderdetails', { orders })
+        try {
+            let userId = req.userId
+            const token = req.cookies.token
+            let cartCount = await userHelpers.getCartCount(userId)
+            let categories = await productController.findCategory()
+            let orders = await productController.getUserOrders(userId)
+            res.render('user/oderdetails', { orders, cartCount, categories, token })
+        } catch (error) {
+            throw new Error(error)
+        }
     },
     verifyingOrder: (req, res) => {
         userHelpers.verifyPayment(req.body).then(() => {
