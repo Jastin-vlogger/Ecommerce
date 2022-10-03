@@ -49,10 +49,10 @@ module.exports = {
             ]
         }).countDocuments()
         let ordersbycategory = await Admin.findorderbycat()
-        let week = await Admin.findorderbymonth()
-        let day = await Admin.findOrders()
+        let week = await Admin.findorderbyweek()
+        let catwise = await Admin.findOrders()
         let month = await Admin.findorderbymonth()
-        // console.log(month);
+        // console.log(week);
         let moo = []
         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (const val of month) {
@@ -63,8 +63,8 @@ module.exports = {
         month.forEach((val,i)=>{
             val.detail.month = moo[i]
         })
-        console.log(month);
-        res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page, ordersbycategory, week, month ,title:'Order Management'});
+        // console.log(month);
+        res.render('admin/orderMangement', { orders, pages: Math.ceil(count / limit), current: page, catwise, week, month ,title:'Order Management'});
     },
     findIsOrderOnline: (id) => {
         return new Promise(async (resolve, reject) => {

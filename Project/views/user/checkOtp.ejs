@@ -87,8 +87,10 @@
                     <!-- enter number -->
                     <div class="form-outline mb-4">
                         <input type="number" name="otp" id="form3Example4" class="form-control" />
+                        <input type="text" name="number" id="" value="<%=number%>" hidden>
                         <label class="form-label" for="form3Example4">Enter OTP</label>
                       </div>
+                      <p id="error-msg"  style="color:rgb(182, 13, 13) "><%=otperror%></p>
                         <!-- Submit button -->
                         <button type="submit" class="btn btn-primary btn-block mb-4" >
                             GET VERIFIED

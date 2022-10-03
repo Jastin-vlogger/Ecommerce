@@ -90,12 +90,15 @@
                         </table>
                         <div class="d-flex align-items-center justify-content-between mb-4" id="content">
                             <div class="row">
-
+                                
                                 <div class="col-sm-12 col-xl-6 col-12 mb-4">
                                     <div class="bg-light text-center rounded p-4">
                                         <div class="d-flex align-items-center justify-content-between mb-4">
+                                            
                                             <h6 class="mb-0">Daily sales</h6>
-
+                                            <button id="btn-download" class="btn btn-dark">
+                                                Download
+                                            </button>
                                         </div>
                                         <canvas id="myChart" width="400" height="400"></canvas>
                                     </div>
@@ -105,7 +108,9 @@
                                     <div class="bg-light text-center rounded p-4">
                                         <div class="d-flex align-items-center justify-content-between mb-4">
                                             <h6 class="mb-0">Weekly sales</h6>
-
+                                            <button id="btn-download1" class="btn btn-dark">
+                                                Download
+                                            </button>
                                         </div>
                                         <canvas id="Chart" width="400" height="400"></canvas>
                                     </div>
@@ -117,7 +122,9 @@
                                     <div class="bg-light text-center rounded p-4">
                                         <div class="d-flex align-items-center justify-content-between mb-4">
                                             <h6 class="mb-4">Yearly sales</h6>
-
+                                            <!-- <button id="btn-download2" class="btn btn-dark">
+                                                Download
+                                            </button> -->
                                         </div>
                                         <canvas id="Chartz" width="400" height="400"></canvas>
                                     </div>
@@ -126,7 +133,9 @@
                                     <div class="bg-light text-center rounded p-4">
                                         <div class="d-flex align-items-center justify-content-between mb-4">
                                             <h6 class="mb-4">Category sales</h6>
-
+                                            <!-- <button id="btn-download3" class="btn btn-dark">
+                                                Download
+                                            </button> -->
                                         </div>
                                         <canvas id="CategoryChartz" width="400" height="400"></canvas>
                                     </div>
@@ -146,5 +155,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/javascripts/checkout.js"></script>
+    
 
     <%-include('footer')-%>

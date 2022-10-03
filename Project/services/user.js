@@ -429,5 +429,16 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+    finduserwithOtp:(num)=>{
+        try {
+            return new Promise((resolve,reject)=>{
+                User.findOne({number:num}).then((data)=>{
+                    resolve(data)
+                })
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

@@ -49,8 +49,6 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-
-
   },
   changeQuantity: async (req, res) => {
     let { cart, product, count, quantity, user } = req.body
@@ -143,9 +141,9 @@ module.exports = {
   },
   address: async (req, res) => {
     const token = req.cookies.token
+    let userId = req.userId
     let cartCount = await userHelpers.getCartCount(userId)
     let categories = await productController.findCategory()
-    let userId = req.userId
     let addedAddress = await userHelpers.findaddress(userId)
     res.render('user/address', { addedAddress, token, cartCount, categories })
   },
@@ -156,11 +154,14 @@ module.exports = {
     })
   },
   edituser: async (req, res) => {
+    const token = req.cookies.token
     let userId = req.userId
+    let cartCount = await userHelpers.getCartCount(userId)
+    let categories = await productController.findCategory()
     return new Promise(async (resolve, reject) => {
       let user = await User.findById({ _id: Types.ObjectId(userId) })
       console.log(user);
-      res.render('user/edituser', { user })
+      res.render('user/edituser', { user, token, cartCount ,categories})
     })
   },
   updateuser: async (req, res) => {
@@ -179,9 +180,10 @@ module.exports = {
   },
   changepassword: async (req, res) => {
     const token = req.cookies.token
+    let userId = req.userId
     let cartCount = await userHelpers.getCartCount(userId)
     let categories = await productController.findCategory()
-    res.render('user/changePassword', { passwordError: '', cartCount, categories })
+    res.render('user/changePassword', { passwordError: '', cartCount, categories ,token})
   },
   updatepassword: async (req, res) => {
     let { lastpassword, newpassword } = req.body;

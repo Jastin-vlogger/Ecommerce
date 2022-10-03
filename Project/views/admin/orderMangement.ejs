@@ -199,11 +199,11 @@
                             <tr>
                                 <th>Category Wise Sales report</th>
                                 <th>Orders</th>
-
+                                <th>Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%ordersbycategory.forEach((element,i)=>{%>
+                            <%catwise.forEach((element,i)=>{%>
                                
                                 <tr>
                                     <td>
@@ -212,7 +212,9 @@
                                     <td>
                                         <%=element.count%>
                                     </td>
-  
+                                    <td class="text-success fw-bold">Rs:
+                                        <%=element.total%>
+                                    </td>
                                 </tr>
                                
                             <%})%> 
@@ -225,6 +227,7 @@
                             <tr>
                                 <th>Weekly Wise Sales report</th>
                                 <th>Orders</th>
+                                <th>Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -234,6 +237,7 @@
                                         <%=data.detail.dayOfWeek%>
                                     </td>
                                     <td><%=data.count%></td>
+                                    <td class="text-success fw-bold">Rs:<%=data.total%></td>
                                 </tr>
                                 <%})%>
                                            
@@ -244,6 +248,7 @@
                             <tr>
                                 <th>Monthly Wise Sales report</th>
                                 <th>Orders</th>
+                                <th>Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -253,6 +258,7 @@
                                         <%=data.detail.month%>
                                     </td>
                                     <td><%=data.count%></td>
+                                    <td class="text-success fw-bold">Rs:<%=data.total%></td>
                                 </tr>
                                 <%})%>
                                            
@@ -318,14 +324,19 @@
                 success: (response) => {
                     console.log(response);
                     for (let i = 0; i < response.length; i++) {
-                        hello.innerHTML += ` <h5>${response[i].name}</h5>
+                        hello.innerHTML += `
+                        <h5 class="text-light bg-dark">User Details</h5>
+                        <p>Name: ${response[i].nameuser}</p>
+                        <p>Email: ${response[i].email}</p>
+                        <h5 class="text-light bg-success">Product Details</h5>
+                        <p>${response[i].name}</p>
                         <img src="/static/product-image/${response[i].image}.jpg" alt="" style="width: 100px;height: 75px;">
                         <h6 class="text-danger">Price: ${response[i].totalAmount}</h6>
                         <h6 class="text-success">Discount Price: ${response[i].discount}</h6>
                         <p>Category: ${response[i].category}</p>
                         <p>status: ${response[i].status}</p>
                         <p>paymentMethod: ${response[i].payment}</p>
-                        <p>address: ${response[i].address} ${response[i].state} ${response[i].pincode}</p>
+                        <p>Delivery Address: ${response[i].address} ${response[i].state} ${response[i].pincode}</p>
                         <hr>
                         `
                     }

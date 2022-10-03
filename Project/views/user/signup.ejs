@@ -91,13 +91,15 @@
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input name="firstName" type="text" id="form3Example1" class="form-control" />
+                      <input name="firstName" type="text" id="username" class="form-control" onkeyup="validatename()"/>
                       <label class="form-label" for="form3Example1">First name</label>
                     </div>
+                    <span id="username-error" class="text-danger"></span>
+
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" name="lastName" id="form3Example2" class="form-control" />
+                      <input type="text" name="lastName" id="username2" class="form-control" />
                       <label class="form-label" for="form3Example2">Last name</label>
                     </div>
                   </div>
@@ -105,27 +107,31 @@
   
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                  <input name="email" type="email" id="form3Example3" class="form-control" />
+                  <input name="email" type="email" id="emailid" class="form-control" onclick="validateEmail()"/>
                   <label class="form-label" for="form3Example3">Email address</label>
-                </div>
+                </div>  
+                <span id="emailid-err" class="text-danger"></span>
 
                 <!-- number input -->
                 <div class="form-outline mb-4">
-                  <input name="number" type="number" id="form3Example3" class="form-control" />
+                  <input name="number" type="number" id="mobilenumber" class="form-control" onclick="validatemobile()" />
                   <label class="form-label" for="form3Example3">Phone number</label>
                 </div>
+                <span id="mobilenumber-err" class="text-danger"></span>
   
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                  <input  type="password" name="password" id="form3Example4" class="form-control" />
+                  <input  type="password" name="password" id="password" class="form-control" onkeyup="validatepassword()" />
                   <label class="form-label" for="form3Example4">Password</label>
                 </div>
+                <span id="password-err" class="text-danger"></span>
+
                 <div class="form-outline mb-4">
                   <input  type="text" name="referal" id="form3Example4" class="form-control" />
                   <label class="form-label" for="form3Example4">Referal Code</label>
                 </div>
 
-                <div id="emailmsg" class="fs-0" style="color:rgb(158, 44, 19);display:none">Please fill the required</div>
+                <!-- <div id="emailmsg" class="fs-0" style="color:rgb(158, 44, 19);display:none">Please fill the required</div> -->
                 <p id="error-msg" class="fs-6" style="color:rgb(169, 40, 53) "><%=eamilNotFound%></p>
                 <p id="error-msg" class="fs-6" style="color:rgb(169, 40, 53) "><%=referalError%></p>
                
@@ -136,9 +142,9 @@
                     Remember Me!
                   </label>
                 </div>
-  
+                <span id="valideee" class="text-danger"></span>
                 <!-- Submit button -->
-                <button type="submit"  class="btn btn-primary btn-block mb-4">
+                <button type="submit"  class="btn btn-primary btn-block mb-4" onclick="return validateForm1()">
                   Sign up
                 </button>
 
@@ -146,13 +152,7 @@
                  <!-- Register buttons -->
                 <div class="text-center">
                   <p>or sign up with:</p>
-                  <button type="button" class="btn btn-link btn-floating ">
-                    <i class="fab fa-facebook-f"></i>
-                  </button>
-  
-                  <button type="button" class="btn btn-link btn-floating">
-                    <i class="fab fa-google"></i>
-                  </button>
+                  <a href="/auth/google" class="btn btn-dark"><span class="fa fa-google"></span> SignIn with Google</a>
                 </div>
               </form>
             </div>
@@ -163,12 +163,12 @@
   </section>
   <!-- Section: Design Block -->
   
-    
+  <script src="/static/javascripts/valid.js"></script>
 <!-- MDB -->
 <script
 type="text/javascript"
 src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
 ></script>
-<script src="/static/javascripts/validate.js"></script>
+<!-- <script src="/static/javascripts/validate.js"></script> -->
 
 <%-include('footer')-%>

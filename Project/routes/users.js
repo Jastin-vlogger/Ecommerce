@@ -14,12 +14,8 @@ const paypal = require('paypal-rest-sdk');
 const Banner = require('../services/admin');
 const banner = require('../models/banner');
 const coupon = require('../controller/coupon');
+const user = require('../controller/user')
 
-
-const serverSID = 'VAfa12683b77edfb62a335bb72f21b4970'
-const accountSID = 'AC15e52716cb86ba690e0d956b1082615e'
-const authtoken = '27249a26cc73b680b9e51674db4e3e3e'
-const client = require('twilio')(accountSID, authtoken)
 
 
 /* GET users listing. */
@@ -98,40 +94,13 @@ router.post('/login', (req, res) => {
 
 
 router.get('/getOtp', userAuth.userLoggedIn, (req, res) => {
-  res.render('user/otppage')
+  res.render('user/otppage',{ number: ''})
 })
 
 
-router.post('/sendotp', (req, res) => {
-  try {
-    client.verify
-      .services(serverSID)
-      .verifications.create({
-        to: `+91${req.body.number}`,
-        channel: 'sms'
-      })
-  } catch (err) {
-    console.log(err)
-  }
-  res.render('user/checkOtp', { number: req.body.number })
-})
+router.post('/sendotp', user.loginOtp)
 
-
-router.post('/checkotp', (req, res) => {
-  const { otp, number } = req.body
-  try {
-    client.verify.services(serverSID).verificationChecks.create({ to: `+91${number}`, code: otp }).then((resp) => {
-      if (!resp.valid) {
-        res.render('user/checkOtp', { otperror: 'Enter valid OTP' })
-      } else {
-        res.redirect('/');
-      }
-
-    })
-  } catch (err) {
-    console.log(err + "hoi this is error")
-  }
-})
+router.post('/checkotp', user.loginotpcheck)
 
 router.get('/signup', userAuth.userLoggedIn, (req, res) => {
   res.render('user/signup', { eamilNotFound: '', referalError: '' })

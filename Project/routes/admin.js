@@ -38,7 +38,7 @@ router.get('/dashboard', authentication.adminverify, async (req, res) => {
         let month = await Admin.monthtotal()
         let year = await Admin.yeartotal()
         console.log(year);
-        res.render('admin/dashboard', { data, title: 'dashboard', totalUsers, todaysEarning,month ,year})
+        res.render('admin/dashboard', { data, title: 'dashboard', totalUsers, todaysEarning, month, year })
     } catch (error) {
         console.log(error);
     }
@@ -114,9 +114,9 @@ router.post('/edit-product/:id', authentication.adminverify, (req, res) => {
     let { body } = req
     let id = req.params.id
     productController.updatedProduct(body, id).then((data) => {
-        console.log(data + '+++++++++');
-        let image = req.files.image
-        image.mv(`public/product-image/${data}.jpg`, (err, done) => {
+        let Image = req.files.image
+        // console.log(data);
+        Image.mv(`public/product-image/${data}.jpg`, (err, done) => {
             if (!err) {
                 res.redirect('/admin/productmanagement')
             }
@@ -210,23 +210,28 @@ router.get('/edit-category/:id', authentication.adminverify, (req, res) => {
 })
 
 router.post('/edit-category', authentication.adminverify, async (req, res) => {
-    let { body } = req
-    let { name, catId } = req.body
-    console.log(req.body);
-    let datas = await categoryControler.recheckCat(name)
-    let data = await categoryControler.findCategory(catId)
-    // let data = await Category.findOne({name:name})
-    if (datas) {
-        if (datas.name == name) {
-            res.render('admin/edit-category', { catError: 'This category is already present', data, title: 'Edit Category' })
-            // res.json({catError:'This category is already present'})
+    try {
+        let { body } = req
+        let { name, catId } = req.body
+        console.log(req.body);
+        let datas = await categoryControler.recheckCat(name)
+        let data = await categoryControler.findCategory(catId)
+        // let data = await Category.findOne({name:name})
+        if (datas) {
+            if (datas.name == name) {
+                res.render('admin/edit-category', { catError: 'This category is already present', data, title: 'Edit Category' })
+                // res.json({catError:'This category is already present'})
+            }
+        } else {
+            categoryControler.updatedCategory(name, catId).then((data) => {
+                res.redirect('/admin/category')
+                // res.json(data)
+            })
         }
-    } else {
-        categoryControler.updatedCategory(name, catId).then((data) => {
-            res.redirect('/admin/category')
-            // res.json(data)
-        })
+    } catch (error) {
+        console.log(error);
     }
+
 })
 
 router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
@@ -236,9 +241,9 @@ router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
 })
 
 router.get('/dashboard/day', authentication.adminverify, async (req, res) => {
-    await Admin.findOrders().then((data) => {
+    await Admin.findOrdersbyday().then((data) => {
+        // console.log(data);
         res.json(data)
-        // res.render('admin/dashboard',{data})
     })
 })
 

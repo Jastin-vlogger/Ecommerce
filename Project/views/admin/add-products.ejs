@@ -16,12 +16,14 @@
             <form action="/admin/add-product" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label >Name</label>
-                    <input type="text" class="form-control " name="name">
+                    <input type="text" class="form-control " name="name" id="productname" onkeyup="validateProductName()">
+                    <span id="username-err" class=" text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label >Description</label>
-                    <input type="text" class="form-control " name="description">
+                    <input type="text" class="form-control " name="description" id="descrip" onkeyup="validatedesc()">
+                    <span id="desc-err" class=" text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -32,7 +34,7 @@
 
                 <label for="cars" >Category:</label>
                 <br><br>
-                <select class="form-select form-select mb-3" name="category">
+                <select class="form-select form-select mb-3" name="category" required>
                     <%categories.forEach((element)=>{%>
                         <option value="<%=element.name%>">
                             <%=element.name%>
@@ -42,16 +44,16 @@
                 <br><br>
                 <div class="form-group">
                     <label for="">Image</label>
-                    <input type="file" class="form-control " name="image">
+                    <input type="file" class="form-control " name="image" required >
                 </div>
                 <div class="form-group">
-                    <input type="file" class="form-control" name="images">
+                    <input type="file" class="form-control" name="images" required>
                 </div>
 
                 <label for="name"></label><br>
 
                 <div id="crop">
-                    <img id="imgView1" src="" alt="" style="height: 100px;width:120px;" class="clr" hidden>
+                    <img id="imgView1" src="" alt="" style="height: 100px;width:120px;" class="clr" hidden >
                     <div class="vald-info" id="info"></div>
                     <h5 class="error_form text-danger" id="image1_error_message"></h5>
                     <div style="display: flex">
@@ -60,7 +62,7 @@
                             style=" margin-top: 10px; display: none; width: 50%; margin: 20rem 0rem 0rem 0rem;" onclick="appear()">crop</button>
                     </div>
                 </div>
-                <input type="file" name="imagess" class="form-control" id="id_image1" onchange="changeImg(event)"><br>
+                <input type="file" name="imagess" class="form-control" id="id_image1" onchange="changeImg(event)" required><br>
 
                 <label for="name"></label><br>
 
@@ -75,9 +77,10 @@
                     </div>
                 </div>
 
-                <input type="file" name="imagesss" class="form-control" onchange="changeImg2(event)" id="id_image2"><br>
+                <input type="file" name="imagesss" class="form-control" onchange="changeImg2(event)" id="id_image2" required><br>
+                <p id="proAddErr" class="mt-3 text-danger"></p>
+                <button type="submit" class="btn btn-warning btn" onclick=" return validateForm()">Add Product</button>
 
-                <button type="submit" class="btn btn-warning btn">Add Product</button>
 
 
             </form>
@@ -86,7 +89,7 @@
         </div>
     </div>
     </div>  
-
+    <script src="/static/javascripts/valid.js"></script>
     <script>
         var el = document.getElementById("wrapper");
         var toggleButton = document.getElementById("menu-toggle");
@@ -101,7 +104,9 @@
         function appear() {
             console.log('this is ');
             let a =  document.getElementById('imgView1')
+            
             a.style.display = 'block'
+           
         }
         const imagebox1 = document.getElementById("image-box1");
         const crop_btn1 = document.getElementById("crop-btn1");

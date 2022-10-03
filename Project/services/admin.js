@@ -19,33 +19,40 @@ module.exports = {
                 {
                     $match: {
                         createdAt: {
-                            $gte: new Date(new Date() - 60 * 60 * 24 * 1000 * 7)
+                            $gte: new Date(new Date().getMonth() - 10)
                         }
                     }
                 },
                 {
-                    $unwind: '$products'
+                    $lookup: {
+                        from: 'products',
+                        localField: 'products.item',
+                        foreignField: '_id',
+                        as: 'pro'
+                    }
+                },
+                {
+                    $unwind: '$pro'
                 },
                 {
                     $project: {
-                        year: { $year: "$createdAt" },
-                        month: { $month: "$createdAt" },
-                        day: { $dayOfMonth: "$createdAt" },
-                        dayOfWeek: { $dayOfWeek: "$createdAt" },
+                        cat: '$pro.category',
+                        total: '$pro.discountedPrice'
                     }
                 },
                 {
                     $group: {
-                        _id: '$dayOfWeek',
+                        _id: '$cat',
                         count: { $sum: 1 },
-                        detail: { $first: '$$ROOT' }
+                        total: { $sum: "$total" },
+                        detail: { $first: "$$ROOT" }
                     }
                 },
                 {
-                    $sort: { detail: 1 }
+                    $sort: { detail: -1 }
                 }
             ])
-            // console.log(data);
+            console.log(data);
             resolve(data)
         })
     },
@@ -62,7 +69,7 @@ module.exports = {
                 {
                     $match: {
                         createdAt: {
-                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 7)
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 4)
                         }
                     }
                 },
@@ -75,13 +82,15 @@ module.exports = {
                         month: { $month: "$createdAt" },
                         day: { $dayOfMonth: "$createdAt" },
                         dayOfWeek: { $dayOfWeek: "$createdAt" },
-                        week: { $week: "$createdAt" }
+                        week: { $week: "$createdAt" },
+                        total:'$totalAmount',
                     }
                 },
                 {
                     $group: {
                         _id: '$week',
                         count: { $sum: 1 },
+                        total:{$sum:'$total'},
                         detail: { $first: '$$ROOT' }
                     }
                 },
@@ -111,13 +120,15 @@ module.exports = {
                         month: { $month: "$createdAt" },
                         day: { $dayOfMonth: "$createdAt" },
                         dayOfWeek: { $dayOfWeek: "$createdAt" },
-                        week: { $week: "$createdAt" }
+                        week: { $week: "$createdAt" },
+                        total:'$totalAmount'
                     }
                 },
                 {
                     $group: {
                         _id: '$month',
                         count: { $sum: 1 },
+                        total:{$sum:'$total'},
                         detail: { $first: '$$ROOT' }
                     }
                 },
@@ -166,6 +177,44 @@ module.exports = {
                 }
             ])
             // console.log(data);
+            resolve(data)
+        })
+    },
+    findOrdersbyday:()=>{
+        return new Promise(async (resolve, reject) => {
+            let data = await Order.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date()- 1000 * 60 * 60 * 24 * 7 )
+                        }
+                    }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        year: { $year: "$createdAt" },
+                        month: { $month: "$createdAt" },
+                        day: { $dayOfMonth: "$createdAt" },
+                        dayOfWeek: { $dayOfWeek: "$createdAt" },
+                        week: { $week: "$createdAt" },
+                        total:'$totalAmount'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$dayOfWeek',
+                        count: { $sum: 1 },
+                        total:{$sum:'$total'},
+                        detail: { $first: '$$ROOT' }
+                    }
+                },
+                {
+                    $sort: { detail: 1 }
+                }
+            ])
             resolve(data)
         })
     },
@@ -255,7 +304,7 @@ module.exports = {
                 {
                     $match: {
                         createdAt: {
-                            $gte: new Date(new Date()-1000 * 60 * 60 * 24)
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24)
                         }
                     }
                 },
@@ -265,56 +314,56 @@ module.exports = {
                 {
                     $group: {
                         _id: null,
-                        total: { $sum: "$totalAmount"},
-                        
+                        total: { $sum: "$totalAmount" },
+
                     }
                 },
             ])
             resolve(data)
         })
     },
-    monthtotal:()=>{
-        return new Promise((resolve,reject)=>{
+    monthtotal: () => {
+        return new Promise((resolve, reject) => {
             Order.aggregate([
                 {
-                    $match:{
-                        createdAt:{
-                            $gte:new Date(new Date() - 1000 * 60 * 60 * 24*7*4)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 4)
                         }
                     }
                 },
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $group:{
-                        _id:null,
-                        total:{$sum:'$totalAmount'}
+                    $group: {
+                        _id: null,
+                        total: { $sum: '$totalAmount' }
                     }
                 }
-            ]).then((res)=>{
+            ]).then((res) => {
                 // console.log(res);
                 resolve(res)
             })
         })
     },
-    yeartotal:()=>{
-        return new Promise(async(resolve,reject)=>{
-           let data = await Order.aggregate([
+    yeartotal: () => {
+        return new Promise(async (resolve, reject) => {
+            let data = await Order.aggregate([
                 {
-                    $match:{
-                        createdAt:{
-                            $gte:new Date(new Date() - 1000 * 60 * 60 * 24*7*4*12)
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 4 * 12)
                         }
                     }
                 },
                 {
-                    $unwind:'$products'
+                    $unwind: '$products'
                 },
                 {
-                    $group:{
-                        _id:1,
-                        total:{$sum:'$totalAmount'},
+                    $group: {
+                        _id: 1,
+                        total: { $sum: '$totalAmount' },
 
                     }
                 }

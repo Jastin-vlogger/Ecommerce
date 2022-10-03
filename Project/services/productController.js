@@ -71,16 +71,15 @@ module.exports = {
     updatedProduct: (updatedData, id) => {
         const { name, description, category, price } = updatedData;
         return new Promise(async (resolve, reject) => {
-            await Product.updateOne({ _id: Types.ObjectId(id) }, {
+            let data = await Product.findByIdAndUpdate({ _id: Types.ObjectId(id) }, {
                 $set: {
                     name: name,
                     description: description,
                     category: category,
                     price: price,
                 }
-            }).then((data) => {
-                resolve(data._id)
             })
+            resolve(data._id)
         })
     },
     getAllProducts: () => {
@@ -465,7 +464,18 @@ module.exports = {
                         }
                     },
                     {
+                        $lookup:{
+                            from:'users',
+                            localField:'userId',
+                            foreignField:'_id',
+                            as:'userdetail'
+                        }
+                    },
+                    {
                         $unwind:'$orderdetail'
+                    },
+                    {
+                        $unwind:'$userdetail'
                     },
                     {
                         $project:{
@@ -480,10 +490,13 @@ module.exports = {
                             discount:'$orderdetail.discountedPrice',
                             payment:'$paymentMethod',
                             category:'$orderdetail.category',
-                            image:'$orderdetail._id'
+                            image:'$orderdetail._id',
+                            email:'$userdetail.email',
+                            nameuser:'$userdetail.firstName'
                         }
                     }
                 ])
+                // console.log(order);
                 resolve(order)
             })
         } catch (error) {
