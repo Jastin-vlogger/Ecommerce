@@ -14,7 +14,7 @@
         </button>
 
         <div class="collapse navbar-collapse order-lg-1" id="navMenu">
-            <ul class="navbar-nav mx-auto text-center ">
+            <ul class="navbar-nav mx-auto text-center nav-ul">
                 <li class="nav-item px-2 py-2">
                     <a class="nav-link text-uppercase text-dark" href="/">home</a>
                 </li>
@@ -34,22 +34,24 @@
                 <li class="nav-item px-2 py-2">
                     <a class="nav-link text-uppercase text-dark" href="#special">specials</a>
                 </li>
-                
+
                 <a href="/cart" class=" btn btn-primary mt-4 ms-2 ">cart</a>
 
-                <a href="/wishlist" class="fa fa-heart  btn btn-primary mt-4 ms-2"></a>
+                <a href="/wishlist" class="  btn btn-primary mt-4 ms-2"> <i class="fa fa-heart"></i></a>
 
 
-                <a href="/profile" class="fa-solid fa-user btn btn-primary mt-4 ms-2 "></a>
+                <a href="/profile" class=" btn btn-primary mt-4 ms-2 ">
+                    <i class="fa-solid fa-user"></i>
+                </a>
                 <%if (token) { %>
                     <a href="logout" class="btn btn-primary mt-4 ms-2 ">
                         Logout
                     </a>
                     <% }else{ %>
-                        <a href="login" class="btn btn-primary mt-4 ms-2 ">
-                            Login
-                        </a>
-                        <%}%>
+                    <a href="login" class="btn btn-primary mt-4 ms-2 ">
+                        Login
+                    </a>
+                    <%}%>
             </ul>
         </div>
     </div>

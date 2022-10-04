@@ -9,7 +9,6 @@ const wallet = require('../services/wallet')
 module.exports = {
     proccedToCheck: async (req, res) => {
         try {
-
             let userId = req.userId
             console.log(req.query);
             const token = req.cookies.token

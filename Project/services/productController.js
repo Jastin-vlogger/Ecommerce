@@ -119,9 +119,6 @@ module.exports = {
     },
     productDetails: (id) => {
         return new Promise(async (resolve, reject) => {
-            // await Product.findById(id).then((data)=>{
-            //     resolve(data)
-            // })
             await Product.aggregate([
                 {
                     $match: { _id: Types.ObjectId(id) }
@@ -339,27 +336,6 @@ module.exports = {
     },
     categorizeProduct: (catname) => {
         return new Promise(async (resolve, reject) => {
-            //   let data = await Product.aggregate([
-            //     {
-            //         $match:{category:catname}
-            //     },
-            //     // {
-            //     //     $unwind:'$name'
-            //     // },
-            //     {
-            //         $lookup:{
-            //             from:'products',
-            //             localField:'name',
-            //             foreignField:'category',
-            //             as:'cat'
-            //         }
-            //     },
-            //     {
-            //         $project:{
-            //             cat:{ $arrayElemAt:['$cat',0]}
-            //         }
-            //     }
-            //   ])
             let data = await Product.find({ category: catname })
             //   console.log(data);
             resolve(data)

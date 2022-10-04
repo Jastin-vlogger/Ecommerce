@@ -213,3 +213,11 @@ function validatelogin(){
     }
     return true;
 }
+
+function validateOTP(){
+    if(!validatemobile()){
+        document.getElementById('otpvalid').innerHTML = 'Fill the Number'
+        return false
+    }
+    return true;
+}

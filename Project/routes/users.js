@@ -126,6 +126,7 @@ router.get('/cart', userAuth.userLoggedIn, product.cart)
 
 router.post('/change-product-quantity', userAuth.userLoggedIn, product.changeQuantity)
 
+
 /* ------------------------------- delete cart product ------------------------------- */
 router.get('/deleteCartProduct/:id', userAuth.userLoggedIn, product.deleteProduct)
 
@@ -136,6 +137,7 @@ router.get('/add-to-whislist/:id', userAuth.userLoggedIn, product.addtowhish)
 router.get('/wishlist-product/:id', userAuth.userLoggedIn, product.deleteWishPro)
 
 router.get('/proccedToCheckOut', userAuth.userLoggedIn, checkout.proccedToCheck)
+
 
 /* ------------------------------- placing order ------------------------------- */
 router.post('/place-order', userAuth.userLoggedIn, checkout.placeOrder)

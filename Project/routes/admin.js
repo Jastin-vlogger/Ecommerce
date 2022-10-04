@@ -193,7 +193,7 @@ router.patch('/edit-category-coupon/:id', authentication.adminverify, async (req
                 let value = parseInt(element.price - (element.price * element.offer[0] / 100))
                 console.log(value);
                 await productController.addDiscountedProduct(element._id, value)
-            });
+            })
             res.json(data);
         })
     } catch (error) {

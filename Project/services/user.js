@@ -12,6 +12,7 @@ const paypal = require('paypal-rest-sdk');
 const Coupon = require('../models/coupon')
 const Usedcoupon = require('../models/usedcoupon')
 const shortid = require('shortid');
+const wallet = require('./wallet')
 
 
 let instance = new Razorpay({
@@ -34,15 +35,18 @@ module.exports = {
             console.log(userData);
             return new Promise(async (resolve, reject) => {
                 let user = await User.findOne({ email: userData.email })
+                console.log(user+'user da');
                 let refer = 'a';
                 if (referal) {
                     refer = await User.findOne({ referral_code: referal })
                 }
-                if (refer) {
+                console.log(refer+'referrereerer');
+                if (refer !='a') {
                     let value = 500;
-                    let val = refer.wallet + value;
+                    let val = refer.wallet + value; 
                     await User.findByIdAndUpdate({ _id: Types.ObjectId(refer._id) }, { $set: { wallet: val } })
                 }
+                console.log(user+'user da ');
                 if (user) {
                     resolve('email found')
                 } else if (!refer) {
@@ -62,9 +66,12 @@ module.exports = {
                         referal: referal,
                         referral_code: referral_code,
                     }
+                    console.log(wallet);
                     userData.password = await bcrypt.hash(userData.password, 10)
                     await new User(data).save().then((data) => {
                         resolve(data)
+                    }).catch((error)=>{
+                        console.log('user mahn '+error);
                     })
                 }
             })
@@ -395,7 +402,7 @@ module.exports = {
                 if(promooffer){
                     let alreadyused = await Usedcoupon.findOne({ coupon: Types.ObjectId(promooffer._id) }, { user: Types.ObjectId(userid) })
                     if (!alreadyused && promooffer.date >= today){
-                        console.log('kiti');
+                        console.log('kiti')
                         resolve(promooffer)
                     }else{
                         resolve()
