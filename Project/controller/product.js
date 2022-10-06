@@ -23,9 +23,8 @@ module.exports = {
           res.json(response)
         })
       } else {
-        res.redirect('/login')
+        res.json({status:false})
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -33,15 +32,15 @@ module.exports = {
   },
   cart: async (req, res) => {
     try {
-      let userId = req.userId
       const token = req.cookies.token
       if (token) {
+        let userId = req.userId
         let total = await userHelpers.getTotalAmount(userId)
         let eachTotal = await userHelpers.getEachProductAmount(userId)
         let cartCount = await userHelpers.getCartCount(userId)
         let product = await productController.getCartProducts(userId)
         let categories = await productController.findCategory()
-        // let offer = await productController.offerfind(userId)
+        console.log(total);
         res.render('user/cart', { product, token, userId, total, eachTotal, cartCount, categories });
       } else {
         res.redirect('/login')

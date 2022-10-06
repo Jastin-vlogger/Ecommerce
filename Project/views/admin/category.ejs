@@ -1,213 +1,272 @@
 <%-include('header')-%>
 
-<%-include('../partials/sidebarAdmin.ejs')%>
+    <%-include('../partials/sidebarAdmin.ejs')%>
 
+        <div class="container-fluid px-4">
             <div class="container-fluid px-4">
-                <div class="container-fluid px-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        data-bs-whatever="@mdo" id="drop">Add Category</button>
-                </div>
-                <div class="row my-5">
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Add </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="recipient-name" class="col-form-label">category name:</label>
-                                        <input type="text" class="form-control" name="name" id="username"
-                                            onkeyup="validatename()">
-                                        <span id="username-err" class="text-danger"></span>
-                                        <p id="error-msg" style="color:rgb(255, 0, 0) "></p>
-                                        <div id="emailmsg" style="color:rgb(170, 47, 47);display:none">Please fill the
-                                            required</div>
-                                        <label class="col-form-label">offer:</label>
-                                        <input type="number" class="form-control" name="offer" id="offer">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button class="btn btn-primary" onclick="addcategory()" type="submit">submit</button>
-                                    </div>
-                                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    data-bs-whatever="@mdo" id="drop">Add Category</button>
+            </div>
+            <div class="row my-5">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label">category name:</label>
+                                    <input type="text" class="form-control" name="name" id="username"
+                                        onkeyup="validatename()">
+                                    <span id="username-err" class="text-danger"></span>
+                                    <p id="error-msg" style="color:rgb(255, 0, 0) "></p>
+                                    <div id="emailmsg" style="color:rgb(170, 47, 47);display:none">Please fill the
+                                        required</div>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid city.
+                                    </div>
+                                    <label class="col-form-label">offer:</label>
+                                    <input type="number" class="form-control" name="offer" id="offer" onkeyup="validateoffer()">
+                                    <span id="offer-err" class="text-danger"></span>
+                                </div>
+                                <span id="msg" class="text-danger"></span>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button class="btn btn-primary" onclick="return validcategory()"
+                                        type="submit">submit</button>
+                                </div>
+
+                            </div> 
                         </div>
                     </div>
+                </div>
 
 
-                    <div class="col">
-                        <table class="table bg-white rounded shadow-sm  table-hover">
-                            <thead>
+                <div class="col">
+                    <table class="table bg-white rounded shadow-sm  table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="50">No</th>
+                                <th scope="col">Category name</th>
+                                <th scope="col">Manage offer</th>
+                                <th scope="col">Action</th>
+                                <th scope="col">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="list">
+                            <% data.forEach((element,i)=>{%>
+                                <%if(element.isDeleted == false){%>
                                 <tr>
-                                    <th scope="col" width="50">No</th>
-                                    <th scope="col">Category name</th>
-                                    <th scope="col">Manage offer</th>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">Action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="list">
-                                <% data.forEach((element,i)=>{%>
-                                    <tr>
-                                        <th scope="row">
-                                            <%=i+1%>
-                                        </th>
-                                        <td>
-                                            <%=element.name%>
-                                        </td>
-                                        <td>
-                                            <span >
-                                                <%=element.offer%>%
-                                            </span>
-                                            <span class="fa fa-edit" id="offeredit" class="btn btn-primary"
+                                    <th scope="row">
+                                        <%=i+1%>
+                                    </th>
+                                    <td>
+                                        <%=element.name%>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <%=element.offer%>%
+                                        </span>
+                                        <span class="fa fa-edit" id="offeredit" class="btn btn-primary"
                                             data-bs-toggle="modal" data-bs-target="#staticBackdrop<%=i%>"></span>
-                                            <!-- <input class="fa fa-edit" id="offeredit" type="button" class="btn btn-primary"
+                                        <!-- <input class="fa fa-edit" id="offeredit" type="button" class="btn btn-primary"
                                             data-bs-toggle="modal" data-bs-target="#staticBackdrop" > -->
-                                            <!-- <span  value="<%=element._id%>"></span> -->
-                                            
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="staticBackdrop<%=i%>" data-bs-backdrop="static"
-                                                data-bs-keyboard="false" tabindex="-1"
-                                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog ">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">edit offer
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="mb-3 ms-4 me-4">
-                                                            <label class="col-form-label">offer:</label>
-                                                            <input  class="form-control" name="offer" id="edit<%=i%>" value="<%=element._id%>" hidden>
+                                        <!-- <span  value="<%=element._id%>"></span> -->
 
-                                                            <input type="number" class="form-control" name="offer" id="editedoffer<%=i%>" value="<%=element._id%>">
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary"
-                                                                onclick="editcategoryoffer(`<%=element._id%>`,`<%=i%>`)">submit</button>
-                                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdrop<%=i%>" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">edit offer
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="mb-3 ms-4 me-4">
+                                                        <label class="col-form-label">offer:</label>
+                                                        <input class="form-control" name="offer" id="edit<%=i%>"
+                                                            value="<%=element._id%>" hidden>
+
+                                                        <input type="number" class="form-control" name="offer"
+                                                            id="editedoffer<%=i%>" value="<%=element._id%>">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="editcategoryoffer(`<%=element._id%>`,`<%=i%>`)">submit</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td><a href="/admin/edit-category/<%=element._id%>" class="btn btn-info"
-                                                id="sweet">Edit</a></td>
-                                        
+                                        </div>
+                                    </td>
+                                    <td><a href="/admin/edit-category/<%=element._id%>" class="btn btn-info"
+                                            id="sweet">Edit</a></td>
 
-                                        <td><a href="/admin/delete-category/<%=element._id%>" class="btn btn-warning"
-                                                id="sweet"
-                                                onclick="return confirm('Are you sure to delete <%=element.name%>')">Delete</a>
-                                        </td>
-                                    </tr>
-                                    <%})%>
-                            </tbody>
-                        </table>
-                    </div>
 
+                                    <td><a href="/admin/delete-category/<%=element._id%>" class="btn btn-warning"
+                                            id="sweet"
+                                            onclick="return confirm('Are you sure to delete <%=element.name%>')">Delete</a>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                <%})%>
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
-    </div>
-    <!-- Button trigger modal -->
+        </div>
+        </div>
+        <!-- Button trigger modal -->
 
 
 
 
-    <!-- /#page-content-wrapper -->
-    </div>
-    <script src="/static/javascripts/validation.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function addcategory() {
-            let name = document.getElementById('username')
-            let offer = document.getElementById('offer')
-            $.ajax({
-                url: '/admin/add-category',
-                method: 'post',
-                data: { name: name.value, offer: offer.value },
-                success: (response) => {
-                    console.log(response);
-                    if (response.status == false) {
-                        let error = document.getElementById('error-msg')
-                        error.innerHTML = 'This name is already present'
-                    } else {
+        <!-- /#page-content-wrapper -->
+        </div>
+        <!-- <script src="/static/javascripts/validation.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function validatename() {
+                var name_err = document.getElementById('username-err')
+                var name = document.getElementById('username').value;
+
+                if (name.length == 0 || name == '') {
+                    name_err.innerHTML = "Name cannot be empty";
+                    return false;
+                }
+
+                if (!name.match(/^[A-Za-z]*\s{0,1}?[A-Za-z]*\s{0,1}?[A-Za-z]*$/)) {
+                    name_err.innerHTML = "Write Proper name";
+                    return false;
+                }
+
+                if (name.length <= 3 || name.length >= 25) {
+                    name_err.innerHTML = "Name must be between 3 and 25 characters";
+                    return false;
+                }
+
+                name_err.innerHTML = ""
+                return true;
+            }
+            function validateoffer() {
+                let offers = document.getElementById('offer').value
+                let offer_err = document.getElementById('offer-err')
+
+                if (offers.length == 0 || offers.length < 1) {
+                    offer_err.innerHTML = 'Enter valid offer'
+                    return false;
+                }
+                if(offers > 50 ){
+                    offer_err.innerHTML = 'Enter offer below 50%'
+                    return false;
+                }
+                if(offers <= 0){
+                    offer_err.innerHTML = 'Enter offer which is above 1%'
+                    return false;
+                }
+                offer_err.innerHTML = ''
+                return true;
+            }
+
+            function validcategory() {
+                if (!validatename() || !validateoffer()) {
+                    let a = document.getElementById('msg')
+                    a.innerHTML = 'Fill the required'
+                }else{
+                    addcategory();
+                    return true;   
+                }
+            }
+
+            function addcategory() {
+                let name = document.getElementById('username')
+                let offer = document.getElementById('offer')
+                $.ajax({
+                    url: '/admin/add-category',
+                    method: 'post',
+                    data: { name: name.value, offer: offer.value },
+                    success: (response) => {
+                        console.log(response);
+                        if (response.status == false) {
+                            let error = document.getElementById('error-msg')
+                            error.innerHTML = 'This name is already present'
+                        } else {
+                            location.href = '/admin/category'
+                        }
+
+                    }
+                })
+            }
+
+
+            function editcategoryoffer(offerId, i) {
+                let offer = document.getElementById(`editedoffer${i}`)
+                $.ajax({
+                    url: `/admin/edit-category-coupon/${offerId}`,
+                    method: 'patch',
+                    data: { offer: offer.value },
+                    success: (response) => {
                         location.href = '/admin/category'
                     }
+                })
+            }
+        </script>
+        <script>
+            var el = document.getElementById("wrapper");
+            var toggleButton = document.getElementById("menu-toggle");
+            toggleButton.onclick = function () {
+                el.classList.toggle("toggled");
+            };
+        </script>
+        <script>
+            var exampleModal = document.getElementById('drop')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                var button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                var recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an AJAX request here
+                // and then do the updating in a callback.
+                //
+                // Update the modal's content.
+                var modalTitle = exampleModal.querySelector('.modal-title')
+                var modalBodyInput = exampleModal.querySelector('.modal-body input')
 
-                }
+                modalTitle.textContent = 'New message to ' + recipient
+                modalBodyInput.value = recipient
             })
-        }
 
-        
-        function editcategoryoffer(offerId,i) {
-            // let offerId = document.getElementById('offeredit').value
-            console.log(offerId,i);
-            let offer = document.getElementById(`editedoffer${i}`)
-            $.ajax({
-                url:`/admin/edit-category-coupon/${offerId}`,
-                method:'patch',
-                data:{offer:offer.value},
-                success:(response)=>{
-                    location.href = '/admin/category'
-                }
+            var exampleModal = document.getElementById('edit')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                var button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                var recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an AJAX request here
+                // and then do the updating in a callback.
+                //
+                // Update the modal's content.
+                var modalTitle = exampleModal.querySelector('.modal-title')
+                var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+                modalTitle.textContent = 'New message to ' + recipient
+                modalBodyInput.value = recipient
             })
-        }
-    </script>
-    <script>
 
-        var el = document.getElementById("wrapper");
-        var toggleButton = document.getElementById("menu-toggle");
+        </script>
 
-        toggleButton.onclick = function () {
-            el.classList.toggle("toggled");
-        };
-    </script>
-    <script>
-        var exampleModal = document.getElementById('drop')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
-            // Button that triggered the modal
-            var button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            var recipient = button.getAttribute('data-bs-whatever')
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-            //
-            // Update the modal's content.
-            var modalTitle = exampleModal.querySelector('.modal-title')
-            var modalBodyInput = exampleModal.querySelector('.modal-body input')
+        </div>
 
-            modalTitle.textContent = 'New message to ' + recipient
-            modalBodyInput.value = recipient
-        })
-
-        var exampleModal = document.getElementById('edit')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
-            // Button that triggered the modal
-            var button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            var recipient = button.getAttribute('data-bs-whatever')
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-            //
-            // Update the modal's content.
-            var modalTitle = exampleModal.querySelector('.modal-title')
-            var modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-            modalTitle.textContent = 'New message to ' + recipient
-            modalBodyInput.value = recipient
-        })
-
-    </script>
-
-    </div>
-
-    <%-include('footer')-%>
+        <%-include('footer')-%>

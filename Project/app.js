@@ -1,7 +1,7 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 const mongoose = require("mongoose");
 const {verify} = require('./authMiddleWare/auth')
@@ -10,10 +10,10 @@ const bodyParser = require('body-parser')
 const nocache = require('nocache')
 const twilio = require('twilio');
 
-var adminRouter = require('./routes/admin');
-var usersRouter = require('./routes/users');
+let adminRouter = require('./routes/admin');
+let usersRouter = require('./routes/users');
 
-var app = express();
+let app = express();
 let port = process.env.port || 5000;
 
 // view engine setup

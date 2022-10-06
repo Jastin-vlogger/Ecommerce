@@ -216,7 +216,6 @@ module.exports = {
                     product: { $arrayElemAt: ['$product', 0] }
                 }
             },
-
             ]).then((cart) => {
                 resolve(cart)
             })
@@ -478,7 +477,6 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
-
     }
 }
 

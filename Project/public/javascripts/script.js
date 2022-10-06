@@ -16,7 +16,7 @@ function changeQuantity(cartId, proId,userId ,count) {
                 swal.fire({
                     showCancelButton: false, // There won't be any cancel button
                     showConfirmButton: false,
-                    title: 'product has been removed from the cart',
+                    title: 'Product has been removed from the cart',
                 })
                 setTimeout(() => {
                     location.reload()

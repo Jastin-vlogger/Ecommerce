@@ -17,6 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                           
                             <% product.forEach((element,i)=>{%>
                                 <tr>
                                     <th scope="row">
@@ -47,12 +48,12 @@
                                         <h6></h6>
                                     </td>
                                     <td>
-                                        <!-- <a class="btn btn-warning float-left second" id=""  onclick="logggging('<%=element.product._id%>')">Remove Product</a> -->
                                         <button class="btn btn-warning float-left second"
                                             onclick="deleteItemCart(`<%=element.product._id%>`)">Remove Product</button>
                                     </td>
                                 </tr>
                                 <%})%>
+                                
                         </tbody>
                     </table>
                 </div>
@@ -61,6 +62,11 @@
     </section>
     <div class="col-lg-4 offset-lg-4">
         <div class="checkout">
+            <%if(total == "cart is empty"){%>
+                <img src="/static/images/3973481.jpg" alt="">
+                <a href="/" class="btn btn-dark mx-auto">Go shopping</a>
+            <%}else{%>
+                
             <ul>
                 <li class="subtotal">subtotal
                     <!-- <span>.rs</span> -->
@@ -72,6 +78,7 @@
                 </li>
             </ul>
             <a href="/proccedToCheckOut" class="proceed-btn">Proceed to Checkout</a>
+            <%}%>
         </div>
     </div>
 

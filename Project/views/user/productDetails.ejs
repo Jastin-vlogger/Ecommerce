@@ -108,7 +108,9 @@
         url: `/add-to-cart/${proId}`,
         method: 'get',
         success: (response) => {
-          if (response) {
+          if (response.status == false) {
+            location.href = '/login'
+          }else{
             Swal.fire({
               position: 'top-end',
               icon: 'success',
@@ -120,7 +122,6 @@
             let count = $('#cart-count').html()
             count = parseInt(count) + 1
             $('#cart-count').html(count)
-
           }
         }
       })

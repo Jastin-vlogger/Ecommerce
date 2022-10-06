@@ -37,7 +37,7 @@ router.get('/dashboard', authentication.adminverify, async (req, res) => {
         let todaysEarning = await Admin.todaytotal()
         let month = await Admin.monthtotal()
         let year = await Admin.yeartotal()
-        console.log(year);
+        console.log(todaysEarning);
         res.render('admin/dashboard', { data, title: 'dashboard', totalUsers, todaysEarning, month, year })
     } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ router.get('/add-product', authentication.adminverify, async (req, res) => {
 })
 
 router.post('/add-product', async (req, res) => {
-    productController.addProduct(req.body).then((data) => {
+    productController.addProduct(req.body).then(async (data) => {
         let image = req.files.image
         let image1 = req.files.images
         let image2 = req.files.imagess
@@ -92,6 +92,11 @@ router.post('/add-product', async (req, res) => {
         image1.mv(`public/product-image/${data}1.jpg`)
         image2.mv(`public/product-image/${data}2.jpg`)
         image3.mv(`public/product-image/${data}3.jpg`)
+        let cat = await categoryControler.findcategory()
+        await cat.forEach(async (element) => {
+            let value = parseInt(element.price - (element.price * element.offer[0] / 100))
+            await productController.addDiscountedProduct(element._id, value)
+        })
         res.redirect('/admin/productmanagement')
     })
 })
@@ -234,9 +239,11 @@ router.post('/edit-category', authentication.adminverify, async (req, res) => {
 
 })
 
-router.get('/delete-category/:id', authentication.adminverify, (req, res) => {
-    let userId = req.params.id
-    categoryControler.deletecategory(userId)
+router.get('/delete-category/:id', authentication.adminverify, async(req, res) => {
+    let catId = req.params.id
+    categoryControler.deletecategory(catId)
+    let cat = await categoryControler.findCategory(catId)
+    categoryControler.deleteEveryProduct(cat.name)
     res.redirect('/admin/category')
 })
 

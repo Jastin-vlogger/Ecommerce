@@ -44,9 +44,11 @@
 
                 <div class="d-flex flex-wrap justify-content-center mt-5 filter-button-group">
                     <%categories.forEach((element)=>{%>
+                        <%if(element.isDeleted == false){%>
                         <a href="products/categories/<%=element._id%>" class="btn btn-primary mt-3 me-3">
                             <%=element.name%>
                         </a>
+                        <%}%>
                         <%})%>
                 </div>
             </div>

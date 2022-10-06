@@ -77,7 +77,7 @@ module.exports={
     },
     deletecategory:(id)=>{
         return new Promise (async(resolve,reject)=>{
-            await Category.findByIdAndRemove(id).then((data)=>{
+            await Category.findByIdAndUpdate(id,{$set:{isDeleted:'true'}}).then((data)=>{
                 resolve(data)
             })
         })
@@ -87,6 +87,12 @@ module.exports={
             await Banner(data).save().then((data)=>{
                 resolve(data._id)
             })
+        })
+    },
+    deleteEveryProduct:(catname)=>{
+        return new Promise(async (resolve, reject) => {
+            let softdelete = await Product.updateMany({ category: catname }, { $set: { isDeleted: true } })
+            resolve(softdelete)
         })
     }
 }

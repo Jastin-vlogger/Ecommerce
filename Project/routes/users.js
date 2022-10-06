@@ -126,7 +126,6 @@ router.get('/cart', userAuth.userLoggedIn, product.cart)
 
 router.post('/change-product-quantity', userAuth.userLoggedIn, product.changeQuantity)
 
-
 /* ------------------------------- delete cart product ------------------------------- */
 router.get('/deleteCartProduct/:id', userAuth.userLoggedIn, product.deleteProduct)
 
