@@ -7,7 +7,6 @@
 * Cash On Delivery
 * Image Cropping
 * Responsive Design
-* High-Resolution Photos
 * Offers and Coupons
 * Sales Reports
 * User profile

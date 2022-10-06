@@ -195,6 +195,7 @@ module.exports = {
 
             ])
             if (total[0]) {
+                console.log(total);
                 resolve(total[0].total)
             } else {
                 resolve('cart is empty')
