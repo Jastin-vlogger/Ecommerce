@@ -83,7 +83,9 @@ router.get('/add-product', authentication.adminverify, async (req, res) => {
 })
 
 router.post('/add-product', async (req, res) => {
-    productController.addProduct(req.body).then(async (data) => {
+    try {
+        
+       productController.addProduct(req.body).then(async (data) => {
         let image = req.files.image
         let image1 = req.files.images
         let image2 = req.files.imagess
@@ -98,7 +100,11 @@ router.post('/add-product', async (req, res) => {
             await productController.addDiscountedProduct(element._id, value)
         })
         res.redirect('/admin/productmanagement')
-    })
+    }) 
+    } catch (error) {
+        res.status(500).json(error)
+    }
+    
 })
 
 router.get('/delete-product/:id', authentication.adminverify, (req, res) => {

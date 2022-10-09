@@ -23,9 +23,11 @@
                         <a class="dropbtn nav-link text-uppercase text-dark">Category</a>
                         <div class="dropdown-content">
                             <%categories.forEach((element)=>{%>
+                                <%if(element.isDeleted == false){%>
                                 <a href="products/categories/<%=element._id%>">
                                     <%=element.name%>
                                 </a>
+                                <%}%>
                                 <%})%>
                         </div>
 

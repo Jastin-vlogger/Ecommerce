@@ -137,7 +137,6 @@ router.get('/wishlist-product/:id', userAuth.userLoggedIn, product.deleteWishPro
 
 router.get('/proccedToCheckOut', userAuth.userLoggedIn, checkout.proccedToCheck)
 
-
 /* ------------------------------- placing order ------------------------------- */
 router.post('/place-order', userAuth.userLoggedIn, checkout.placeOrder)
 
