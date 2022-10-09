@@ -35,18 +35,19 @@ module.exports = {
         let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
         let wallbalance = await userHelpers.findWallBalance(userId)
         let wall = wallbalance.wallet
-       
+        let couponName = '';
+        let couponOffer = 0;
         if (coupon) {
             totalPrice = coupon
             let couponused = await couponHelpers.findCoupon(couponid)
-            console.log(couponused);
+            couponName = couponused.offer;
+            couponOffer = couponused.discount;
             await couponHelpers.usedcoupon(couponused._id, userId).then((data) => {
-                console.log(data);
             })
         }
+        console.log(couponName);
+        userHelpers.placeOrder(req.body, products, totalPrice, userId,couponName,couponOffer).then(async (response) => {
 
-        userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async (response) => {
-            // console.log(response);
             let a = response.products;
             //where stock is made decreasing
             a.forEach((element) => {

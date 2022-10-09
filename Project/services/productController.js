@@ -277,7 +277,9 @@ module.exports = {
                     original:'$product.price',
                     name:'$product.name',
                     category:'$product.category',
-                    image:'$product._id'
+                    image:'$product._id',
+                    offer:'$couponOffer',
+                    offername:'$coupon'
                 }
             },
 

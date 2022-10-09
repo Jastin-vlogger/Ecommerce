@@ -84,7 +84,7 @@ fetch('/admin/dashboard/month', {
 
     let xaxis = []
     let countss = []
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var months = ['a',"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     for (const val of data) {
         let month = `${val.detail.month}`
         let m = months[month]

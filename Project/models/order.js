@@ -34,6 +34,12 @@ const orderSchema = mongoose.Schema(
         ordercanceled:{
             type:Boolean,
             default:false,
+        },
+        coupon:{
+            type:String,
+        },
+        couponOffer:{
+            type:Number,
         }
     },
   { timestamps: true }

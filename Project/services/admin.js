@@ -133,7 +133,7 @@ module.exports = {
                     }
                 },
                 {
-                    $sort: { detail: -1 }
+                    $sort: { _id: 1 }
                 }
             ])
             resolve(data)

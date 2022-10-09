@@ -98,12 +98,21 @@
         url: `/product/${id}`,
         method: 'get',
         success: (response) => {
-          console.log(response);
+          
           for (let i = 0; i < response.length; i++) {
-            hello.innerHTML += ` <h5>${response[i].name}</h5>
+            hello.innerHTML += ` 
+                        <h5 class="text-light bg-dark">${response[i].name}</h5>
                         <img src="/static/product-image/${response[i].image}.jpg" alt="" style="width: 100px;height: 75px;">
-                        <h6 class="text-danger">Price: ${response[i].original}</h6>
-                        <h6 class="text-success">Discount Price: ${response[i].purchase}</h6>
+                        ${
+                          (response[i].purchase==response[i].original) ?
+                           `<h6 class="text-danger">Price: ${response[i].purchase}</h6>`
+                            :
+                           `
+                            <h6 class="text-danger">Price: ${response[i].original}</h6>
+                            <h6 class="text-dark">Coupon Used: ${response[i].offername}</h6>
+                            <h6 class="text-success">Discount Price: ${response[i].offer}</h6>
+                            <h6 class="text-success">Total Paid: ${response[i].purchase}</h6>`  
+                        }
                         <p>Category: ${response[i].category}</p>
                         <p>Ordered Date: ${new Date(response[i].date).toDateString()}</p> 
                         <p>PaymentMethod: ${response[i].paymentMethod}</p>

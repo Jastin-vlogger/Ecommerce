@@ -243,7 +243,7 @@ module.exports = {
             resolve(total)
         })
     },
-    placeOrder: (order, products, total, userId) => {
+    placeOrder: (order, products, total, userId,couponName,couponOffer) => {
         return new Promise(async (resolve, reject) => {
             let status = order.paymentmethod === 'COD' ? 'placed' : 'pending'
             let ordersave = {
@@ -257,7 +257,9 @@ module.exports = {
                 products: products,
                 status: status,
                 totalAmount: total,
-                date: new Date()
+                coupon:couponName,
+                couponOffer:couponOffer,
+                date: new Date(),  
             }
             await new Order(ordersave).save().then(async (response) => {
                 await Cart.deleteOne({ user: Types.ObjectId(userId) })
