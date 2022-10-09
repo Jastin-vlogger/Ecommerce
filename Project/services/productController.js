@@ -487,6 +487,19 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+    changestockquantity:(proId,minusstock)=>{
+        try {
+           return new Promise((resolve,reject)=>{
+            Product.findByIdAndUpdate({_id:Types.ObjectId(proId)},{$inc:{stock:-minusstock}}).then((res)=>{
+                resolve(res)
+            }).catch((error)=>{
+                reject(error)
+            })
+           }) 
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

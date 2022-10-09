@@ -80,10 +80,22 @@
                 <%=data.description%>
               </p>
               <ul>
-                <li>Stock: <span>
+                <%if(data.stock == 0){%>
+                  <li class="text-danger fs-5">Sorry out of stock</li>
+                <%}else if(data.stock <=10){%>
+                  <li class="text-danger fs-4">Hurry up only few <%=data.stock%> stocks left</li>
+                <%}else{%>
+                  <li>Stock: <span>
                   <%=data.stock%>
-                </span></li>
-                <li>Available: <span>in stock</span></li>
+                  </span></li>
+                <%}%>
+                <%if(data.stock == 0){%>
+                  <li>Available:
+                    <span>out of stock</span></li>
+                <%}else{%>
+                <li>Available:
+                   <span>in stock</span></li>
+                <%}%>
                 <li>Category: <span>
                     <%=data.category%>
                   </span></li>
@@ -91,8 +103,11 @@
             </div>
 
             <div class="purchase-info">
-              <!-- <a href = "/add-to-cart/" class = "btn btn-primary mt-3">ADD TO CART</a> -->
-              <button class="btn btn-primary mt-3" onclick="addToCart(`<%=data._id%>`)">ADD TO CART</button>
+              <%if(data.stock == 0){%>
+                <button class="btn btn-primary mt-3" onclick="swal()">ADD TO CART</button>
+              <%}else{%>
+                <button class="btn btn-primary mt-3" onclick="addToCart(`<%=data._id%>`)">ADD TO CART</button>
+              <%}%>
 
             </div>
           </div>
@@ -129,6 +144,14 @@
       })
 
     }
+
+    function swal() {
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Out of stock!',
+      })
+    }
   </script>
   <script>
     $(document).ready(function () {
@@ -143,15 +166,6 @@
     })
 
   </script>
-  <!-- <script>
-    var options = {
-      width: 200,
-      zoomWidth: 500,
-      offset: { vertical: 0, horizontal: 10 },
-      scale: 1
-    };
-    new ImageZoom(document.getElementById("img-container"), options);   
-  </script> -->
   <script src="/static/javascripts/productDetails.js"></script>
 
   <%-include('footer')-%>

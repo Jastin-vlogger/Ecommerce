@@ -46,6 +46,14 @@ module.exports = {
         }
 
         userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async (response) => {
+            // console.log(response);
+            let a = response.products;
+            //where stock is made decreasing
+            a.forEach((element) => {
+                let productId = element.item
+                let stockNeededToMinus = element.quantity
+                productController.changestockquantity(productId,stockNeededToMinus)
+            });
             let orderId = response._id 
             if (payment == 'COD') {
                 res.json({ cod_sucess: true });

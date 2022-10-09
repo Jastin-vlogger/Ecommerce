@@ -43,9 +43,11 @@
                 <br><br>
                 <select class="form-select form-select mb-3" name="category" required>
                     <%categories.forEach((element)=>{%>
+                        <%if(element.isDeleted == false){%>
                         <option value="<%=element.name%>">
                             <%=element.name%>
                         </option>
+                        <%}%>
                         <%})%>
                 </select>
                 <br><br>
