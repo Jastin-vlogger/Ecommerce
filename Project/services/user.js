@@ -261,8 +261,7 @@ module.exports = {
             }
             await new Order(ordersave).save().then(async (response) => {
                 await Cart.deleteOne({ user: Types.ObjectId(userId) })
-                console.log(response._id + "this is the oderId");
-                resolve(response._id)
+                resolve(response)
             })
         })
     },

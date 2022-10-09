@@ -35,6 +35,7 @@ module.exports = {
         let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
         let wallbalance = await userHelpers.findWallBalance(userId)
         let wall = wallbalance.wallet
+       
         if (coupon) {
             totalPrice = coupon
             let couponused = await couponHelpers.findCoupon(couponid)
@@ -44,7 +45,8 @@ module.exports = {
             })
         }
 
-        userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async (orderId) => {
+        userHelpers.placeOrder(req.body, products, totalPrice, userId).then(async (response) => {
+            let orderId = response._id 
             if (payment == 'COD') {
                 res.json({ cod_sucess: true });
             } else if (payment == 'Razorpay') {

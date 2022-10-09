@@ -11,11 +11,20 @@ const Wishlist = require('../models/userwhislist')
 
 module.exports = {
     addProduct: (product) => {
+        console.log(product);
+        let {name,description,price,stock,category} =product
+        let pro = {
+            name:name,
+            description:description,
+            price:price,
+            stock:stock,
+            category:category
+        }
         return new Promise(async (resolve, reject) => {
-            await new Product({ ...product }).save().then((data) => {
+            await new Product(pro).save().then((data) => {
                 resolve(data._id)
             })
-        })
+        })      
     },
     addDiscountedProduct: (id, value) => {
         return new Promise(async (resolve, reject) => {
@@ -140,6 +149,7 @@ module.exports = {
                         category: '$product.name',
                         offer: '$product.offer',
                         price: '$price',
+                        stock:'$stock'
                     }
                 }
             ]).then((data) => {

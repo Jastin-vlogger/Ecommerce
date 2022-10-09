@@ -8,8 +8,9 @@ module.exports={
             //the imp thing 
             const user = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
                 console.log(user+'hellllllllllllllll');
-                if(err)
-                res.status(401).json('token not valid');
+                if(err){
+                    res.status(401).json('token not valid');
+                }
                 req.userId = user.userdata._id;
                 req.userName = user.userdata.firstName;
                 next();
@@ -34,7 +35,6 @@ userLoggedIn:(req,res,next)=>{
             req.userId = user.userdata._id;
             req.userName = user.userdata.firstName;
             next(); 
-            // return res.redirect('/')
             } catch (error) {
             console.log("error"); 
             res.clearCookie('token');

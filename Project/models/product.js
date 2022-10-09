@@ -28,6 +28,10 @@ const productSchema = mongoose.Schema(
     },
     discountedPrice:{
       type:Number,
+    },
+    stock:{
+      type:Number,
+      required:true,
     }
   },
   { timestamps: true }

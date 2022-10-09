@@ -183,22 +183,40 @@ function validatedesc() {
         return false;
     }
 
-    if (!name.match(/^[A-Za-z]*\s{0,1}?[A-Za-z]*\s{0,1}?[A-Za-z]*$/)) {
-        name_err.innerHTML = "Write Proper description";
+
+    name_err.innerHTML = " "
+    return true;
+}
+
+function validatePrice(){
+    let price = document.getElementById('price').value
+    let error = document.getElementById('priceError')
+    if(price.length<=0 || price.length =='' ){
+        error.innerHTML = 'Enter proper Price'
         return false;
     }
-
-    if (name.length <= 3 || name.length >= 250) {
-        name_err.innerHTML = "This must be between 3 and 50 characters";
+    if(price<=1000){
+        error.innerHTML = 'Enter amount more than 1000'
         return false;
     }
+    error.innerHTML =''
+    return true;
+}
 
-    name_err.innerHTML = ""
+function validateStock(){
+    let price = document.getElementById('stock').value
+    let error = document.getElementById('stockError')
+    if(price.length<=0 || price.length =='' ){
+        error.innerHTML = 'Enter proper stock'
+        return false;
+    }
+    
+    error.innerHTML =''
     return true;
 }
 
 function validateForm() {
-    if (!validateProductName() || !validatedesc()) {
+    if (!validateProductName() || !validatedesc() || !validatePrice() || !validateStock()) {
         document.getElementById('proAddErr').innerHTML = 'Fill All data'
         return false
     }

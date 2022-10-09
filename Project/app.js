@@ -36,7 +36,7 @@ app.use('/static',express.static(path.join(__dirname,'public')))
 app.use('/admin', adminRouter); 
 app.use('/',usersRouter);
 
-mongoose.connect('mongodb://localhost/userinfo')
+mongoose.connect(process.env.MONGO_URL)
 
 app.listen(port,console.log("http://localhost:3008"))
 

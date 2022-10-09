@@ -28,7 +28,14 @@
 
                 <div class="form-group">
                     <label >Price</label>
-                    <input type="text" class="form-control " name="price">
+                    <input type="text" class="form-control " name="price" id="price" onkeyup="validatePrice()">
+                    <span class="text-danger" id="priceError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label >Stock</label>
+                    <input type="number" class="form-control " name="stock" id="stock" onkeyup="validateStock()">
+                    <span class="text-danger "  id="stockError"></span>
                 </div>
                 <!-- Example single danger button -->
 
