@@ -1,0 +1,157 @@
+<%-include('header')-%>
+<%-include('../partials/sidebarAdmin.ejs')%>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Add Offers</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid px-4">
+
+                <div class="row my-5">
+
+                    <div class="card-body">
+                        <form id="offeradd">
+
+                            <!-- <p class="text-success">Category Added</p> -->
+
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label for="example-text-input" class="col-sm-12 col-form-label">Offer
+                                        Name</label>
+                                    <div class="col-sm-12">
+                                        <input class="form-control" placeholder="Enter Offer name" type="text"
+                                            name="Offername">
+                                        <!-- {{!-- <span id="username-err" class=" text-danger"></span> --}} -->
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="example-text-input" class="col-sm-12 col-form-label">Discount</label>
+                                    <div class="col-sm-12">
+                                        <input class="form-control" placeholder="Enter discount rate" type="number"
+                                            name="discountRate">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="example-text-input" class="col-sm-12 col-form-label">Expire date</label>
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="date" name="date">
+                                    </div>
+                                </div>
+                                <div class="text-right mt-3 col-md-1">
+                                    <button type="submit" class="btn btn-success waves-effect waves-light"
+                                        onclick="addoffer()">Save</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- end col -->
+
+
+            <div class="container-fluid px-4">
+
+                <div class="row my-5">
+                    <h3 class="fs-4 mb-3">Offers</h3>
+                    <div class="col">
+
+                        <table class="table bg-white rounded shadow-sm  table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Offer</th>
+                                    <th>Expire</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <%offers.forEach((element)=>{%>
+                                    <%if(element.expired===false){%>
+                                    <tr>
+                                        <td>
+                                            <%=element.offer%>
+                                        </td>
+                                        <td>
+                                            <%=element.discount%>
+                                        </td>
+                                        <td>
+                                            <%=element.date%>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger" onclick="deleteOffer('<%=element._id%>')">Remove</button>
+                                        </td>
+                                    </tr>
+                                    <%}%>
+                                    <%})%>
+                                    
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script>
+        var el = document.getElementById("wrapper");
+        var toggleButton = document.getElementById("menu-toggle");
+
+        toggleButton.onclick = function () {
+            el.classList.toggle("toggled");
+        };
+    </script>
+
+    <script>
+
+        function deleteOffer(id){
+            $.ajax({
+                url:'/admin/deletecoupon',
+                method:'patch',
+                data:{
+                    proid:id
+                },
+                success:(response)=>{
+                    location.href = '/admin/add-offers'
+                }
+            })
+        }
+
+        function addoffer() {
+            let offer = document.getElementById('Offername')
+            let discount = document.getElementById('discountRate')
+            $.ajax({
+                url: '/admin/add-coupon',
+                method: 'post',
+                data: $('#offeradd').serialize(),
+            })
+        }
+
+
+
+        function deleteCatOffer(id) {
+            console.log(id)
+            console.log("test id")
+            $.ajax({
+                url: '/admin/deleteCatOffer',
+                data: {
+                    proId: id,
+                },
+                method: 'post',
+                success: (response) => {
+                    alert("Updated Succesfully")
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+    <%-include('footer')-%>

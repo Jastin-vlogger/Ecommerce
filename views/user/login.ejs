@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Cycle</title>
+
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css" rel="stylesheet" />
+
+
+  <!-- google sign in -->
+  <meta name="google-signin-client_id" content="225477678393-rbc9qhsd171ljc7p9infql54fnpm63os.apps.googleusercontent.com">
+  <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+
+</head>
+
+<body>
+
+  <!-- Section: Design Block -->
+  <section class="background-radial-gradient overflow-hidden">
+    <style>
+      .background-radial-gradient {
+        background-color: hsl(218, 41%, 15%);
+        background-image: radial-gradient(650px circle at 0% 0%,
+            hsl(218, 41%, 35%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%),
+          radial-gradient(1250px circle at 100% 100%,
+            hsl(218, 41%, 45%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%);
+      }
+
+      #radius-shape-1 {
+        height: 220px;
+        width: 220px;
+        top: -60px;
+        left: -130px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+
+      #radius-shape-2 {
+        border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+        bottom: -60px;
+        right: -110px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+
+      .bg-glass {
+        background-color: hsla(0, 0%, 100%, 0.9) !important;
+        backdrop-filter: saturate(200%) blur(25px);
+      }
+    </style>
+
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+      <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+          <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+            Shop greatest product <br />
+            <span style="color: hsl(218, 81%, 75%)">for your Lifestyle</span>
+          </h1>
+          <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+            Make your life easier!
+          </p>
+        </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+          <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+          <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+          <div class="card bg-glass">
+            <div class="card-body px-4 py-5 px-md-5">
+              <form action="/login" method="post" id="signup">
+
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  <input type="email" name="email" id="emailid" class="form-control" value="" onkeyup="validateEmail()" />
+                  <label class="form-label" for="form3Example3" n>Email address</label>
+                 
+
+                </div>
+                <span id="emailid-err" class="text-danger"></span>
+                <p id="error-msg" class="fs-6" style="color:rgb(170, 47, 76) ">
+                  <%=eamilError%>
+                </p>
+
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  <input type="password" name="password" id="password" class="form-control" onkeyup="validatepassword()"/>
+                  <label class="form-label" for="form3Example4">Password</label>
+                </div>
+                <span id="password-err" class="text-danger"></span>
+                <p id="error-msg" class="fs-6" style="color:rgb(169, 40, 53) ">
+                  <%=passwordError%>
+                </p>
+
+                <!-- <div id="emailmsg" class="fs-6" style="color:rgb(158, 44, 19);display:none">Please fill the required
+                </div> -->
+
+                <!-- Checkbox -->
+                <div class="form-check d-flex justify-content-center mb-4">
+                  <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+                  <label class="form-check-label" for="form2Example33">
+                    Remember Me!
+                  </label>
+                </div>
+                <span id="valideee" class="text-danger"></span>
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4" onclick="return validatelogin()">
+                  Login
+                </button>
+
+
+
+
+                <div class="d-flex align-items-center justify-content-center pb-4">
+                  <a href="getOtp" class="btn btn-primary mt-3">Login with OTP</a>
+                </div>
+                <div class="d-flex align-items-center justify-content-center pb-4">
+                  <p class="mb-0 me-2">Don't have an account?</p>
+                  <a href="signup" class="btn btn-outline-danger">Create new</a>
+                </div>
+
+                
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Design Block -->
+
+
+<script src="/static/javascripts/valid.js"></script>
+  <!-- MDB -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"></script>
+  <!-- <script src="/static/javascripts/validate.js"></script> -->
+  <!-- <a href="#" onclick="signOut();">Sign out</a> -->
+  <script>
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
+  
+
+
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+
+
+
+  <%-include('footer')-%>

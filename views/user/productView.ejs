@@ -1,0 +1,45 @@
+<%-include('header')-%>
+
+<!-- special products -->
+<section id="special" class="py-5">
+    <div class="container">
+        <div class="title text-center py-5">
+            <h2 class="position-relative d-inline-block">Products</h2>
+        </div>
+
+        <div class="special-list row g-0">
+
+            <%allProduct.forEach((element)=>{%>
+                <%if(element.isDeleted===false){%>
+                    <div class="col-md-6 col-lg-4 col-xl-3 p-2">
+
+                        <div class="special-img position-relative overflow-hidden"
+                            style="width: 300px;height: 200px;">
+                            <img src="/static/product-image/<%=element._id%>.jpg" class="w-100" style="max-width: 100%;
+                max-height: 100%;">
+
+                            <span
+                                class="position-absolute d-flex align-items-center justify-content-center text-primary fs-4">
+                            </span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-capitalize mt-3 mb-1">
+                                <%=element.name%>
+                            </p>
+                            <span class="fw-bold d-block">
+                                <%=element.price%>
+                            </span>
+                            <a href="productDetails/<%=element._id%>" class="btn btn-primary mt-3">BUY NOW</a>
+                        </div>
+
+                    </div>
+                    <%}%>
+                        <%})%>
+
+        </div>
+
+    </div>
+</section>
+<!-- end of special products -->
+
+<%-include('footer')-%>

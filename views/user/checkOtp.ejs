@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Cycle</title>
+
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+
+ <!-- Section: Design Block -->
+ <section class="background-radial-gradient overflow-hidden">
+    <style>
+      .background-radial-gradient {
+        background-color: hsl(218, 41%, 15%);
+        background-image: radial-gradient(650px circle at 0% 0%,
+            hsl(218, 41%, 35%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%),
+          radial-gradient(1250px circle at 100% 100%,
+            hsl(218, 41%, 45%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%);
+      }
+  
+      #radius-shape-1 {
+        height: 220px;
+        width: 220px;
+        top: -60px;
+        left: -130px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+  
+      #radius-shape-2 {
+        border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+        bottom: -60px;
+        right: -110px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(#44006b, #ad1fff);
+        overflow: hidden;
+      }
+  
+      .bg-glass {
+        background-color: hsla(0, 0%, 100%, 0.9) !important;
+        backdrop-filter: saturate(200%) blur(25px);
+      }
+    </style>
+  
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+      <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+          <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+            Shop greatest product <br />
+            <span style="color: hsl(218, 81%, 75%)">for your Lifestyle</span>
+          </h1>
+          <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+            Make your life easier!
+          </p>
+        </div>
+  
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+          <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+          <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+  
+          <div class="card bg-glass">
+            <div class="card-body px-4 py-5 px-md-5">
+
+                <!-- otp input -->
+                <form action="/checkotp" method="post" id="signup">
+                    <!-- enter number -->
+                    <div class="form-outline mb-4">
+                        <input type="number" name="otp" id="form3Example4" class="form-control" />
+                        <input type="text" name="number" id="" value="<%=number%>" hidden>
+                        <label class="form-label" for="form3Example4">Enter OTP</label>
+                      </div>
+                      <p id="error-msg"  style="color:rgb(182, 13, 13) "><%=otperror%></p>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block mb-4" >
+                            GET VERIFIED
+                        </button>
+                        <p> Resend OTP in <span id="countdowntimer">30 </span> Seconds</p>
+                    </form>
+                    <form action="/sendotp" method="post">
+                      <div class="new_user">
+                        <input type="text" name="number" id="" value="<%=number%>" hidden>
+                          <div class="pt-1 mb-4" id="hide_send" style="visibility: hidden;">
+                              <input type="hidden" name="entered_value" value=""
+                                  class="form-control pb-4 form-control-lg" />
+                              <button class="btn btn-dark btn-lg btn-block col-md-4" id="resend"
+                                  type="submit">resend</button>
+                          </div>
+                      </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Design Block -->
+
+  <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+></script>
+<!-- <script src="/static/javascripts/validate.js"></script> -->
+
+<script>
+  
+  var timeleft = 30;
+    var downloadTimer = setInterval(function(){
+    timeleft--;
+    document.getElementById("countdowntimer").textContent = timeleft;
+    if(timeleft <= 0)
+        clearInterval(downloadTimer);
+    },1000);
+  
+</script>
+
+
+<script>
+
+  function showdiv() {
+      document.getElementById('hide_send').style.visibility = "visible";
+  }
+  setTimeout('showdiv()', 300 * 100);
+</script>
+
+  <%-include('footer')-%>

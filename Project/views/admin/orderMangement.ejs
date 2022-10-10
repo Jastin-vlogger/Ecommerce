@@ -331,8 +331,16 @@
                         <h5 class="text-light bg-success">Product Details</h5>
                         <p>${response[i].name}</p>
                         <img src="/static/product-image/${response[i].image}.jpg" alt="" style="width: 100px;height: 75px;">
-                        <h6 class="text-danger">Price: ${response[i].totalAmount}</h6>
-                        <h6 class="text-success">Discount Price: ${response[i].discount}</h6>
+                        ${
+                          (response[i].totalAmount==response[i].discount) ?
+                           `<h6 class="text-danger">Price: ${response[i].discount}</h6>`
+                            :
+                           `
+                            <h6 class="text-danger">Price: ${response[i].totalAmount}</h6>
+                            <h6 class="text-dark">Coupon Used: ${response[i].offername}</h6>
+                            <h6 class="text-success">Discount Price: ${response[i].offer}</h6>
+                            <h6 class="text-success">Total Paid: ${response[i].discount}</h6>`  
+                        }
                         <p>Category: ${response[i].category}</p>
                         <p>status: ${response[i].status}</p>
                         <p>paymentMethod: ${response[i].payment}</p>

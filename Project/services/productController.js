@@ -423,7 +423,7 @@ module.exports = {
                 },
 
             ]).then((wish) => {
-                // console.log(wish);
+                console.log(wish);
                 resolve(wish)
             })
         })
