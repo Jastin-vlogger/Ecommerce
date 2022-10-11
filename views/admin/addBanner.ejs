@@ -65,8 +65,8 @@
                                             <td>
                                                 <%=element.description%>
                                             </td>
-                                            <td><a href=""
-                                                class="btn btn-secondary float-left">Remove</a></td>
+                                            <td><button
+                                                class="btn btn-secondary float-left" onclick="confirmation('<%=element._id%>')">Remove</button></td>
                                         </tr>
                                         <%})%>
                                 </tbody>
@@ -82,7 +82,11 @@
     </div>
 
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    
+
+    <%-include('footer')-%>
 
     <script>
         var el = document.getElementById("wrapper");
@@ -92,15 +96,6 @@
             el.classList.toggle("toggled");
         };
     </script>
-
-
-
-
-
-
-    <%-include('footer')-%>
-
-
         <script>
 
             function viewImage1(event) {

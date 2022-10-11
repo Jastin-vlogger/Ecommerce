@@ -83,14 +83,14 @@ module.exports = {
                         day: { $dayOfMonth: "$createdAt" },
                         dayOfWeek: { $dayOfWeek: "$createdAt" },
                         week: { $week: "$createdAt" },
-                        total:'$totalAmount',
+                        total: '$totalAmount',
                     }
                 },
                 {
                     $group: {
                         _id: '$week',
                         count: { $sum: 1 },
-                        total:{$sum:'$total'},
+                        total: { $sum: '$total' },
                         detail: { $first: '$$ROOT' }
                     }
                 },
@@ -121,14 +121,14 @@ module.exports = {
                         day: { $dayOfMonth: "$createdAt" },
                         dayOfWeek: { $dayOfWeek: "$createdAt" },
                         week: { $week: "$createdAt" },
-                        total:'$totalAmount'
+                        total: '$totalAmount'
                     }
                 },
                 {
                     $group: {
                         _id: '$month',
                         count: { $sum: 1 },
-                        total:{$sum:'$total'},
+                        total: { $sum: '$total' },
                         detail: { $first: '$$ROOT' }
                     }
                 },
@@ -180,13 +180,13 @@ module.exports = {
             resolve(data)
         })
     },
-    findOrdersbyday:()=>{
+    findOrdersbyday: () => {
         return new Promise(async (resolve, reject) => {
             let data = await Order.aggregate([
                 {
                     $match: {
                         createdAt: {
-                            $gte: new Date(new Date()- 1000 * 60 * 60 * 24 * 7 )
+                            $gte: new Date(new Date() - 1000 * 60 * 60 * 24 * 7)
                         }
                     }
                 },
@@ -200,14 +200,14 @@ module.exports = {
                         day: { $dayOfMonth: "$createdAt" },
                         dayOfWeek: { $dayOfWeek: "$createdAt" },
                         week: { $week: "$createdAt" },
-                        total:'$totalAmount'
+                        total: '$totalAmount'
                     }
                 },
                 {
                     $group: {
                         _id: '$dayOfWeek',
                         count: { $sum: 1 },
-                        total:{$sum:'$total'},
+                        total: { $sum: '$total' },
                         detail: { $first: '$$ROOT' }
                     }
                 },
@@ -225,21 +225,28 @@ module.exports = {
         res.render('admin/addBanner', { data, categories, title: 'Banner Mangement' });
     },
     addbanner: async (req, res) => {
-        console.log(req.body);
-        let { heading, desc, category } = req.body
-        let categor = await Category.findOne({ name: category })
-        console.log(categor._id);
-        let image = req.files.image
-        let addbanner = {
-            header: heading,
-            description: desc,
-            category: categor._id,
+        try {
+            console.log(req.body);
+            let { heading, desc, category } = req.body
+            let categor = await Category.findOne({ name: category })
+            // console.log(categor._id);
+            let image = req.files.image
+            let addbanner = {
+                header: heading,
+                description: desc,
+                category: categor._id,
+            }
+            let data = await adminHelpers.addbannertodb(addbanner)
+            console.log(data);
+            image.mv(`public/bannerImg/${data}.jpg`)
+            res.redirect('/admin/bannermangement');
+        } catch (error) {
+            console.log(error);
+            res.redirect('/error')
         }
-        let data = await adminHelpers.addbannertodb(addbanner)
-        console.log(data);
-        image.mv(`public/bannerImg/${data}.jpg`)
-        res.redirect('/admin/bannermangement');
+
     },
+    
     addoffer: async (req, res) => {
         let offers = await Coupon.find()
         console.log(offers);

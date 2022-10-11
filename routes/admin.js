@@ -292,6 +292,8 @@ router.get('/bannermangement', authentication.adminverify, Admin.bannermange)
 
 router.post('/banner', authentication.adminverify, Admin.addbanner)
 
+router.delete('/deletebanner', authentication.adminverify, admin.deleteBanner);
+
 router.get('/add-offers', authentication.adminverify, Admin.addoffer)
 
 router.post('/add-coupon', authentication.adminverify, coupon.addcoupon)

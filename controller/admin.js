@@ -41,5 +41,12 @@ module.exports = {
         } catch (error) {
             throw new Error(error)
         }
-    }
+    },
+    deleteBanner:(req,res)=>{
+        try {
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }

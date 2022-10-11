@@ -33,8 +33,32 @@ app.use(bodyParser.urlencoded({
 app.use('/static',express.static(path.join(__dirname,'public')))
 // app.use(fileUpload())
 
+app.get('/error',(req,res)=>{
+  res.render('error')
+})
+
+
 app.use('/admin', adminRouter); 
 app.use('/',usersRouter);
+
+
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
 
 mongoose.connect(process.env.MONGO_URL)
 
