@@ -20,83 +20,35 @@ const user = require('../controller/user')
 
 /* GET users listing. */
 router.get('/', userAuth.verify, async (req, res) => {
-  const token = req.cookies.token
-  let userId = req.userId
-  let cartCount = await userHelpers.getCartCount(userId)
-  let categories = await productController.findCategory()
-  let bannerdata = await banner.find()
-  let allProduct = await productController.getAllProducts()
-  // let all = await productController.finde()
-  // console.log(all);
-  res.render('user/landingPage', { allProduct, token, cartCount, categories, bannerdata })
-});
-
-router.get('/productDetails/:id', userAuth.verify, async (req, res) => {
   try {
-    let productId = req.params.id
-    let userId = req.userId
     const token = req.cookies.token
-    let categories = await productController.findCategory()
+    let userId = req.userId
     let cartCount = await userHelpers.getCartCount(userId)
-    let data = await productController.productDetails(productId)
-    console.log(data);
-    res.render('user/productDetails', { data, cartCount, token, categories })
+    let categories = await productController.findCategory()
+    let bannerdata = await banner.find()
+    let allProduct = await productController.getAllProducts()
+    // let all = await productController.finde()
+    // console.log(all);
+    res.render('user/landingPage', { allProduct, token, cartCount, categories, bannerdata })
   } catch (error) {
     console.log(error);
-    throw new (error)
   }
-})
 
-router.get('/products/categories/productDetails/:id', userAuth.verify, async (req, res) => {
-  let productId = req.params.id
-  let userId = req.userId
-  const token = req.cookies.token
-  let cartCount = await userHelpers.getCartCount(userId)
-  let categories = await productController.findCategory()
-  productController.productDetails(productId).then((data) => {
-    console.log(data);
-    res.render('user/productDetails', { data, cartCount, token, categories })
-  })
-})
+});
+
+router.get('/productDetails/:id', userAuth.verify, product.proDetailCatwise)
+
+router.get('/products/categories/productDetails/:id', userAuth.verify, product.category)
 
 router.get('/login', userAuth.userLoggedIn, (req, res) => {
   res.render('user/login', { passwordError: " ", nameval: '', eamilError: '' })
 })
 
-router.post('/login', (req, res) => {
-  try {
-    let { email } = req.body
-    userHelpers.loginValidate(req.body).then((data) => {
-      if (data.status == true) {
-        //the important part
-        userHelpers.findUser(req.body.email).then((userdata) => {
-          const token = jwt.sign({ userdata }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" })
-          res.cookie('token', token, {
-            httpOnly: true,
-          })
-          res.redirect('/')
-        })
-      } else if (data == "blocked") {
-        res.clearCookie('token');
-        res.render('user/login', { passwordError: "You are Blocked", nameval: email, eamilError: '' })
-      } else if (data.status == false) {
-        res.render('user/login', { passwordError: "Enter valid password", nameval: email, eamilError: '' })
-      } else if (data) {
-        res.render('user/login', { eamilError: 'Enter valid Email', passwordError: '', nameval: '' })
-      }
-    })
-  } catch (error) {
-    console.log(error);
-    throw new Error(' Authentication failed')
-  }
-
-})
-
+router.post('/login', user.login)
 
 router.get('/getOtp', userAuth.userLoggedIn, (req, res) => {
-  res.render('user/otppage',{ number: ''})
+  res.render('user/otppage', { number: '' })
 })
-
 
 router.post('/sendotp', user.loginOtp)
 
@@ -105,18 +57,7 @@ router.post('/checkotp', user.loginotpcheck)
 router.get('/signup', userAuth.userLoggedIn, (req, res) => {
   res.render('user/signup', { eamilNotFound: '', referalError: '' })
 })
-router.post('/signup', (req, res) => {
-  let { body } = req
-  userHelpers.signUp(body).then((data) => {
-    if (data == 'email found') {
-      res.render('user/signup', { eamilNotFound: 'Email already exists', referalError: '' })
-    } else if (data == 'invalid referal') {
-      res.render('user/signup', { referalError: 'please check the referral', eamilNotFound: '' })
-    } else {
-      res.redirect('/login')
-    }
-  })
-})
+router.post('/signup', user.signup)
 
 router.get('/products/categories/:id', product.categorize)
 

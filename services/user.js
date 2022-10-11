@@ -66,8 +66,7 @@ module.exports = {
                         referal: referal,
                         referral_code: referral_code,
                     }
-                    console.log(wallet);
-                    userData.password = await bcrypt.hash(userData.password, 10)
+                    data.password = await bcrypt.hash(userData.password, 10)
                     await new User(data).save().then((data) => {
                         resolve(data)
                     }).catch((error)=>{

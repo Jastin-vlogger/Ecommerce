@@ -20,7 +20,7 @@ module.exports = {
                         to: `+91${req.body.number}`,
                         channel: 'sms'
                     })
-                res.render('user/checkOtp', { number: req.body.number ,otperror:'' })
+                res.render('user/checkOtp', { number: req.body.number, otperror: '' })
             } else {
                 res.render('user/otppage', { number: 'Enter valid Number' });
             }
@@ -52,5 +52,53 @@ module.exports = {
         } catch (err) {
             console.log(err + "hoi this is error")
         }
+    },
+    signup: (req, res) => {
+        try {
+            let { body } = req
+            userHelpers.signUp(body).then((data) => {
+                if (data == 'email found') {
+                    res.render('user/signup', { eamilNotFound: 'Email already exists', referalError: '' })
+                } else if (data == 'invalid referal') {
+                    res.render('user/signup', { referalError: 'please check the referral', eamilNotFound: '' })
+                } else {
+                    res.redirect('/login')
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/error')
+        }
+
+    },
+    login: (req, res) => {
+        try {
+            let { email } = req.body
+            userHelpers.loginValidate(req.body).then((data) => {
+                if (data.status == true) {
+                    //the important part
+                    userHelpers.findUser(req.body.email).then((userdata) => {
+                        const token = jwt.sign({ userdata }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" })
+                        res.cookie('token', token, {
+                            httpOnly: true,
+                        })
+                        res.redirect('/')
+                    })
+                } else if (data == "blocked") {
+                    res.clearCookie('token');
+                    res.render('user/login', { passwordError: "You are Blocked", nameval: email, eamilError: '' })
+                } else if (data.status == false) {
+                    res.render('user/login', { passwordError: "Enter valid password", nameval: email, eamilError: '' })
+                } else if (data) {
+                    res.render('user/login', { eamilError: 'Enter valid Email', passwordError: '', nameval: '' })
+                }
+            })
+        } catch (error) {
+            res.redirect('/error')
+            console.log(error);
+            throw new Error(' Authentication failed')
+
+        }
+
     }
 }

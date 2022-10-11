@@ -348,7 +348,6 @@ module.exports = {
     categorizeProduct: (catname) => {
         return new Promise(async (resolve, reject) => {
             let data = await Product.find({ category: catname })
-            //   console.log(data);
             resolve(data)
         })
     },

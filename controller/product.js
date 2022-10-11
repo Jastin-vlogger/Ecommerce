@@ -23,7 +23,7 @@ module.exports = {
           res.json(response)
         })
       } else {
-        res.json({status:false})
+        res.json({ status: false })
       }
     } catch (error) {
       console.log(error);
@@ -160,7 +160,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let user = await User.findById({ _id: Types.ObjectId(userId) })
       console.log(user);
-      res.render('user/edituser', { user, token, cartCount ,categories})
+      res.render('user/edituser', { user, token, cartCount, categories })
     })
   },
   updateuser: async (req, res) => {
@@ -182,7 +182,7 @@ module.exports = {
     let userId = req.userId
     let cartCount = await userHelpers.getCartCount(userId)
     let categories = await productController.findCategory()
-    res.render('user/changePassword', { passwordError: '', cartCount, categories ,token})
+    res.render('user/changePassword', { passwordError: '', cartCount, categories, token })
   },
   updatepassword: async (req, res) => {
     let { lastpassword, newpassword } = req.body;
@@ -250,7 +250,40 @@ module.exports = {
       console.log(response);
       res.redirect('/wishlist')
     })
-  }
+  },
+  category: async (req, res) => {
+    try {
+      let productId = req.params.id
+      let userId = req.userId
+      const token = req.cookies.token
+      let cartCount = await userHelpers.getCartCount(userId)
+      let categories = await productController.findCategory()
+      productController.productDetails(productId).then((data) => {
+        console.log(data);
+        res.render('user/productDetails', { data, cartCount, token, categories })
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
+  },
+  proDetailCatwise: async (req, res) => {
+    try {
+      let productId = req.params.id
+      let userId = req.userId
+      const token = req.cookies.token
+      let categories = await productController.findCategory()
+      let cartCount = await userHelpers.getCartCount(userId)
+      let data = await productController.productDetails(productId)
+      console.log(data);
+      res.render('user/productDetails', { data, cartCount, token, categories })
+    } catch (error) {
+      console.log(error);
+      throw new (error)
+    }
+  },
+  
 
 }
 
