@@ -50,18 +50,30 @@ module.exports = {
     }
   },
   changeQuantity: async (req, res) => {
-    let { cart, product, count, quantity, user } = req.body
-    console.log(cart, product, count, quantity);
-    userHelpers.changeProductQuantity(cart, product, count, quantity).then(async (response) => {
-      response.total = await userHelpers.getTotalAmount(user)
-      res.json(response)
-    })
+    try {
+      let { cart, product, count, quantity, user } = req.body
+      console.log(cart, product, count, quantity);
+      userHelpers.changeProductQuantity(cart, product, count, quantity).then(async (response) => {
+        response.total = await userHelpers.getTotalAmount(user)
+        res.json(response)
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   deleteProduct: (req, res) => {
-    let userId = req.userId
-    let prodId = req.params.id
-    let cartdelete = productController.deleteCart(prodId, userId)
-    res.redirect('/cart')
+    try {
+      let userId = req.userId
+      let prodId = req.params.id
+      let cartdelete = productController.deleteCart(prodId, userId)
+      res.redirect('/cart')
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   profile: async (req, res) => {
     try {
@@ -131,86 +143,134 @@ module.exports = {
     res.redirect('/admin/orderMangement')
   },
   saveaddress: async (req, res) => {
-    let { firstname, lastname, address, town, state, pincode } = req.body
-    let userId = req.userId
-    await productController.addAddress(firstname, lastname, address, town, state, pincode, userId).then((data) => {
-      res.redirect('/profile')
-    })
+    try {
+      let { firstname, lastname, address, town, state, pincode } = req.body
+      let userId = req.userId
+      await productController.addAddress(firstname, lastname, address, town, state, pincode, userId).then((data) => {
+        res.json(data)
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
 
   },
   address: async (req, res) => {
-    const token = req.cookies.token
-    let userId = req.userId
-    let cartCount = await userHelpers.getCartCount(userId)
-    let categories = await productController.findCategory()
-    let addedAddress = await userHelpers.findaddress(userId)
-    res.render('user/address', { addedAddress, token, cartCount, categories })
+    try {
+      const token = req.cookies.token
+      let userId = req.userId
+      let cartCount = await userHelpers.getCartCount(userId)
+      let categories = await productController.findCategory()
+      let addedAddress = await userHelpers.findaddress(userId)
+      res.render('user/address', { addedAddress, token, cartCount, categories })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   removeAddress: async (req, res) => {
-    let addressId = req.params.userId
-    await productController.removeAddress(addressId).then((data) => {
-      res.redirect('/profile')
-    })
+    try {
+      let addressId = req.params.userId
+      await productController.removeAddress(addressId).then((data) => {
+        res.redirect('/profile')
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   edituser: async (req, res) => {
-    const token = req.cookies.token
-    let userId = req.userId
-    let cartCount = await userHelpers.getCartCount(userId)
-    let categories = await productController.findCategory()
-    return new Promise(async (resolve, reject) => {
-      let user = await User.findById({ _id: Types.ObjectId(userId) })
-      console.log(user);
-      res.render('user/edituser', { user, token, cartCount, categories })
-    })
+    try {
+      const token = req.cookies.token
+      let userId = req.userId
+      let cartCount = await userHelpers.getCartCount(userId)
+      let categories = await productController.findCategory()
+      return new Promise(async (resolve, reject) => {
+        let user = await User.findById({ _id: Types.ObjectId(userId) })
+        console.log(user);
+        res.render('user/edituser', { user, token, cartCount, categories })
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   updateuser: async (req, res) => {
-    let { email, firstName, lastName } = req.body
-    let userId = req.userId
-    return new Promise(async (resolve, reject) => {
-      let updatedUser = await User.updateOne({ _id: Types.ObjectId(userId) }, {
-        $set: {
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-        }
+    try {
+      let { email, firstName, lastName } = req.body
+      let userId = req.userId
+      return new Promise(async (resolve, reject) => {
+        let updatedUser = await User.updateOne({ _id: Types.ObjectId(userId) }, {
+          $set: {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+          }
+        })
+        res.redirect("/profile")
       })
-      res.redirect("/profile")
-    })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   changepassword: async (req, res) => {
-    const token = req.cookies.token
-    let userId = req.userId
-    let cartCount = await userHelpers.getCartCount(userId)
-    let categories = await productController.findCategory()
-    res.render('user/changePassword', { passwordError: '', cartCount, categories, token })
+    try {
+      const token = req.cookies.token
+      let userId = req.userId
+      let cartCount = await userHelpers.getCartCount(userId)
+      let categories = await productController.findCategory()
+      res.render('user/changePassword', { passwordError: '', cartCount, categories, token })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   updatepassword: async (req, res) => {
-    let { lastpassword, newpassword } = req.body;
-    console.log(lastpassword, newpassword);
-    console.log(req.body);
-    let userId = req.userId
-    userHelpers.updatepassword(lastpassword, newpassword, userId).then(async (data) => {
-      if (data.status == false) {
-        res.render('user/changePassword', { passwordError: 'Enter correct password' })
-      } else {
-        await bcrypt.hash(newpassword, 10).then(async (hashed) => {
-          await User.findByIdAndUpdate({ _id: Types.ObjectId(userId) }, { $set: { password: hashed } })
-          res.redirect('/profile')
-        })
-      }
-    })
+    try {
+      let { lastpassword, newpassword } = req.body;
+      console.log(lastpassword, newpassword);
+      console.log(req.body);
+      let userId = req.userId
+      userHelpers.updatepassword(lastpassword, newpassword, userId).then(async (data) => {
+        if (data.status == false) {
+          res.render('user/changePassword', { passwordError: 'Enter correct password' })
+        } else {
+          await bcrypt.hash(newpassword, 10).then(async (hashed) => {
+            await User.findByIdAndUpdate({ _id: Types.ObjectId(userId) }, { $set: { password: hashed } })
+            res.redirect('/profile')
+          })
+        }
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   categorize: async (req, res) => {
-    let categoryId = req.params.id
-    const token = req.cookies.token
-    let userId = req.userId
-    let categories = await productController.findCategory()
-    let cartCount = await userHelpers.getCartCount(userId)
-    let catname = await Category.findById(categoryId)
-    // console.log(catname.name);
-    let data = await productController.categorizeProduct(catname.name)
-    console.log('data :' + data);
-    res.render('user/category', { data, token, cartCount, categories })
+    try {
+      let categoryId = req.params.id
+      const token = req.cookies.token
+      let userId = req.userId
+      let categories = await productController.findCategory()
+      let cartCount = await userHelpers.getCartCount(userId)
+      let catname = await Category.findById(categoryId)
+      // console.log(catname.name);
+      let data = await productController.categorizeProduct(catname.name)
+      console.log('data :' + data);
+      res.render('user/category', { data, token, cartCount, categories })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   whislist: async (req, res) => {
     try {
@@ -233,23 +293,35 @@ module.exports = {
     }
   },
   addtowhish: async (req, res) => {
-    let userId = req.userId
-    let productId = req.params.id
-    console.log(userId, productId);
-    await productcontroller.addTowhishlist(productId, userId).then((response) => {
-      console.log(response);
-      res.json(response)
-      // res.redirect('/');
-    })
+    try {
+      let userId = req.userId
+      let productId = req.params.id
+      console.log(userId, productId);
+      await productcontroller.addTowhishlist(productId, userId).then((response) => {
+        console.log(response);
+        res.json(response)
+        // res.redirect('/');
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
 
   },
   deleteWishPro: async (req, res) => {
-    let userId = req.userId
-    let productId = req.params.id
-    await productcontroller.deleteWishProduct(productId, userId).then((response) => {
-      console.log(response);
-      res.redirect('/wishlist')
-    })
+    try {
+      let userId = req.userId
+      let productId = req.params.id
+      await productcontroller.deleteWishProduct(productId, userId).then((response) => {
+        console.log(response);
+        res.redirect('/wishlist')
+      })
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   category: async (req, res) => {
     try {
@@ -283,7 +355,7 @@ module.exports = {
       throw new (error)
     }
   },
-  
+
 
 }
 

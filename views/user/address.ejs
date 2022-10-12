@@ -1,80 +1,97 @@
 <%-include('header')-%>
-<style>
-    body{
-    background-color: #eeeeee;
-}
+    <style>
+        body {
+            background-color: #eeeeee;
+        }
 
-.footer-background{
-    background-color: rgb(204, 199, 199);
-}
+        .footer-background {
+            background-color: rgb(204, 199, 199);
+        }
 
-@media(max-width:991px){
-    #heading{
-        padding-left: 50px;
-    }
-    #prc{
-        margin-left: 70px;
-        padding-left: 110px;
-    }
-    #quantity{
-        padding-left: 48px;
-    }
-    #produc{
-        padding-left: 40px;
-    }
-    #total{
-        padding-left: 54px;
-    }
-}
-@media(max-width:767px){
-    .mobile{
-        font-size: 10px;
-    }
-    h5{
-        font-size: 14px;
-    }
-    h6{
-        font-size: 9px;
-    }
-    #mobile-font{
-        font-size: 11px;
-    }
-    #prc{
-        font-weight: 700;
-        margin-left: -45px;
-        padding-left: 105px;
-    }
-    #quantity{
-        font-weight: 700;
-        padding-left: 6px;
-    }
-    #produc{
-        font-weight: 700;
-        padding-left: 0px;
-    }
-    #total{
-        font-weight: 700;
-        padding-left: 9px;
-    }
-    #image{
-        width: 60px;
-        height: 60px;
-    }
-    .col{
-        width: 100%;
-    }
-    #zero-pad{
-        padding: 2%;
-        margin-left: 10px;
-    }
-    #footer-font{
-        font-size: 12px;
-    }
-    #heading{
-        padding-top: 15px;
-    }
-}
-</style>
+        @media(max-width:991px) {
+            #heading {
+                padding-left: 50px;
+            }
+
+            #prc {
+                margin-left: 70px;
+                padding-left: 110px;
+            }
+
+            #quantity {
+                padding-left: 48px;
+            }
+
+            #produc {
+                padding-left: 40px;
+            }
+
+            #total {
+                padding-left: 54px;
+            }
+        }
+
+        @media(max-width:767px) {
+            .mobile {
+                font-size: 10px;
+            }
+
+            h5 {
+                font-size: 14px;
+            }
+
+            h6 {
+                font-size: 9px;
+            }
+
+            #mobile-font {
+                font-size: 11px;
+            }
+
+            #prc {
+                font-weight: 700;
+                margin-left: -45px;
+                padding-left: 105px;
+            }
+
+            #quantity {
+                font-weight: 700;
+                padding-left: 6px;
+            }
+
+            #produc {
+                font-weight: 700;
+                padding-left: 0px;
+            }
+
+            #total {
+                font-weight: 700;
+                padding-left: 9px;
+            }
+
+            #image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .col {
+                width: 100%;
+            }
+
+            #zero-pad {
+                padding: 2%;
+                margin-left: 10px;
+            }
+
+            #footer-font {
+                font-size: 12px;
+            }
+
+            #heading {
+                padding-top: 15px;
+            }
+        }
+    </style>
 
 
 
@@ -96,64 +113,70 @@
                 <!-- ACCORDION START -->
                 <div id="checkout-login" class="coupon-content">
                     <div class="coupon-info">
-                        <form action="/saveaddress" method="post" id="" class="billing-form">
+                      
                             <div class="form-group">
 
 
                                 <div class="w-100"></div>
                                 <div class="row align-items-end">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 ">
                                         <div class="form-group">
                                             <label for="streetaddress">First Name</label>
-                                            <input type="text" class="form-control" name="firstname" required
-                                                placeholder="First name">
+                                            <input type="text" class="form-control" name="firstname"
+                                                placeholder="First name" id="username" onkeyup="validatename()">
+                                            <span id="username-error" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="streetaddress">Last Name</label>
-                                            <input type="text" class="form-control" name="lastname" required
+                                            <input type="text" class="form-control" name="lastname" id="last"
                                                 placeholder="Last name">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="streetaddress">Street Address</label>
-                                            <input type="text" class="form-control" name="address" required
-                                                placeholder="House number and building name">
+                                            <input type="text" class="form-control" name="address" id="street"
+                                                onkeyup="checkAddress()" placeholder="House number and building name">
+                                            <span id="streetErr" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="streetaddress">Town</label>
-                                            <input type="text" class="form-control" name="town" required
-                                                placeholder="Town">
+                                            <input type="text" class="form-control" name="town" id="town"
+                                                onkeyup="checktown()" placeholder="Town">
+                                            <span id="townErr" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="w-100"></div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="towncity">State / City</label>
-                                            <input type="text " name="state" required class="form-control"
-                                                placeholder="State">
+                                            <input type="text " name="state" class="form-control" id="country"
+                                                onkeyup="country()" placeholder="State">
+                                            <span id="countryErr" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="postcodezip">Postcode / ZIP *</label>
-                                            <input type="number" name="pincode" required class="form-control"
-                                                placeholder="postcode">
+                                            <input type="number" name="pincode" class="form-control" id="pin"
+                                                onkeyup="checkpin()" placeholder="postcode">
+                                            <span id="pinErr" class="text-danger"></span>
                                         </div>
                                     </div>
+                                    <span id="formErr" class="text-danger"></span>
                                     <div class="w-100"></div>
                                     <div class="col-xl-8 ftco-animate">
-                                        <button type="submit" class="btn btn-primary mt-5 py-3  px-4">save Address
+                                        <button  class="btn btn-primary mt-5 py-3  px-4" onclick="saveadd()">save Address
                                         </button>
                                     </div>
 
 
-                        </form>
+                       
                     </div>
                 </div>
                 <!-- ACCORDION END -->
@@ -162,7 +185,7 @@
 
 
 
-        <%if(addedAddress == 0){%>
+        <%if(addedAddress==0){%>
 
             <p class="text-center">No Data Found</p>
             <%}%>
@@ -170,12 +193,12 @@
                     <div class="row shadow mt-3 rounded p-3 align-items-center">
                         <div class="col-md-3">
                             <%=element.firstname%>
-                            <%=element.lastname%>
+                                <%=element.lastname%>
                         </div>
 
                         <div class="col-md-4">
                             <%=element.address%> ,
-                            <%=element.town%><br>
+                                <%=element.town%><br>
                         </div>
                         <div class="col-md-3">
                             <span>Pin :</span>
@@ -184,7 +207,8 @@
 
                         <div class="col-md-2">
                             <div class="text-end">
-                                <button onclick="removeAddress('<%=element._id%>')" class="btn btn-primary pt-2">Remove</button>
+                                <button onclick="removeAddress('<%=element._id%>')"
+                                    class="btn btn-primary pt-2">Remove</button>
                             </div>
                         </div>
 
@@ -193,8 +217,105 @@
 
     </section>
 
-
+    <!-- <script src="/static/javascripts/valid.js"></script> -->
     <script>
+
+        function validatename() {
+            let name_err = document.getElementById('username-error')
+            let name = document.getElementById('username').value;
+
+            if (name.length == 0 || name == '') {
+                name_err.innerHTML = "Name cannot be empty";
+                return false;
+            }
+
+            if (!name.match(/^[A-Za-z]*\s{0,1}?[A-Za-z]*\s{0,1}?[A-Za-z]*$/)) {
+                name_err.innerHTML = "Write Proper name";
+                return false;
+            }
+
+            if (name.length <= 3 || name.length >= 25) {
+                name_err.innerHTML = "Name must be between 3 and 25 characters";
+                return false;
+            }
+
+            name_err.innerHTML = ""
+            return true;
+        }
+
+        function checkAddress() {
+            let street = document.getElementById('street').value
+            let streetErr = document.getElementById('streetErr')
+            if (street.length <= 3 || street == '') {
+                streetErr.innerHTML = 'Enter valid details'
+                return false;
+            }
+            streetErr.innerHTML = ''
+            return true;
+        }
+
+        function checktown() {
+            let street = document.getElementById('town').value
+            let streetErr = document.getElementById('townErr')
+            if (street.length <= 3 || street == '') {
+                streetErr.innerHTML = 'Enter valid details'
+                return false;
+            }
+            streetErr.innerHTML = ''
+            return true;
+        }
+
+        function country() {
+            let street = document.getElementById('country').value
+            let countryErr = document.getElementById('countryErr')
+            if (street.length <= 3 || street == '') {
+                countryErr.innerHTML = 'Enter valid details'
+                return false;
+            }
+            countryErr.innerHTML = ''
+            return true;
+        }
+
+        function checkpin() {
+            let street = document.getElementById('pin').value
+            let pinErr = document.getElementById('pinErr')
+            if (street.length <= 3 || street == '') {
+                pinErr.innerHTML = 'Enter valid details'
+                return false;
+            }
+            pinErr.innerHTML = ''
+            return true;
+        }
+
+        function saveadd() {
+            if (!validatename() || !checkAddress() || !checktown() || !country() || !checkpin()) {
+                document.getElementById('formErr').innerHTML = 'Fill All data'
+                return false;
+            } else {
+                saveaddress();
+                return true;
+            }
+
+        }
+        function saveaddress() {
+            let firstname = document.getElementById('username').value;
+            let lastname = document.getElementById('last').value;
+            let address = document.getElementById('street').value;
+            let town = document.getElementById('town').value;
+            let state = document.getElementById('country').value;
+            let pincode = document.getElementById('pin').value;
+            $.ajax({
+                url:'/saveaddress',
+                method:'post',
+                data:{firstname,lastname,address,town,state,pincode},
+                success:(res)=>{
+                    location.href = '/profile'
+                }
+            })
+        }
+
+
+
         function removeAddress(proId) {
             Swal.fire({
                 title: 'Are you sure?',

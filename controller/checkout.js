@@ -19,68 +19,79 @@ module.exports = {
             let address = await userHelpers.findaddress(userId)
             let wallbalance = await userHelpers.findWallBalance(userId)
             let wall = wallbalance.wallet
-            res.render('user/checkoutpage', { total, product, userId, address, wall, cartCount, categories, token });
+            if (cartCount) {
+                 res.render('user/checkoutpage', { total, product, userId, address, wall, cartCount, categories, token });
+            } else {
+                res.redirect('/')
+            }
         } catch (error) {
             console.log(error);
+            res.redirect('/error')
         }
 
     },
     placeOrder: async (req, res) => {
-        let userId = req.body.userId
-        let payment = req.body.paymentmethod
-        console.log(req.body);
-        let { coupon } = req.body
-        let { couponusing, couponid } = req.body
-        let products = await productController.getCartProductList(req.body.userId)
-        let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
-        let wallbalance = await userHelpers.findWallBalance(userId)
-        let wall = wallbalance.wallet
-        let couponName = '';
-        let couponOffer = 0;
-        if (coupon) {
-            totalPrice = coupon
-            let couponused = await couponHelpers.findCoupon(couponid)
-            couponName = couponused.offer;
-            couponOffer = couponused.discount;
-            await couponHelpers.usedcoupon(couponused._id, userId).then((data) => {
-            })
-        }
-        console.log(couponName);
-        userHelpers.placeOrder(req.body, products, totalPrice, userId,couponName,couponOffer).then(async (response) => {
-
-            let a = response.products;
-            //where stock is made decreasing
-            a.forEach((element) => {
-                let productId = element.item
-                let stockNeededToMinus = element.quantity
-                productController.changestockquantity(productId,stockNeededToMinus)
-            });
-            let orderId = response._id 
-            if (payment == 'COD') {
-                res.json({ cod_sucess: true });
-            } else if (payment == 'Razorpay') {
-                console.log('da kutta');
-                userHelpers.generateRazorPay(orderId, totalPrice).then((response) => {
-                    res.json(response);
-                    console.log(response);
+        try {
+            let userId = req.body.userId
+            let payment = req.body.paymentmethod
+            console.log(req.body);
+            let { coupon } = req.body
+            let { couponusing, couponid } = req.body
+            let products = await productController.getCartProductList(req.body.userId)
+            let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
+            let wallbalance = await userHelpers.findWallBalance(userId)
+            let wall = wallbalance.wallet
+            let couponName = '';
+            let couponOffer = 0;
+            if (coupon) {
+                totalPrice = coupon
+                let couponused = await couponHelpers.findCoupon(couponid)
+                couponName = couponused.offer;
+                couponOffer = couponused.discount;
+                await couponHelpers.usedcoupon(couponused._id, userId).then((data) => {
                 })
-            } else if (payment == 'Paypal') {
-                console.log(req.body)
-                console.log('im here');
-                userHelpers.generatePaypal(orderId, totalPrice).then(async (response) => {
-                    await userHelpers.changePaymentStatusPaypal(orderId)
-                    res.json({ paypal: true })
-                })
-            } else {
-                console.log('hi im wallet');
-                let reduceWallBalance = wall - totalPrice;
-                let a = await wallet.refundForOnline(reduceWallBalance, userId)
-                userHelpers.changePaymentStatusPaypal(orderId).then((response) => {
-                    res.json({ wallet: true })
-                })
-
             }
-        })
+            console.log(couponName);
+            userHelpers.placeOrder(req.body, products, totalPrice, userId, couponName, couponOffer).then(async (response) => {
+
+                let a = response.products;
+                //where stock is made decreasing
+                a.forEach((element) => {
+                    let productId = element.item
+                    let stockNeededToMinus = element.quantity
+                    productController.changestockquantity(productId, stockNeededToMinus)
+                });
+                let orderId = response._id
+                if (payment == 'COD') {
+                    res.json({ cod_sucess: true });
+                } else if (payment == 'Razorpay') {
+                    console.log('da kutta');
+                    userHelpers.generateRazorPay(orderId, totalPrice).then((response) => {
+                        res.json(response);
+                        console.log(response);
+                    })
+                } else if (payment == 'Paypal') {
+                    console.log(req.body)
+                    console.log('im here');
+                    userHelpers.generatePaypal(orderId, totalPrice).then(async (response) => {
+                        await userHelpers.changePaymentStatusPaypal(orderId)
+                        res.json({ paypal: true })
+                    })
+                } else {
+                    console.log('hi im wallet');
+                    let reduceWallBalance = wall - totalPrice;
+                    let a = await wallet.refundForOnline(reduceWallBalance, userId)
+                    userHelpers.changePaymentStatusPaypal(orderId).then((response) => {
+                        res.json({ wallet: true })
+                    })
+
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            res.redirect('/error')
+        }
+
     },
     orderplaced: async (req, res) => {
         try {

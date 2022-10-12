@@ -104,7 +104,7 @@
                         <h5 class="text-light bg-dark">${response[i].name}</h5>
                         <img src="/static/product-image/${response[i].image}.jpg" alt="" style="width: 100px;height: 75px;">
                         ${
-                          (response[i].purchase==response[i].original) ?
+                          (response[i].offer == 0) ?
                            `<h6 class="text-danger">Price: ${response[i].purchase}</h6>`
                             :
                            `

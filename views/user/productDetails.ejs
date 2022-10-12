@@ -80,16 +80,16 @@
                 <%=data.description%>
               </p>
               <ul>
-                <%if(data.stock == 0){%>
+                <%if(data.stock <= 0){%>
                   <li class="text-danger fs-5">Sorry out of stock</li>
-                <%}else if(data.stock <=10){%>
+                <%}else if(data.stock <=10 ){%>
                   <li class="text-danger fs-4">Hurry up only few <%=data.stock%> stocks left</li>
                 <%}else{%>
                   <li>Stock: <span>
                   <%=data.stock%>
                   </span></li>
                 <%}%>
-                <%if(data.stock == 0){%>
+                <%if(data.stock <= 0){%>
                   <li>Available:
                     <span>out of stock</span></li>
                 <%}else{%>
@@ -103,7 +103,7 @@
             </div>
 
             <div class="purchase-info">
-              <%if(data.stock == 0){%>
+              <%if(data.stock <= 0){%>
                 <button class="btn btn-primary mt-3" onclick="swal()">ADD TO CART</button>
               <%}else{%>
                 <button class="btn btn-primary mt-3" onclick="addToCart(`<%=data._id%>`)">ADD TO CART</button>

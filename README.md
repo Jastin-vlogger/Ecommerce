@@ -24,4 +24,8 @@
 * MongoDB
 * Bootstrap
 * JWT 
+* Nginx
+
+## Services Used
+* AWS 
 

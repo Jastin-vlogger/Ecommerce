@@ -1,6 +1,6 @@
 function validatename() {
-    var name_err = document.getElementById('username-error')
-    var name = document.getElementById('username').value;
+    let name_err = document.getElementById('username-error')
+    let name = document.getElementById('username').value;
 
     if (name.length == 0 || name == '') {
         name_err.innerHTML = "Name cannot be empty";
@@ -23,8 +23,8 @@ function validatename() {
 
 
 function validateEmail() {
-    var email = document.getElementById('emailid').value
-    var email_err = document.getElementById('emailid-err')
+    let email = document.getElementById('emailid').value
+    let email_err = document.getElementById('emailid-err')
 
     if (email.length == 0 || email == '') {
         email_err.innerHTML = 'Email cannot be empty'
@@ -41,8 +41,8 @@ function validateEmail() {
 }
 
 function validatemobile() {
-    var mob = document.getElementById('mobilenumber').value
-    var mob_err = document.getElementById('mobilenumber-err')
+    let mob = document.getElementById('mobilenumber').value
+    let mob_err = document.getElementById('mobilenumber-err')
 
     if (mob.length != 10) {
         mob_err.innerHTML = 'Enter Proper Number'
@@ -54,8 +54,8 @@ function validatemobile() {
 }
 
 function validatepassword() {
-    var password = document.getElementById('password').value
-    var password_err = document.getElementById('password-err')
+    let password = document.getElementById('password').value
+    let password_err = document.getElementById('password-err')
 
     if (password.length == 0 || password.length <= 3) {
         password_err.innerHTML = 'Enter valid password'
@@ -90,8 +90,8 @@ function pwcheck() {
 
 
 function checkAddress() {
-    var street = document.getElementById('street').value
-    var streetErr = document.getElementById('streetErr')
+    let street = document.getElementById('street').value
+    let streetErr = document.getElementById('streetErr')
     if (street.length <= 3 || street == '') {
         streetErr.innerHTML = 'Enter valid details'
         return false;
@@ -99,9 +99,21 @@ function checkAddress() {
     streetErr.innerHTML = ''
     return true;
 }
+
+function checktown(){
+    let street = document.getElementById('town').value
+    let streetErr = document.getElementById('townErr')
+    if (street.length <= 3 || street == '') {
+        streetErr.innerHTML = 'Enter valid details'
+        return false;
+    }
+    streetErr.innerHTML = ''
+    return true;
+}
+
 function country() {
-    var street = document.getElementById('country').value
-    var countryErr = document.getElementById('countryErr')
+    let street = document.getElementById('country').value
+    let countryErr = document.getElementById('countryErr')
     if (street.length <= 3 || street == '') {
         countryErr.innerHTML = 'Enter valid details'
         return false;
@@ -111,8 +123,8 @@ function country() {
 }
 
 function checkpin() {
-    var street = document.getElementById('pin').value
-    var pinErr = document.getElementById('pinErr')
+    let street = document.getElementById('pin').value
+    let pinErr = document.getElementById('pinErr')
     if (street.length <= 3 || street == '') {
         pinErr.innerHTML = 'Enter valid details'
         return false;
@@ -121,10 +133,20 @@ function checkpin() {
     return true;
 }
 
+function saveadd(){
+    if (!validatename() || !checkAddress() || !checktown() || !country() || !checkpin() ) {
+        document.getElementById('formErr').innerHTML = 'Fill All data'
+        return false;
+    }else{
+       return true; 
+    }
+    
+}
+
 
 function checkAddresstwo() {
-    var street = document.getElementById('address').value
-    var addressErr = document.getElementById('addressErr')
+    let street = document.getElementById('address').value
+    let addressErr = document.getElementById('addressErr')
     if (street == '' || street.length <= 3) {
         addressErr.innerHTML = 'Enter valid details'
         return false;
@@ -152,8 +174,8 @@ function checkprDT() {
 ////////////////////////////////////////////////////////////////////
 
 function validateProductName() {
-    var name_err = document.getElementById('username-err')
-    var name = document.getElementById('productname').value;
+    let name_err = document.getElementById('username-err')
+    let name = document.getElementById('productname').value;
 
     if (name.length == 0 || name == '') {
         name_err.innerHTML = "Name cannot be empty";
@@ -175,8 +197,8 @@ function validateProductName() {
 }
 
 function validatedesc() {
-    var name_err = document.getElementById('desc-err')
-    var name = document.getElementById('descrip').value;
+    let name_err = document.getElementById('desc-err')
+    let name = document.getElementById('descrip').value;
 
     if (name.length == 0 || name == '') {
         name_err.innerHTML = "This field cannot be empty";
