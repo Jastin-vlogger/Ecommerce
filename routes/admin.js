@@ -286,8 +286,6 @@ router.get('/cancelorder/:id', authentication.adminverify, addcart.cancelOrderAd
 
 router.post('/change-status/:id', authentication.adminverify, addcart.changestatus)
 
-// router.get('/change-status/:id', authentication.adminverify, addcart.changestatus)
-
 router.get('/bannermangement', authentication.adminverify, Admin.bannermange)
 
 router.post('/banner', authentication.adminverify, Admin.addbanner)

@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const userAuth = require('../authMiddleWare/auth')
 const productController = require('../services/productController');
-// const product = require('../services/product')
 const product = require('../controller/product')
 const checkout = require('../controller/checkout');
 const { render } = require('../app');

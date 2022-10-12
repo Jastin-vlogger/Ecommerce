@@ -211,6 +211,7 @@
                 "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                 "handler": (response) => {
                     verifyPayment(response, order)
+                    console.log(response)
                 },
                 "prefill": {
                     "name": "Gaurav Kumar",
@@ -229,6 +230,7 @@
         }
 
         function verifyPayment(payment, order) {
+            console.log(payment)
             console.log(payment, order);
             $.ajax({
                 url: '/verify-payment',

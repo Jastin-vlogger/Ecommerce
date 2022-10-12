@@ -133,14 +133,26 @@ module.exports = {
 
   },
   cancelOrderAdmin: async (req, res) => {
-    let orderId = req.params.id
-    let ordercanceled = await productController.cancelOrderadmin(orderId)
-    res.redirect('/admin/orderMangement')
+    try {
+      let orderId = req.params.id
+      let ordercanceled = await productController.cancelOrderadmin(orderId)
+      res.redirect('/admin/orderMangement')
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   changestatus: async (req, res) => {
-    let orderId = req.params.id
-    let status = await productController.changeOrderStatus(orderId, req.body.status)
-    res.redirect('/admin/orderMangement')
+    try {
+      let orderId = req.params.id
+      let status = await productController.changeOrderStatus(orderId, req.body.status)
+      res.redirect('/admin/orderMangement')
+    } catch (error) {
+      console.log(error);
+      res.redirect('/error')
+    }
+
   },
   saveaddress: async (req, res) => {
     try {
