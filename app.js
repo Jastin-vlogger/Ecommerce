@@ -14,7 +14,7 @@ let adminRouter = require('./routes/admin');
 let usersRouter = require('./routes/users');
 
 let app = express();
-let port = process.env.port || 5000;
+// let port = process.env.port || 5000;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,6 +62,6 @@ app.use(function(err, req, res, next) {
 
 mongoose.connect(process.env.MONGO_URL)
 
-app.listen(port,console.log("http://localhost:3008"))
+app.listen(process.env.PORT || 5000,console.log("http://localhost:3008"))
 
 module.exports = app;
