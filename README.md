@@ -17,6 +17,7 @@
 * Form Validation
 * Product & Category Management in Admin side
 * Wishlist
+* Load balancer
 
 ## Technologies used:
 * Node js
@@ -26,6 +27,7 @@
 * JWT 
 * Nginx
 
+
 ## Services Used
 * AWS 
-
+* Heruko
