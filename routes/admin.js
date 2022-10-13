@@ -60,10 +60,8 @@ router.get('/productmanagement', authentication.adminverify, async (req, res) =>
             { category: { $regex: '.*' + search + '.*', $options: 'i' } },
         ]
     })
-
-        .limit(limit * 1)
+        .limit(limit)
         .skip((page - 1) * limit)
-        .exec()
 
     let count = await Product.find({
         $or: [
